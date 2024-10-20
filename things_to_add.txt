@@ -1,0 +1,4 @@
+See why is it showing that .subscribe is deprecated
+watch angular course content from angular dynamic components
+
+see how environment variables are added to angular and springboot

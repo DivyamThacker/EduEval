@@ -1,0 +1,15 @@
+file Upload Component
+<!-- <button type="button" (click)="sayHello()" style="background-color: blue;">Say Hello</button> -->
+<button type="button" (click)="generatePdf()" style="background-color: green;">Generate Pdf</button>
+<p>{{message}}</p>
+
+<hr>
+<div>
+  <h3>Select an HTML file to upload:</h3>
+  <input type="file" (change)="onFileSelected($event)" />
+</div>
+<!-- <form (submit)="onSubmit()" enctype="multipart/form-data">
+    <input type="file" (change)="onFileSelected($event)" />
+    <button type="submit">Upload</button>
+  </form> -->
+  
