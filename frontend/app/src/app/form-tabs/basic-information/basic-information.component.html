@@ -1,0 +1,17 @@
+<div class="body">
+<div class="container">
+    <div class="sidebar">
+        <app-forms-sidebar [subSections]="basicInfoSubSections"></app-forms-sidebar>
+    </div>
+
+    <div class="main-content">
+        <app-forms-tabs></app-forms-tabs>
+
+        <router-outlet></router-outlet>
+        
+        <div class="form-actions">
+            <app-forms-actions> </app-forms-actions>
+        </div>
+    </div>
+</div>
+</div>

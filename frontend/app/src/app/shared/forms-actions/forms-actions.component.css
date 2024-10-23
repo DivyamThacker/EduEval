@@ -1,0 +1,29 @@
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.back-btn {
+    background-color: #ccc;
+}
+
+.next-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.save-exit-btn {
+    background-color: #ffcc00;
+}
+
+.submit-btn {
+    background-color: #28a745;
+    color: white;
+}

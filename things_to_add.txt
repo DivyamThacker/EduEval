@@ -1,4 +1,54 @@
+The tab navigation not workign properly
+
+active tab should be highlited also active subsection should be highlited
+
+work out how will you save the information written, also think about an alert when a user is trying to change the section or subsection
+without saving changes
+
+add scroll behaviour in pages like contact details page , which has add button
+
+add  academic information and extended profile page and check if sidebar is working properly
+
+
 See why is it showing that .subscribe is deprecated
 watch angular course content from angular dynamic components
 
 see how environment variables are added to angular and springboot
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+old contact page:
+
+<form>
+    <div class="form-group">
+        <label for="designation">Designation</label>
+        <input type="text" id="designation" name="designation" placeholder="Text field data">
+    </div>
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Text field data">
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email ID</label>
+        <input type="email" id="email" name="email" placeholder="Text field data">
+    </div>
+
+    <div class="form-group">
+        <label for="telephone">Telephone with STD Code</label>
+        <input type="number" id="telephone" name="telephone" placeholder="Numeric field data">
+    </div>
+
+    <div class="form-group">
+        <label for="mobile">Mobile</label>
+        <input type="number" id="mobile" name="mobile" placeholder="Numeric field data">
+    </div>
+
+    <div class="form-group">
+        <label for="fax">Fax</label>
+        <input type="number" id="fax" name="fax" placeholder="Numeric field data">
+    </div>
+
+    <div class="add-button">
+        <button type="button">Add +</button>
+    </div>
+</form>

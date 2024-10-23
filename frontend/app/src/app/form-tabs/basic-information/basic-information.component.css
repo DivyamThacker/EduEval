@@ -1,0 +1,135 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 97vh;
+    background-color: #f3f3f3;
+}
+
+.container {
+    display: flex;
+    width: 70%;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.sidebar {
+    background-color: #f1f4fc;
+    padding: 20px;
+    width: 25%;
+}
+
+.main-content {
+    padding: 20px;
+    width: 75%;
+}
+
+.form-actions {
+    margin-top: 20px;
+    grid-column: span 2;
+}
+
+
+/* Add these styles for the form that is inside the router outlet, as viewEncapsulation is off in this component*/
+form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+
+.add-button {
+    margin-top: 20px;
+}
+
+.add-button button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Add these styles for the file input fields */
+input[type="file"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+input[type="file"]:hover {
+    background-color: #e9e9e9;
+}
+
+/* for forms with add button with scrollbar  */
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-group{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    position: relative; /* Set position relative for absolute positioning of delete button */
+}
+
+.delete-btn {
+    position: absolute; /* Use absolute positioning */
+    top: 10px; /* Adjust top as necessary */
+    right: 10px; /* Align to the right */
+    cursor: pointer; /* Show pointer cursor on hover */
+    color: #e74c3c; /* Color for the delete icon */
+}
+
+.delete-btn i {
+    font-size: 18px; /* Adjust size of the icon */
+}
+
+/* Additional styles for the delete button when hovered */
+.delete-btn:hover {
+    color: #c0392b; /* Change color on hover */
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    form {
+        grid-template-columns: 1fr; /* Stack inputs on smaller screens */
+    }
+}

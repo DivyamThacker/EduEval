@@ -1,0 +1,22 @@
+.tabs {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.tab-btn {
+    background-color: #ccc;
+    color: black;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.tab-btn.active {
+    background-color:#007bff;
+}
+
+.tab-btn + .tab-btn {
+    margin-left: 10px;
+}

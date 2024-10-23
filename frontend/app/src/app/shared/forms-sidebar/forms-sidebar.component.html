@@ -1,0 +1,5 @@
+<ul>
+    <li *ngFor="let section of subSections">
+      <a [routerLink]="section.route" routerLinkActive="active">{{ section.label }}</a>
+    </li>
+</ul>

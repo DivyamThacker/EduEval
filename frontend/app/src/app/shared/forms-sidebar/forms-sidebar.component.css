@@ -1,0 +1,28 @@
+ul {
+    list-style-type: none;
+}
+
+ul li {
+    padding: 15px 0;
+    font-size: 18px;
+    color: #666;
+    cursor: pointer;
+}
+
+ul li.active {
+    font-weight: bold;
+    color: #000;
+}
+
+ul li a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul li a:hover {
+    color: #007bff;
+}
+
+ul li.active a {
+    color: #111;
+}

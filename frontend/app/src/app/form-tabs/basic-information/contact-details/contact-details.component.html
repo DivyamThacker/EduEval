@@ -1,0 +1,45 @@
+<div style="max-height: 400px; overflow-y: auto;">
+    <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div formArrayName="contacts">
+        <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class="contact-group">
+            <h4>Contact {{ i + 1 }}</h4>
+            <div>
+                <div class="delete-btn" (click)="removeContact(i)">
+                    <i class="fas fa-trash"></i> <!-- Font Awesome trash icon -->
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="designation">Designation</label>
+                <input type="text" id="designation" formControlName="designation" placeholder="Text field data">
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" formControlName="name" placeholder="Text field data">
+            </div>
+            <div class="form-group">
+                <label for="email">Email ID</label>
+                <input type="email" id="email" formControlName="email" placeholder="Text field data">
+            </div>
+            <div class="form-group">
+                <label for="telephone">Telephone with STD Code</label>
+                <input type="number" id="telephone" formControlName="telephone" placeholder="Numeric field data">
+            </div>
+            <div class="form-group">
+                <label for="mobile">Mobile</label>
+                <input type="number" id="mobile" formControlName="mobile" placeholder="Numeric field data">
+            </div>
+            <div class="form-group">
+                <label for="fax">Fax</label>
+                <input type="number" id="fax" formControlName="fax" placeholder="Numeric field data">
+            </div>
+        </div>
+      </div>
+  
+      <div class="add-button">
+        <button type="button" (click)="addContact()">Add +</button>
+      </div>
+  
+      <!-- <button type="submit">Submit</button> -->
+    </form>
+  </div>
+  
