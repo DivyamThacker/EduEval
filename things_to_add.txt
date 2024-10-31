@@ -1,3 +1,6 @@
+
+
+
 The tab navigation not workign properly
 
 active tab should be highlited also active subsection should be highlited
@@ -15,40 +18,29 @@ watch angular course content from angular dynamic components
 
 see how environment variables are added to angular and springboot
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-old contact page:
 
-<form>
-    <div class="form-group">
-        <label for="designation">Designation</label>
-        <input type="text" id="designation" name="designation" placeholder="Text field data">
-    </div>
+@PostMapping("/api/naac/universities")
+	public ResponseEntity<University> saveUniversity(@Valid @RequestBody University university) {
+		University savedUniversity = universityRepository.save(university);
 
-    <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" placeholder="Text field data">
-    </div>
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+						.path("/{id}")
+						.buildAndExpand(savedUniversity.getId())
+						.toUri();
 
-    <div class="form-group">
-        <label for="email">Email ID</label>
-        <input type="email" id="email" name="email" placeholder="Text field data">
-    </div>
+		return ResponseEntity.created(location).body(savedUniversity);
+	}
 
-    <div class="form-group">
-        <label for="telephone">Telephone with STD Code</label>
-        <input type="number" id="telephone" name="telephone" placeholder="Numeric field data">
-    </div>
 
-    <div class="form-group">
-        <label for="mobile">Mobile</label>
-        <input type="number" id="mobile" name="mobile" placeholder="Numeric field data">
-    </div>
+	@PostMapping("/api/naac/basic-info")
+	public ResponseEntity<University> createUniversity(@Valid @RequestBody University university) {
+		
+		University savedUniversity = universityRepository.save(university);
 
-    <div class="form-group">
-        <label for="fax">Fax</label>
-        <input type="number" id="fax" name="fax" placeholder="Numeric field data">
-    </div>
-
-    <div class="add-button">
-        <button type="button">Add +</button>
-    </div>
-</form>
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+						.path("/{id}")
+						.buildAndExpand(savedUniversity.getId())
+						.toUri();   
+		
+		return ResponseEntity.created(location).build();
+	}
