@@ -1,6 +1,7 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule , Validators} from '@angular/forms';
+import { FormDataService } from '../../../shared/form-api-service';
 
 @Component({
   selector: 'app-contact-details',
@@ -11,8 +12,9 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule , Validators} fr
 })
 export class ContactDetailsComponent{
   form: FormGroup;
+  contactId: number | null = null; // Set this ID when editing an existing contact
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private formDataService: FormDataService) {
     // Initialize the form with a FormArray
     this.form = this.fb.group({
       contacts: this.fb.array([]),
@@ -42,5 +44,12 @@ export class ContactDetailsComponent{
 
   onSubmit(): void {
     console.log(this.form.value);
+  }
+
+  onSaveContact(contactData: any) {
+    this.formDataService.submitContactDetails(contactData, this.contactId ?? undefined).subscribe({
+      next: response => console.log('Contact saved successfully', response),
+      error: error => console.error('Error saving contact', error)
+    });
   }
 }

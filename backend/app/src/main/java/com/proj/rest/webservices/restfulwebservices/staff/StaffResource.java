@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.proj.rest.webservices.restfulwebservices.jpa.StaffRepository;
-import com.proj.rest.webservices.restfulwebservices.staff.Staff;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;

@@ -3,6 +3,8 @@ package com.proj.rest.webservices.restfulwebservices.university;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.proj.rest.webservices.restfulwebservices.university.campus.Campus;
+import com.proj.rest.webservices.restfulwebservices.university.contact.Contact;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -35,10 +37,21 @@ public class University {
     private String type;
     private String establishmentDate;
     private String priorStatus;
-    private String priorEstablishmentDate;
-    private String recognitionDate;
 
-    public University(Integer id, String name, String address, String city, String state, String pincode, String websiteUrl, String nature, String type, String establishmentDate,String recognitionDate, String priorStatus, String priorEstablishmentDate) {
+    private String recognitionSection;
+    private String recognitionDate;
+    private String recognitionDocument;
+
+    private String isUPE; //university with potential for excellence
+
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("university") // Prevent circular serialization
+	private List<Campus> campuses;
+
+    
+    public University(Integer id, String name, String address, String city, String state, String pincode,
+     String websiteUrl, String nature, String type, String establishmentDate, String priorStatus, String recognitionSection,
+      String recognitionDate, String recognitionDocument, String isUPE, List<Campus> campuses, List<Contact> contactDetails) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -49,9 +62,12 @@ public class University {
         this.nature = nature;
         this.type = type;
         this.establishmentDate = establishmentDate;
-        this.recognitionDate = recognitionDate;
         this.priorStatus = priorStatus;
-        this.priorEstablishmentDate = priorEstablishmentDate;
+        this.recognitionSection = recognitionSection;
+        this.recognitionDate = recognitionDate;
+        this.recognitionDocument = recognitionDocument;
+        this.isUPE = isUPE;
+        this.campuses = campuses;
     }
 
     public Integer getId() {
@@ -141,6 +157,23 @@ public class University {
     public void setEstablishmentDate(String establishmentDate) {
         this.establishmentDate = establishmentDate;
     }
+    
+    public String getPriorStatus() {
+        return priorStatus;
+    }
+    
+    public void setPriorStatus(String priorStatus) {
+        this.priorStatus = priorStatus;
+    }
+    
+    public String getRecognitionSection() {
+        return recognitionSection;
+    }
+
+    public String setRecognitionSection(String recognitionSection) {
+        return this.recognitionSection = recognitionSection;
+    }
+
     public String getRecognitionDate() {
         return recognitionDate;
     }
@@ -149,20 +182,28 @@ public class University {
         this.recognitionDate = recognitionDate;
     }
 
-    public String getPriorStatus() {
-        return priorStatus;
+    public String getRecognitionDocument() {
+        return recognitionDocument;
     }
 
-    public void setPriorStatus(String priorStatus) {
-        this.priorStatus = priorStatus;
+    public void setRecognitionDocument(String recognitionDocument) {
+        this.recognitionDocument = recognitionDocument;
     }
 
-    public String getPriorEstablishmentDate() {
-        return priorEstablishmentDate;
+    public String getIsUPE() {
+        return isUPE;
     }
 
-    public void setPriorEstablishmentDate(String priorEstablishmentDate) {
-        this.priorEstablishmentDate = priorEstablishmentDate;
+    public void setIsUPE(String isUPE) {
+        this.isUPE = isUPE;
+    }
+
+    public List<Campus> getCampuses() {
+        return campuses;
+    }
+
+    public void setCampuses(List<Campus> campuses) {
+        this.campuses = campuses;
     }
 
     @Override
@@ -180,7 +221,11 @@ public class University {
                 ", type='" + type + '\'' +
                 ", establishmentDate='" + establishmentDate + '\'' +
                 ", priorStatus='" + priorStatus + '\'' +
-                ", priorEstablishmentDate='" + priorEstablishmentDate + '\'' +
+                ", recognitionSection='" + recognitionSection + '\'' +
+                ", recognitionDate='" + recognitionDate + '\'' +
+                ", recognitionDocument='" + recognitionDocument + '\'' +
+                ", isUPE='" + isUPE + '\'' +
+                ", campuses=" + campuses +
                 '}';
     }
 

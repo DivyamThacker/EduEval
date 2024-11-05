@@ -1,6 +1,7 @@
-package com.proj.rest.webservices.restfulwebservices.university;
+package com.proj.rest.webservices.restfulwebservices.university.contact;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.proj.rest.webservices.restfulwebservices.university.University;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -52,11 +53,11 @@ public class Contact {
         this.email = email;
     }
 
-    public String getphone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setphone(String phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

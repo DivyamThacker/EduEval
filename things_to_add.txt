@@ -1,16 +1,32 @@
 
+figure out where onSaveContact method shold be there
 
+first make apis for all these post and put request made by the subsections
 
-The tab navigation not workign properly
+okay nvm , what if I want all subsections to call to all different api but access the same university id which is generated when a person makes the post requests in any of
+ the sections,so that all subsequent requests are directed to put request rather that post request for that 
 
-active tab should be highlited also active subsection should be highlited
+subscribe to formapi service in all subsections to update the data.(do it differently for contact details component)
+or do it differently for all subsections
+
+make sure if all the controllers do the work , you want them to , like university resource must not include anything about contact or campus
+
+create second page in pdf using itext
+
+create cover page and dashboard page
+
+think about how to exit the form menu
 
 work out how will you save the information written, also think about an alert when a user is trying to change the section or subsection
 without saving changes
 
-add scroll behaviour in pages like contact details page , which has add button
+also think the logic to enable and disable the submit button
 
-add  academic information and extended profile page and check if sidebar is working properly
+generate pdf using dynamic data for just one university
+
+add spring security
+
+add cookies to determine which university is logged in and thus save the interim data accordingly for a given university    
 
 
 See why is it showing that .subscribe is deprecated
@@ -18,29 +34,3 @@ watch angular course content from angular dynamic components
 
 see how environment variables are added to angular and springboot
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-@PostMapping("/api/naac/universities")
-	public ResponseEntity<University> saveUniversity(@Valid @RequestBody University university) {
-		University savedUniversity = universityRepository.save(university);
-
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-						.path("/{id}")
-						.buildAndExpand(savedUniversity.getId())
-						.toUri();
-
-		return ResponseEntity.created(location).body(savedUniversity);
-	}
-
-
-	@PostMapping("/api/naac/basic-info")
-	public ResponseEntity<University> createUniversity(@Valid @RequestBody University university) {
-		
-		University savedUniversity = universityRepository.save(university);
-
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-						.path("/{id}")
-						.buildAndExpand(savedUniversity.getId())
-						.toUri();   
-		
-		return ResponseEntity.created(location).build();
-	}

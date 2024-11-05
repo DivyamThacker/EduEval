@@ -23,6 +23,6 @@ ul li a:hover {
     color: #007bff;
 }
 
-ul li.active a {
+ul li a.active {
     color: #111;
 }

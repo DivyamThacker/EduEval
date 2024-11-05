@@ -1,7 +1,7 @@
 <div style="max-height: 400px; overflow-y: auto;">
     <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
       <div formArrayName="contacts">
-        <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class="contact-group">
+        <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class="replica-group contact-group">
             <h4>Contact {{ i + 1 }}</h4>
             <div>
                 <div class="delete-btn" (click)="removeContact(i)">
