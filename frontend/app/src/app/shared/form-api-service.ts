@@ -7,28 +7,63 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class FormDataService {
-  private universityIdSource = new BehaviorSubject<number | null>(null);
-  universityId$ = this.universityIdSource.asObservable();
-
-  // Set the universityId after the initial POST
-  setUniversityId(id: number) {
-    this.universityIdSource.next(id);
-  }
-
-  getUniversityId(): number | null {
-    return this.universityIdSource.value;
-  }
   apiUrl = environment.apiUrl;
 
-  universityId : number = 0;
+  private universityId: number | null = null;
+  private contactId: number | null = null;
+  private campusId: number | null = null;
+
+  private contactModelSource = new BehaviorSubject<any>({});
+  contactModel$ = this.contactModelSource.asObservable();
+
+  private campusModelSource = new BehaviorSubject<any>({});
+  campusModel$ = this.campusModelSource.asObservable();
+
   private basicInfoModelSource = new BehaviorSubject<any>({});
   basicInfoModel$ = this.basicInfoModelSource.asObservable();
 
   private academicInfoModelSource = new BehaviorSubject<any>({});
   academicInfoModel$ = this.academicInfoModelSource.asObservable();
-
+  
   constructor(private http: HttpClient) {}
+  
+  // University ID management
+  setUniversityId(id: number) {
+    this.universityId = id;
+  }
 
+  getUniversityId(): number | null {
+    return this.universityId;
+  }
+  
+  // Contact ID and model management
+  setContactId(id: number | null) {
+    this.contactId = id;
+  }
+  getContactId(): number | null {
+    return this.contactId;
+  }
+  setContactData(data: any) {
+    this.contactModelSource.next(data);
+  }
+  getContactData(): Observable<any> {
+    return this.contactModel$;
+  }
+  
+  // Campus ID and model management
+  setCampusId(id: number | null) {
+    this.campusId = id;
+  }
+  getCampusId(): number | null {
+    return this.campusId;
+  }
+  setCampusData(data: any) {
+    this.campusModelSource.next(data);
+  }
+  getCampusData(): Observable<any> {
+    return this.campusModel$;
+  }
+  
   setBasicInfoData(data: any) {
     this.basicInfoModelSource.next({ ...this.basicInfoModelSource.value, ...data });
   }
@@ -37,81 +72,49 @@ export class FormDataService {
     this.academicInfoModelSource.next({ ...this.academicInfoModelSource.value, ...data });
   }
 
-
-submitBasicInfo() {
-  if (this.universityId != 0) {
-    return this.http.put(`${this.apiUrl}/naac/basic-info/${this.universityId}`, this.basicInfoModelSource.value)
-      .pipe(
-        catchError((error) => {
-          console.error('Error in PUT request:', error);
-          return throwError(() => error);  // Updated usage of throwError
-        })
-      );
-  } else {
-    return this.http.post(this.apiUrl + '/naac/basic-info', this.basicInfoModelSource.value).pipe(
-      tap((response: any) => {
-        this.universityId = response.id;
-      }),
-      catchError((error) => {
-        console.error('Error in POST request:', error);
-        return throwError(() => error);  // Updated usage of throwError
-      })
-    );
-  }
-}
-
-  // POST or PUT for Contact section based on universityId
-  submitContactDetails(data: any, contactId?: number): Observable<any> {
-    const universityId = this.getUniversityId();
-    if (universityId) {
-      if (contactId) {
-        // Update existing contact
-        return this.http.put(`${this.apiUrl}/university/${universityId}/contacts/${contactId}`, data)
-          .pipe(catchError(error => throwError(() => error)));
-      } else {
-        // Add new contact
-        return this.http.post(`${this.apiUrl}/university/${universityId}/contacts`, data)
-          .pipe(catchError(error => throwError(() => error)));
-      }
-    } else {
-      return throwError(() => 'University ID not set.');
-    }
-  }
-
-  // POST or PUT for Campus section based on universityId
-  submitCampusDetails(data: any, campusId?: number): Observable<any> {
-    const universityId = this.getUniversityId();
-    if (universityId) {
-      if (campusId) {
-        // Update existing campus
-        return this.http.put(`${this.apiUrl}/university/${universityId}/campuses/${campusId}`, data)
-          .pipe(catchError(error => throwError(() => error)));
-      } else {
-        // Add new campus
-        return this.http.post(`${this.apiUrl}/university/${universityId}/campuses`, data)
-          .pipe(catchError(error => throwError(() => error)));
-      }
-    } else {
-      return throwError(() => 'University ID not set.');
-    }
-  }
-
-  // POST or PUT for Basic Info + Recognition Details
-  submitBasicInformation(data: any): Observable<any> {
-    const universityId = this.getUniversityId();
-    if (universityId) {
-      return this.http.put(`${this.apiUrl}/university/${universityId}`, data)
+  // Basic Info API submission
+  submitBasicInfo() {
+    const data = this.basicInfoModelSource.value;
+    if (this.universityId) {
+      return this.http.put(`${this.apiUrl}/naac/university/${this.universityId}/basic-info`, data)
         .pipe(catchError(error => throwError(() => error)));
     } else {
-      return this.http.post(`${this.apiUrl}/university`, data).pipe(
-        tap((response: any) => this.setUniversityId(response.id)),
-        catchError(error => throwError(() => error))
-      );
+      return this.http.post(`${this.apiUrl}/naac/university/basic-info`, data)
+        .pipe(
+          tap((response: any) => this.setUniversityId(response.id)),
+          catchError(error => throwError(() => error))
+        );
     }
   }
-  
 
-  submitAcademicInfo() {
-    return this.http.post(this.apiUrl + '/naac/academic-information', this.academicInfoModelSource.value);
+  // Contact Details API submission
+  submitContactDetails() {
+    const data = this.contactModelSource.value;
+     this.http.delete(`${this.apiUrl}/naac/university/${this.universityId}/contact-details`)
+    .subscribe({
+      next: response => console.log(`Contact Details for this university id : ${this.universityId} deleted successfully`, response),
+      error: error => console.error('Error deleting Contact Details', error)
+    });
+      return this.http.post(`${this.apiUrl}/naac/university/${this.universityId}/contact-details`, data.contacts)
+        .pipe(
+          catchError(error => throwError(() => error))
+        );
+  }
+
+  // Campus Details API submission
+  submitCampusDetails() {
+    const data = this.campusModelSource.value;
+    console.log("this is university id", this.universityId);
+    console.log("this is campus id", this.campusId);
+    if (this.campusId) {
+      return this.http.put(`${this.apiUrl}/naac/university/${this.universityId}/campus/${this.campusId}`, data)
+        .pipe(catchError(error => throwError(() => error)));
+    } else {
+      return this.http.post(`${this.apiUrl}/naac/university/${this.universityId}/campus`, data)
+        .pipe(
+          tap((response: any) => this.setCampusId(response.id)),
+          catchError(error => throwError(() => error))
+        );
+    }
   }
 }

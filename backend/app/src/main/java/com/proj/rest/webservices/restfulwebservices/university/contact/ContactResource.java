@@ -1,6 +1,5 @@
 package com.proj.rest.webservices.restfulwebservices.university.contact;
 
-import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.proj.rest.webservices.restfulwebservices.jpa.ContactDetailsRepository;
 import com.proj.rest.webservices.restfulwebservices.jpa.UniversityRepository;
@@ -34,16 +32,14 @@ public class ContactResource {
 	}
 
     @PostMapping("")
-	public ResponseEntity<Contact> createContact(@PathVariable Integer universityId,@RequestBody Contact contact) {
+	public ResponseEntity<List<Contact>> createContact(@PathVariable Integer universityId,@RequestBody List<Contact> contacts) {
 		University university = universityRepository.findById(universityId).get();
-		contact.setUniversity(university);
-		Contact savedContact = contactDetailsRepository.save(contact);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(savedContact.getId())
-				.toUri();
-
-		return ResponseEntity.created(location).build();
+		for (Contact c : contacts) {
+			c.setUniversity(university);
+			contactDetailsRepository.save(c);
+		}
+		List<Contact> savedContacts = universityRepository.findById(universityId).get().getContactDetails();
+		return ResponseEntity.ok(savedContacts);
 	}
 
 	@PutMapping("/{contactId}")
@@ -67,6 +63,24 @@ public class ContactResource {
 			contactDetailsRepository.delete(contact);
 			return ResponseEntity.noContent().build();
 		}).orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
+	@DeleteMapping("")
+	public ResponseEntity<Object> deleteAllContacts(@PathVariable Integer universityId) {
+		University university = universityRepository.findById(universityId).orElse(null);
+		if (university == null) {
+			return ResponseEntity.notFound().build();
+		}
+		List<Contact> contacts = university.getContactDetails();
+		for (Contact c : contacts) {
+			System.out.println(c);
+		}
+		if (!contacts.isEmpty()) {
+			contactDetailsRepository.deleteAll(contacts);
+			university.getContactDetails().clear();       // Remove from university
+			universityRepository.save(university);        // Persist update to university
+		}
+		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("")

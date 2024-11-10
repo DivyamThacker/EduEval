@@ -1,5 +1,5 @@
 <div style="max-height: 400px; overflow-y: auto;">
-    <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form class="form" [formGroup]="form" >
       <div formArrayName="campuses">
         <div *ngFor="let campus of campuses.controls; let i = index" [formGroupName]="i" class="replica-group area-location-group">
             <h4>Campus {{ i + 1 }}</h4>

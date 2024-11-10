@@ -9,6 +9,10 @@ import { CollegeInfoComponent } from './form-tabs/academic-information/college-i
 import { AcademicInformationComponent } from './form-tabs/academic-information/academic-information.component';
 import { ProgramDetialsComponent } from './form-tabs/extended-profile/program-detials/program-detials.component';
 import { ExtendedProfileComponent } from './form-tabs/extended-profile/extended-profile.component';
+import { TeachingFacultyComponent } from './form-tabs/academic-information/teaching-faculty/teaching-faculty.component';
+import { StaffComponent } from './form-tabs/academic-information/staff/staff.component';
+import { ExtraDetailsComponent } from './form-tabs/academic-information/extra-details/extra-details.component';
+import { EnrollmentDetailsComponent } from './form-tabs/academic-information/enrollment-details/enrollment-details.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/basic-information', pathMatch: 'full' },
@@ -30,10 +34,10 @@ export const routes: Routes = [
         component: AcademicInformationComponent,
         children: [
             { path: 'college-info', component: CollegeInfoComponent },
-            { path: 'teaching-faculty', component: CollegeInfoComponent },
-            { path: 'non-teaching-staff', component: CollegeInfoComponent },
-            { path: 'student-details', component: CollegeInfoComponent },
-            { path: 'extra-uni-details', component: CollegeInfoComponent }
+            { path: 'teaching-faculty', component: TeachingFacultyComponent },
+            { path: 'staff', component: StaffComponent },
+            { path: 'enrollment-details', component: EnrollmentDetailsComponent },
+            { path: 'extra-details', component: ExtraDetailsComponent }
         ]
     },
     { path: 'extended-profile', redirectTo: 'extended-profile/program-details', pathMatch: 'full' },

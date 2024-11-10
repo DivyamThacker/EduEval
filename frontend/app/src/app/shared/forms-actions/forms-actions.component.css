@@ -1,6 +1,6 @@
 .form-actions {
     display: flex;
-    justify-content: space-between;
+    justify-content:space-around;
 }
 
 .form-actions button {
@@ -23,7 +23,7 @@
     background-color: #ffcc00;
 }
 
-.submit-btn {
-    background-color: #28a745;
+.exit-btn {
+    background-color:red;
     color: white;
 }

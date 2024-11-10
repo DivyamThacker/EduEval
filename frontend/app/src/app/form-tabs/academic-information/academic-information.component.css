@@ -97,10 +97,7 @@ input[type="file"]:hover {
     flex-direction: column;
 }
 
-.contact-group{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+.replica-group{
     border: 1px solid #e0e0e0;
     border-radius: 5px;
     padding: 15px;

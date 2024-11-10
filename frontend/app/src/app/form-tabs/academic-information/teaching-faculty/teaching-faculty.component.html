@@ -1,0 +1,127 @@
+<div style="text-align: center;">
+    <h3>Furnish the deatails about all types of teachers </h3>
+</div>
+<div style="max-height: 250px; overflow-y: auto;">
+    <form class="form" [formGroup]="facultyForm">
+        <div formArrayName="faculties" style="padding: 10px;">
+            <div *ngFor="let faculty of faculties?.controls; let i = index" [formGroupName]="i" class="replica-group faculty-group">
+                <h4>Faculty Type {{ i + 1 }}</h4>
+                <div>
+                    <div class="delete-btn" (click)="removeFaculty(i)">
+                        <i class="fas fa-trash"></i> 
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="academicRank">Academic Rank</label>
+                    <select id="academicRank" formControlName="academicRank">
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Professor">Professor</option>
+                        <option value="Associate Professor">Associate Professor</option>
+                        <option value="Assistant Professor">Assistant Professor</option>   
+                    </select>
+                </div>
+
+                <div class="form-group"> 
+                    <label for="recruitmentStatus">Recruitment Status</label>
+                    <select id="recruitmentStatus" formControlName="recruitmentStatus">
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Sanctioned">Sanctioned</option>
+                        <option value="Recruited">Recruited</option>
+                        <option value="Yet to Recruit">Yet to Recruit</option>
+                        <option value="On Contract">On Contract</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" formControlName="gender">
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option> 
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="highestQualification">Highest Qualification</label>
+                    <select id="highestQualification" formControlName="highestQualification">
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="D.Sc/D.Litt">D.Sc/D.Litt</option>
+                        <option value="Ph.D">Ph.D</option>
+                        <option value="M.Phil">M.Phil</option>
+                        <option value="PG">PG</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tenure">Tenure</label>
+                    <select id="tenure" formControlName="tenure">
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Permanent">Permanent</option>
+                        <option value="Part Time">Part Time</option>
+                        <option value="Temporary">Temporary</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="count">Count of Such Entities</label>
+                    <input id="count" type="number" formControlName="count" placeholder="Numeric field data">
+                </div>
+            </div>
+        </div>
+        <div class="add-button" style="margin-top:-30px">
+            <button type="button" (click)="addFaculty()">Add +</button>
+        </div>
+    </form>
+</div>
+
+<hr style="margin-top: 10px; margin-bottom: 10px;">
+
+<div style="text-align: center;">
+    <h3>Furnish the deatails about distinguished academicians appointed </h3>
+</div>
+
+<div style="max-height: 150px; overflow-y: auto;">
+    <form class="form" [formGroup]="academiciansForm">
+        <div formArrayName="academicians" style="padding: 10px;">
+            <div *ngFor="let academician of academicians?.controls; let i = index" [formGroupName]="i" class="replica-group academician-group">
+                <h4 style="grid-column: span 2;">Academician Type {{ i + 1 }}</h4>
+                <div>
+                    <div class="delete-btn" (click)="removeAcademician(i)">
+                        <i class="fas fa-trash"></i> 
+                    </div>
+                </div>
+
+                <div class="form-group"> 
+                    <label for="type">Type of Professor</label>
+                    <select id="type" formControlName="type">
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Sanctioned">Emeritus</option>
+                        <option value="Recruited">Adjunct</option>
+                        <option value="Yet to Recruit">Visiting</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender2">Gender</label>
+                    <select id="gender2" formControlName="gender">
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option> 
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="count2">Count of Such Entities</label>
+                    <input id="count2" type="number" formControlName="count" placeholder="Numeric field data">
+                </div>
+            </div>
+        </div>
+        <div class="add-button" style="margin-top:-30px">
+            <button type="button" (click)="addFaculty()">Add +</button>
+        </div>
+    </form>
+</div>
+
+
+

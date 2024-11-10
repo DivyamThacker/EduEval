@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/api/naac")
+@RequestMapping("/api/naac/university")
 public class UniversityResource {
 
     private UniversityRepository universityRepository;
@@ -66,14 +66,14 @@ public class UniversityResource {
 		return universityRepository.findAll();
 	}
 
-	@GetMapping("/basic-info/{id}")
-	public University retrieveUniversity(@PathVariable Integer id) {	
-		return universityRepository.findById(id).get();
+	@GetMapping("/{universityId}/basic-info")
+	public University retrieveUniversity(@PathVariable Integer universityId) {	
+		return universityRepository.findById(universityId).get();
 	}
 
-	@PutMapping("/basic-info/{id}")
-	public ResponseEntity<University> updateUniversity(@PathVariable Integer id, @Valid @RequestBody University universityDetails) {
-		return universityRepository.findById(id).map(university -> {
+	@PutMapping("/{universityId}/basic-info")
+	public ResponseEntity<University> updateUniversity(@PathVariable Integer universityId, @Valid @RequestBody University universityDetails) {
+		return universityRepository.findById(universityId).map(university -> {
 			university.setName(universityDetails.getName());
 			university.setAddress(universityDetails.getAddress());
 			university.setCity(universityDetails.getCity());

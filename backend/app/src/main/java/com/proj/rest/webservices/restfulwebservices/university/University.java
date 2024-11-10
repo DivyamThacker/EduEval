@@ -23,7 +23,7 @@ public class University {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university") // Prevent circular serialization
 	private List<Contact> contactDetails;
 
@@ -44,7 +44,7 @@ public class University {
 
     private String isUPE; //university with potential for excellence
 
-    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university") // Prevent circular serialization
 	private List<Campus> campuses;
 

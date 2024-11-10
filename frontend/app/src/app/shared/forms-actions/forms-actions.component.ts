@@ -20,25 +20,28 @@ export class FormsActionsComponent{
     console.log('Next button clicked');
   }
 
-  onSubmit(){
-    console.log('Form submitted');
+  onExit(){
+    console.log('Form exited');
   }
 
   onSaveChanges() {
     const currentUrl = this.router.url;
-  
-    if (currentUrl.startsWith('/basic-information')) {
+
+    if (currentUrl.startsWith('/basic-information/basic-info')) {
       this.formDataService.submitBasicInfo().subscribe({
         next: response => console.log('Basic Info submitted successfully', response),
         error: error => console.error('Error submitting Basic Info', error)
       });
-    } else if (currentUrl.startsWith('/academic-information')) {
-      this.formDataService.submitAcademicInfo().subscribe({
-        next: response => console.log('Academic Info submitted successfully', response),
-        error: error => console.error('Error submitting Academic Info', error)
+    } else if (currentUrl.startsWith('/basic-information/contact-details')) {
+      this.formDataService.submitContactDetails().subscribe({
+        next: response => console.log('Contact Details submitted successfully', response),
+        error: error => console.error('Error submitting Contact Details', error)
       });
-    } else {
-      console.warn('Unrecognized section for submission');
+    } else if (currentUrl.startsWith('/basic-information/area-location')) {
+      this.formDataService.submitCampusDetails().subscribe({
+        next: response => console.log('Campus Details submitted successfully', response),
+        error: error => console.error('Error submitting Campus Details', error)
+      });
     }
   }
   

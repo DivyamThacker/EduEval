@@ -16,8 +16,8 @@ export class AcademicInformationComponent {
   academicInfoSubSections = [
     { label: 'College Information', route: '/academic-information/college-info' },
     { label: 'Teaching Faculty', route: '/academic-information/teaching-faculty' },
-    { label: 'Non Teaching Staff', route: '/academic-information/non-teaching-staff' },
-    { label: 'Student Details', route: '/academic-information/student-details' },
-    { label: 'Extra University Details', route: '/academic-information/extra-uni-details' }
+    { label: 'Non Teaching Staff', route: '/academic-information/staff' },
+    { label: 'Enrollment Details', route: '/academic-information/enrollment-details' },
+    { label: 'Extra Details', route: '/academic-information/extra-details' }
   ];
 }

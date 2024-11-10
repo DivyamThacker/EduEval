@@ -1,0 +1,17 @@
+.program-fields {
+    display: grid;
+    grid-template-columns: 7fr 7fr 1fr;
+    gap: 20px;
+    grid-column: span 2; /* Makes sure it spans the full width of the form */
+}
+
+.delete-btn{
+    position : static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-group{
+    padding: 10px;
+}

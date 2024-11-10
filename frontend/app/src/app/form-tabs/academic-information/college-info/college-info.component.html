@@ -1,1 +1,94 @@
-<p>college-info works!</p>
+<div style="text-align: center; margin-bottom: 10px;">
+    <h3>Furnish the Details of Number of Colleges under University</h3>
+</div>
+<div style="max-height: 150px; overflow-y: auto;">
+    <form [formGroup]="form">
+        <div class="form-group">
+            <label for="constituent-colleges">Constituent Colleges</label>
+            <input type="number" id="constituent-colleges" formControlName="constituentColleges" placeholder="Numeric field data">
+        </div>
+
+        <div class="form-group">
+            <label for="affiliated-colleges">Affiliated Colleges</label>
+            <input type="number" id="affiliated-colleges" formControlName="affiliatedColleges" placeholder="Numeric field data">
+        </div>
+
+        <div class="form-group">
+            <label for="colleges-under-2f">Colleges Under 2(f)</label>
+            <input type="number" id="colleges-under-2f" formControlName="collegesUnder2f" placeholder="Numeric field data">
+        </div>
+
+        <div class="form-group">
+            <label for="colleges-under-2f-12b">Colleges Under 2(f) and 12B</label>
+            <input type="number" id="colleges-under-2f-12b" formControlName="collegesUnder2f12b" placeholder="Numeric field data">
+        </div>
+
+        <div class="form-group">
+            <label for="naac-accredited">NAAC Accredited Colleges</label>
+            <input type="number" id="naac-accredited" formControlName="naacAccredited" placeholder="Numeric field data">
+        </div>
+
+        <div class="form-group">
+            <label for="colleges-excellence">Colleges with Potential for Excellence (UGC)</label>
+            <input type="number" id="colleges-excellence" formControlName="collegesExcellence" placeholder="Numeric field data">
+        </div>
+
+        <div class="form-group">
+            <label for="autonomous-colleges">Autonomous Colleges</label>
+            <input type="number" id="autonomous-colleges" formControlName="autonomousColleges" placeholder="Numeric field data">
+        </div>
+
+        <div class="form-group">
+            <label for="pg-departments">Colleges with Postgraduate Departments</label>
+            <input type="number" id="pg-departments" formControlName="pgDepartments" placeholder="Numeric field data">
+        </div>
+
+        <div class="form-group">
+            <label for="research-departments">Colleges with Research Departments</label>
+            <input type="number" id="research-departments" formControlName="researchDepartments" placeholder="Numeric field data">
+        </div>
+
+        <div class="form-group">
+            <label for="research-institutes">University Recognized Research Institutes/Centers</label>
+            <input type="number" id="research-institutes" formControlName="researchInstitutes" placeholder="Numeric field data">
+        </div>
+
+    </form>
+</div>
+
+<hr style="margin-top: 20px; margin-bottom: 20px;">
+
+<div style="max-height: 200px; overflow-y: auto;">
+    <form [formGroup]="sraForm">
+        <div class="form-group" style="grid-column: span 2;">
+            <label for="is-sra-program">Is the University Offering any Programmes Recognised by any Statutory Regulatory Authority (SRA)</label>
+            <input type="checkbox" id="is-sra-program" formControlName="isSRAProgram">
+        </div>
+    
+        <div *ngIf="sraForm.get('isSRAProgram')?.value" style="grid-column: span 2;">
+            <div formArrayName="sraPrograms">
+                <div *ngFor="let sraProgram of sraPrograms?.controls; let i = index" [formGroupName]="i" class="program-fields" style="margin-bottom: 15px;">
+                    
+                    <div class="form-group">
+                        <label for="sra-program-name-{{i}}">SRA Program Name</label>
+                        <input type="text" id="sra-program-name-{{i}}" formControlName="sraProgramName" placeholder="Enter program name">
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="sra-document-{{i}}">Document</label>
+                        <input type="file" id="sra-document-{{i}}" formControlName="sraDocument" multiple>
+                    </div>
+        
+                    <!-- Delete button -->
+                    <div class="delete-btn" (click)="removeSRAProgram(i)">
+                        <i class="fas fa-trash"></i> <!-- Font Awesome trash icon -->
+                    </div>
+                </div>
+            </div>
+            <div class="add-button" style="grid-column: span 2;">
+                <button type="button" (click)="addSRAProgram()">Add +</button>
+            </div>
+        </div>
+        
+    </form>
+</div>

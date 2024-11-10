@@ -1,6 +1,7 @@
 import { NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormDataService } from '../../../shared/form-api-service';
 
 @Component({
   selector: 'app-area-location',
@@ -9,10 +10,10 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
   templateUrl: './area-location.component.html',
   styleUrl: './area-location.component.css'
 })
-export class AreaLocationComponent {
+export class AreaLocationComponent implements OnInit{
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor( private formDataService : FormDataService, private fb: FormBuilder) {
     // Initialize the form with a FormArray
     this.form = this.fb.group({
       campuses: this.fb.array([]),//campus locations
@@ -26,15 +27,25 @@ export class AreaLocationComponent {
 
   addCampus(): void {
     const campusGroup = this.fb.group({
-      campusType: ['', Validators.required],
-      location: ['', Validators.required],
-      campusArea: ['', Validators.pattern(/^\d{5}$/)],
-      address: ['', Validators.required],
-      builtInArea: ['', Validators.pattern(/^\d{5}$/)],
-      ProgrammesOffered: ['', Validators.required],
-      dateOfEstablishment: ['', [Validators.required, Validators.pattern(/^\d{2} \d{2} \d{4}$/)]],
-      dateOfRecognition: ['', [Validators.required, Validators.pattern(/^\d{2} \d{2} \d{4}$/)]]
+      type: [''],
+      location: [''],
+      campusArea: [''],
+      address: [''],
+      builtInArea: [''],
+      ProgrammesOffered: [''],
+      dateOfEstablishment: [''],
+      dateOfRecognition: ['']
     });
+    // const campusGroup = this.fb.group({
+    //   type: ['', Validators.required],
+    //   location: ['', Validators.required],
+    //   campusArea: ['', Validators.pattern(/^\d{5}$/)],
+    //   address: ['', Validators.required],
+    //   builtInArea: ['', Validators.pattern(/^\d{5}$/)],
+    //   ProgrammesOffered: ['', Validators.required],
+    //   dateOfEstablishment: ['', [Validators.required, Validators.pattern(/^\d{2} \d{2} \d{4}$/)]],
+    //   dateOfRecognition: ['', [Validators.required, Validators.pattern(/^\d{2} \d{2} \d{4}$/)]]
+    // });
     this.campuses.push(campusGroup);
   }
 
@@ -42,7 +53,11 @@ export class AreaLocationComponent {
     this.campuses.removeAt(index);
   }
 
-  onSubmit(): void {
-    console.log(this.form.value);
+  ngOnInit(): void {
+    // Set initial data and watch for changes
+    this.form.valueChanges.subscribe(() => {
+      this.formDataService.setCampusData(this.form.value);
+    });
   }
+
 }
