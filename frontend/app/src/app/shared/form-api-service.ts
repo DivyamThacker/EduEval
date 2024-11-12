@@ -76,10 +76,10 @@ export class FormDataService {
   submitBasicInfo() {
     const data = this.basicInfoModelSource.value;
     if (this.universityId) {
-      return this.http.put(`${this.apiUrl}/naac/university/${this.universityId}/basic-info`, data)
+      return this.http.put(`${this.apiUrl}/university/${this.universityId}/basic-info`, data)
         .pipe(catchError(error => throwError(() => error)));
     } else {
-      return this.http.post(`${this.apiUrl}/naac/university/basic-info`, data)
+      return this.http.post(`${this.apiUrl}/university/basic-info`, data)
         .pipe(
           tap((response: any) => this.setUniversityId(response.id)),
           catchError(error => throwError(() => error))
@@ -90,12 +90,12 @@ export class FormDataService {
   // Contact Details API submission
   submitContactDetails() {
     const data = this.contactModelSource.value;
-     this.http.delete(`${this.apiUrl}/naac/university/${this.universityId}/contact-details`)
+     this.http.delete(`${this.apiUrl}/university/${this.universityId}/contact-details`)
     .subscribe({
       next: response => console.log(`Contact Details for this university id : ${this.universityId} deleted successfully`, response),
       error: error => console.error('Error deleting Contact Details', error)
     });
-      return this.http.post(`${this.apiUrl}/naac/university/${this.universityId}/contact-details`, data.contacts)
+      return this.http.post(`${this.apiUrl}/university/${this.universityId}/contact-details`, data.contacts)
         .pipe(
           catchError(error => throwError(() => error))
         );
@@ -107,10 +107,10 @@ export class FormDataService {
     console.log("this is university id", this.universityId);
     console.log("this is campus id", this.campusId);
     if (this.campusId) {
-      return this.http.put(`${this.apiUrl}/naac/university/${this.universityId}/campus/${this.campusId}`, data)
+      return this.http.put(`${this.apiUrl}/university/${this.universityId}/campus/${this.campusId}`, data)
         .pipe(catchError(error => throwError(() => error)));
     } else {
-      return this.http.post(`${this.apiUrl}/naac/university/${this.universityId}/campus`, data)
+      return this.http.post(`${this.apiUrl}/university/${this.universityId}/campus`, data)
         .pipe(
           tap((response: any) => this.setCampusId(response.id)),
           catchError(error => throwError(() => error))

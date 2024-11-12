@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormDataService } from '../form-api-service';
 
 @Component({
   selector: 'app-forms-actions',
   standalone: true,
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './forms-actions.component.html',
   styleUrl: './forms-actions.component.css'
 })
@@ -22,6 +22,8 @@ export class FormsActionsComponent{
 
   onExit(){
     console.log('Form exited');
+    //confirm if the changes on the form should be saved
+    this.router.navigate(['/dashboard']);
   }
 
   onSaveChanges() {

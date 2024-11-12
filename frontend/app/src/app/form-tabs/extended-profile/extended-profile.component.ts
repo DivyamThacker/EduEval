@@ -9,7 +9,8 @@ import { FormsActionsComponent } from '../../shared/forms-actions/forms-actions.
   standalone: true,
   imports: [FormsSidebarComponent, FormsTabsComponent, FormsActionsComponent, RouterModule],
   templateUrl: './extended-profile.component.html',
-  styleUrl: './extended-profile.component.css'
+  styleUrl: './extended-profile.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class ExtendedProfileComponent {
   extendedProfileSubSections = [

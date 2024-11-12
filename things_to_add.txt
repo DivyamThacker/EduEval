@@ -1,13 +1,21 @@
 
+see why pdfservice is null in dashboard
+
+see why navlink not routing me to services
+
 start with extended profile frontend
 
-do something about document upload in academic information , maybe create a new component
+add routes for cover page and dashboard
+
+do something about document upload in academic information , maybe create a new component (that consists of 3 things reports and two descripion)
 
 Create all the frontend angular forms 
 
 make all the form actions button working
 
 create cover page and dashboard page
+
+write effecient code in extended profile form
 
 think about how to exit the form menu
 
@@ -46,7 +54,122 @@ add cookies to determine which university is logged in and thus save the interim
 See why is it showing that .subscribe is deprecated
 watch angular course content from angular dynamic components
 
-see how environment variables are added to angular and springboot
+give correct label names and ids in the html code of all components in extended-profile 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+student details component html:
+<div class="form-group" >
+    <label for="startYear">Enter Starting Year:</label>
+    <input type="number" id="startYear" [(ngModel)]="startYear" (input)="generateYears()" min="2000" max="2100" />
+</div>
+
+<div style="max-height: 400px; overflow-y: auto;">
+    <div style="text-align: center; margin-bottom: 10px;">
+        <h3>1. Enter number of students year-wise</h3>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td *ngFor="let control of programs.controls; let i = index">
+                <input type="number" [formControl]="control" placeholder="Enter Value" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
+          <label for="programDetailsFile">Upload Institutional data in prescribed format:</label>
+          <input type="file" id="programDetailsFile" (change)="onFileSelected($event)" />
+      </div>
+
+      <hr style="margin-top: 10px; margin-bottom: 10px;">
+
+      <div style="text-align: center; margin-bottom: 10px;">
+        <h3>2. Enter number of outgoing / final year students year-wise</h3>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td *ngFor="let control of programs.controls; let i = index">
+                <input type="number" [formControl]="control" placeholder="Enter Value" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
+          <label for="programDetailsFile">Upload Institutional data in prescribed format:</label>
+          <input type="file" id="programDetailsFile" (change)="onFileSelected($event)" />
+      </div>
+
+      <hr style="margin-top: 10px; margin-bottom: 10px;">
+
+      <div style="text-align: center; margin-bottom: 10px;">
+        <h3>3. Enter number of of students appeared in the University examination year-wise</h3>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td *ngFor="let control of programs.controls; let i = index">
+                <input type="number" [formControl]="control" placeholder="Enter Value" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
+          <label for="programDetailsFile">Upload Institutional data in prescribed format:</label>
+          <input type="file" id="programDetailsFile" (change)="onFileSelected($event)" />
+      </div>
+
+      <hr style="margin-top: 10px; margin-bottom: 10px;">
+
+      <div style="text-align: center; margin-bottom: 10px;">
+        <h3>4. Enter number of revaluation applications year-wise</h3>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td *ngFor="let control of programs.controls; let i = index">
+                <input type="number" [formControl]="control" placeholder="Enter Value" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
+          <label for="programDetailsFile">Upload Institutional data in prescribed format:</label>
+          <input type="file" id="programDetailsFile" (change)="onFileSelected($event)" />
+      </div>
+</div>
+
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 form-api service:
 private universityIdSource = new BehaviorSubject<number | null>(null);

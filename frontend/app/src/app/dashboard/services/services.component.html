@@ -1,0 +1,24 @@
+<div class="card-container">
+  
+  <div class="card">
+    <h3>1</h3>
+    <h3>This Service Generates a SSR report for your institute based on the past 5 years data</h3>
+    <button class="button" (click)="onGenerate()">Generate</button>
+  </div>
+  
+  <div class="card">
+    <h3>2</h3>
+    <h3>This Service lets you update the structured data about your instituition</h3>
+    <button class="button" routerLink="/basic-information">Update</button>
+  </div>
+  
+  <!-- <div class="card">
+      <h3>3</h3>
+      <h3>This service generates a Mock NAAC score for your institute based on the details you have provided before</h3>
+      <button class="generate-button">Generate</button>
+    </div> -->
+</div>
+
+<div *ngIf="pdfUrl">
+  <iframe [src]="pdfUrl" width="100%" height="600px"></iframe>
+</div>

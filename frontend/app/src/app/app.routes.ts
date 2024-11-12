@@ -13,9 +13,25 @@ import { TeachingFacultyComponent } from './form-tabs/academic-information/teach
 import { StaffComponent } from './form-tabs/academic-information/staff/staff.component';
 import { ExtraDetailsComponent } from './form-tabs/academic-information/extra-details/extra-details.component';
 import { EnrollmentDetailsComponent } from './form-tabs/academic-information/enrollment-details/enrollment-details.component';
+import { StudentDetailsComponent } from './form-tabs/extended-profile/student-details/student-details.component';
+import { AcademicDetailsComponent } from './form-tabs/extended-profile/academic-details/academic-details.component';
+import { InstitutionDetailsComponent } from './form-tabs/extended-profile/institution-details/institution-details.component';
+import { HomeComponent } from './home/home.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ServicesComponent } from './dashboard/services/services.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/basic-information', pathMatch: 'full' },
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    {path: 'home', component: HomeComponent},
+    {path: 'dashboard', redirectTo: 'dashboard/services', pathMatch: 'full'},
+    {path: 'dashboard', component: DashboardComponent,
+        children: [
+          { path: 'services', component: ServicesComponent },
+          { path: 'about-us', component: ServicesComponent },
+          { path: 'pricing', component: ServicesComponent },
+          { path: 'contact-us', component: ServicesComponent }
+        ]
+    },
     { path: 'file-upload', component: FileUploadComponent },
     { path: 'basic-information', redirectTo: 'basic-information/basic-info', pathMatch: 'full' },
     {
@@ -46,9 +62,9 @@ export const routes: Routes = [
         component: ExtendedProfileComponent,
         children: [
             { path: 'program-details', component: ProgramDetialsComponent },
-            { path: 'student-details', component: ProgramDetialsComponent },
-            { path: 'academic-details', component: ProgramDetialsComponent },
-            { path: 'institution-details', component: ProgramDetialsComponent },
+            { path: 'student-details', component: StudentDetailsComponent },
+            { path: 'academic-details', component: AcademicDetailsComponent },
+            { path: 'institution-details', component: InstitutionDetailsComponent },
         ]
     },
 

@@ -1,0 +1,103 @@
+<div class="form-group">
+    <label for="startYear">Enter Starting Year:</label>
+    <input type="number" id="startYear" [(ngModel)]="startYear" (input)="generateYears()" min="2000" max="2100" />
+  </div>
+  
+  <div style="max-height: 400px; overflow-y: auto; margin-top: 15px; padding: 10px;">
+  
+    <!-- Section 1 -->
+    <div style="text-align: center; margin-bottom: 10px;">
+      <h3>1. Enter number of students year-wise</h3>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td *ngFor="let control of section1.controls">
+            <input type="number" [formControl]="control" placeholder="Enter Value" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
+      <label for="programDetailsFile1">Upload Institutional data in prescribed format:</label>
+      <input type="file" id="programDetailsFile1" (change)="onFileSelected($event, 'Section 1')" />
+    </div>
+    <hr style="margin-top: 10px; margin-bottom: 10px;">
+  
+    <!-- Section 2 -->
+    <div style="text-align: center; margin-bottom: 10px;">
+      <h3>2. Enter number of outgoing / final year students year-wise</h3>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td *ngFor="let control of section2.controls">
+            <input type="number" [formControl]="control" placeholder="Enter Value" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
+      <label for="programDetailsFile2">Upload Institutional data in prescribed format:</label>
+      <input type="file" id="programDetailsFile2" (change)="onFileSelected($event, 'Section 2')" />
+    </div>
+    <hr style="margin-top: 10px; margin-bottom: 10px;">
+  
+    <!-- Section 3 -->
+    <div style="text-align: center; margin-bottom: 10px;">
+      <h3>3. Enter number of students appeared in the University examination year-wise</h3>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td *ngFor="let control of section3.controls">
+            <input type="number" [formControl]="control" placeholder="Enter Value" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
+      <label for="programDetailsFile3">Upload Institutional data in prescribed format:</label>
+      <input type="file" id="programDetailsFile3" (change)="onFileSelected($event, 'Section 3')" />
+    </div>
+    <hr style="margin-top: 10px; margin-bottom: 10px;">
+  
+    <!-- Section 4 -->
+    <div style="text-align: center; margin-bottom: 10px;">
+      <h3>4. Enter number of revaluation applications year-wise</h3>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td *ngFor="let control of section4.controls">
+            <input type="number" [formControl]="control" placeholder="Enter Value" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
+      <label for="programDetailsFile4">Upload Institutional data in prescribed format:</label>
+      <input type="file" id="programDetailsFile4" (change)="onFileSelected($event, 'Section 4')" />
+    </div>
+  </div>
+  

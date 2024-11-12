@@ -130,3 +130,27 @@ input[type="file"]:hover {
         grid-template-columns: 1fr; /* Stack inputs on smaller screens */
     }
 }
+
+/* This is for table */
+
+.table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #000;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  input {
+    width: 100%;
+    text-align: center;
+  }
+  

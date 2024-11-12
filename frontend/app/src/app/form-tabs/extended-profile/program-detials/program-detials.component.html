@@ -1,1 +1,35 @@
-<p>program-detials works!</p>
+<div style="text-align: center; margin-bottom: 10px;">
+  <h3>Number of programs offered year-wise for the last five years</h3>
+</div>
+
+<div class="form-group" >
+  <label for="startYear">Enter Starting Year:</label>
+  <input type="number" id="startYear" [(ngModel)]="startYear" (input)="generateYears()" min="2000" max="2100" />
+</div>
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td *ngFor="let control of programs.controls; let i = index">
+          <input type="number" [formControl]="control" placeholder="Enter Value" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
+    <label for="programDetailsFile">Upload Institutional data in prescribed format:</label>
+    <input type="file" id="programDetailsFile" (change)="onFileSelected($event)" />
+</div>
+
+<div class="form-group" style="margin-top: 20px;">
+    <label for="departmentsOfferingPrograms">Number of departments offering academic programmes:</label>
+    <input type="number" id="departmentsOfferingPrograms" formControlName="departmentsOfferingPrograms" min="0" placeholder="Numeric feild data" />
+</div>

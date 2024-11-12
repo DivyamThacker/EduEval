@@ -26,7 +26,7 @@ import com.itextpdf.kernel.pdf.action.PdfAction;
 @Service
 public class PdfService {
     private static final String SRC = "src/main/resources/static/input.html"; 
-    private static final String DEST = "target/UniversityProfile.pdf"; 
+    private static final String DEST = "target/classes/UniversityProfile.pdf"; 
 
     public void convertHtmlToPdf() throws IOException {
         try {

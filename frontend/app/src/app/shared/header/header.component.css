@@ -1,0 +1,54 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    display: flex;
+    align-items: center;
+}
+
+.logo span {
+    color: #4169e1; /* Blue color for 'EduEval' */
+}
+
+nav a {
+    margin: 0 15px;
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-btn {
+    padding: 8px 16px;
+    border: 1px solid #000;
+    background: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.image img {
+    width: 750px; /* Adjust width as needed */
+    border-radius: 15px;
+}
+
+.nav-link {
+    /* Base styles */
+    color: #333;
+    text-decoration: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  
+    /* Hover effect */
+    transition: background-color 0.3s ease-in-out;
+  
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
