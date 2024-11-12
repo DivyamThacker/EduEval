@@ -1,6 +1,6 @@
 <div style="max-height: 400px; overflow-y: auto;">
     <form class="form" [formGroup]="form" >
-      <div formArrayName="campuses">
+      <div formArrayName="campuses" style="padding: 10px;">
         <div *ngFor="let campus of campuses.controls; let i = index" [formGroupName]="i" class="replica-group area-location-group">
             <h4>Campus {{ i + 1 }}</h4>
             <div style="grid-column: span 3;">
@@ -17,6 +17,7 @@
             <div class="form-group" style="grid-column: span 2;">
                 <label for="location">Location</label>
                 <select id="location" name="location">
+                    <option value="" disabled selected>Select an option</option>
                     <option>Urban</option>
                     <option>Rural</option>
                     <option>Tribal</option>

@@ -1,6 +1,6 @@
 <div style="max-height: 400px; overflow-y: auto;">
     <form class="form" [formGroup]="form">
-      <div formArrayName="contacts">
+      <div formArrayName="contacts" style="padding: 10px;">
         <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class="replica-group contact-group">
             <h4>Contact {{ i + 1 }}</h4>
             <div>

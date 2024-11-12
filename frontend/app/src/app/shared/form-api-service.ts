@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class FormDataService {
+  areUnsavedChanges = false;
   apiUrl = environment.apiUrl;
 
   private universityId: number | null = null;
@@ -27,6 +28,14 @@ export class FormDataService {
   
   constructor(private http: HttpClient) {}
   
+  setUnsavedChanges(value: boolean) {
+    this.areUnsavedChanges = value;
+  }
+
+  getUnsavedChanges(): boolean {
+    return this.areUnsavedChanges;
+  }
+
   // University ID management
   setUniversityId(id: number) {
     this.universityId = id;

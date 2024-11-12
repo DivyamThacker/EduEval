@@ -1,6 +1,12 @@
 <div class="form-actions">
-    <button type="button" class="back-btn" (click)="onBack()">Back</button>
-    <button type="button" class="next-btn" (click)="onNext()">Next</button>
+    <button 
+        type="button" [ngClass]="isAtFirst ? 'disabled' : 'btn'" (click)="navigate('back')" [disabled]="isAtFirst"> Previous 
+    </button>
+
+  <button 
+    type="button" [ngClass]="isAtLast ? 'disabled' : 'btn'" (click)="navigate('next')" [disabled]="isAtLast">Next
+  </button>
+
     <button type="button" class="save-exit-btn" (click)="onSaveChanges()">Save Changes</button>
     <button type="button" class="exit-btn" (click)="onExit()">Exit</button>
 </div>

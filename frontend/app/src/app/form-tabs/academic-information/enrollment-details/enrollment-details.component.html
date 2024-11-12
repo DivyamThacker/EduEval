@@ -66,7 +66,7 @@
             <input type="checkbox" id="isIntegrated" formControlName="isIntegrated">
         </div>
     
-        <div *ngIf="integratedForm.get('isIntegrated')?.value" style="grid-column: span 2;">
+        <div *ngIf="integratedForm.get('isIntegrated')?.value" style="grid-column: span 2; padding: 10px;">
             <div formArrayName="integratedEnrollments">
                 <div *ngFor="let integratedEnrollment of integratedEnrollments?.controls; let i = index" [formGroupName]="i" class="replica-group enrollment-group" style="margin-bottom: 10px;">
                     <h4 style="grid-column: span 2;">Type {{ i + 1 }}</h4>

@@ -19,6 +19,7 @@ import { InstitutionDetailsComponent } from './form-tabs/extended-profile/instit
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ServicesComponent } from './dashboard/services/services.component';
+import { canDeactivateGuard } from './guards/can-deactivate.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -38,7 +39,7 @@ export const routes: Routes = [
         path: 'basic-information',
         component: BasicInformationComponent,
         children: [
-            { path: 'basic-info', component: BasicInfoComponent },
+            { path: 'basic-info', component: BasicInfoComponent, canDeactivate: [canDeactivateGuard] },
             { path: 'contact-details', component: ContactDetailsComponent },
           { path: 'recognition-details', component: RecognitionDetailsComponent },
           { path: 'area-location', component: AreaLocationComponent }
@@ -66,9 +67,5 @@ export const routes: Routes = [
             { path: 'academic-details', component: AcademicDetailsComponent },
             { path: 'institution-details', component: InstitutionDetailsComponent },
         ]
-    },
-
-    // { path: 'about', component: AboutComponent },
-    // { path: 'contact', component: ContactComponent },
-    // { path: '**', component: PageNotFoundComponent }
+    }
 ];

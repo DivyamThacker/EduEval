@@ -1,30 +1,21 @@
+understand what is a promise
 
-see why pdfservice is null in dashboard
-
-see why navlink not routing me to services
-
-start with extended profile frontend
-
-add routes for cover page and dashboard
-
-do something about document upload in academic information , maybe create a new component (that consists of 3 things reports and two descripion)
-
-Create all the frontend angular forms 
-
-make all the form actions button working
-
-create cover page and dashboard page
-
-write effecient code in extended profile form
-
-think about how to exit the form menu
+do something about document upload in academic information , maybe create a new component\
+ (that consists of 3 things reports and two descripion)
 
 add basicsource model to Recognition details component (change the attirbutes in the model because university 
 can be recongnized under both sectoins also think about how are you going to save the file as a string or what)
 
+get the data that and fill the interim forms using it so that one can edit or add the new data and 
+also see what already data exists on backend
+
 change the request to api everywhere for basic info to go to ${this.apiUrl}/naac/university/${this.universityId}/basic-info
 
 first make apis for all these post and put request made by the subsections
+
+unset areUnsavedChanges in onSaveChanges method only if the response is received , do not unset while there is error
+
+write effecient code in extended profile form
 
 okay nvm , what if I want all subsections to call to all different api but access the same university id which is generated when a person makes the post requests in any of
  the sections,so that all subsequent requests are directed to put request rather that post request for that 
@@ -34,15 +25,16 @@ or do it differently for all subsections
 
 make sure if all the controllers do the work , you want them to , like university resource must not include anything about contact or campus
 
-create second page in pdf using itext
+create all pages of profile section in the pdf
 
+think about how will you get and upload the text data to azure storage and show it in the generated ssr
 
 add validators to all form in frontend
 
 work out how will you save the information written, also think about an alert when a user is trying to change the section or subsection
 without saving changes
 
-also think the logic to enable and disable the submit button
+give correct label names and ids in the html code of all components in extended-profile 
 
 generate pdf using dynamic data for just one university
 
@@ -50,127 +42,9 @@ add spring security
 
 add cookies to determine which university is logged in and thus save the interim data accordingly for a given university    
 
-
-See why is it showing that .subscribe is deprecated
 watch angular course content from angular dynamic components
 
-give correct label names and ids in the html code of all components in extended-profile 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-student details component html:
-<div class="form-group" >
-    <label for="startYear">Enter Starting Year:</label>
-    <input type="number" id="startYear" [(ngModel)]="startYear" (input)="generateYears()" min="2000" max="2100" />
-</div>
-
-<div style="max-height: 400px; overflow-y: auto;">
-    <div style="text-align: center; margin-bottom: 10px;">
-        <h3>1. Enter number of students year-wise</h3>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td *ngFor="let control of programs.controls; let i = index">
-                <input type="number" [formControl]="control" placeholder="Enter Value" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
-          <label for="programDetailsFile">Upload Institutional data in prescribed format:</label>
-          <input type="file" id="programDetailsFile" (change)="onFileSelected($event)" />
-      </div>
-
-      <hr style="margin-top: 10px; margin-bottom: 10px;">
-
-      <div style="text-align: center; margin-bottom: 10px;">
-        <h3>2. Enter number of outgoing / final year students year-wise</h3>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td *ngFor="let control of programs.controls; let i = index">
-                <input type="number" [formControl]="control" placeholder="Enter Value" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
-          <label for="programDetailsFile">Upload Institutional data in prescribed format:</label>
-          <input type="file" id="programDetailsFile" (change)="onFileSelected($event)" />
-      </div>
-
-      <hr style="margin-top: 10px; margin-bottom: 10px;">
-
-      <div style="text-align: center; margin-bottom: 10px;">
-        <h3>3. Enter number of of students appeared in the University examination year-wise</h3>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td *ngFor="let control of programs.controls; let i = index">
-                <input type="number" [formControl]="control" placeholder="Enter Value" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
-          <label for="programDetailsFile">Upload Institutional data in prescribed format:</label>
-          <input type="file" id="programDetailsFile" (change)="onFileSelected($event)" />
-      </div>
-
-      <hr style="margin-top: 10px; margin-bottom: 10px;">
-
-      <div style="text-align: center; margin-bottom: 10px;">
-        <h3>4. Enter number of revaluation applications year-wise</h3>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th *ngFor="let year of years">{{ year }}-{{ year + 1 }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td *ngFor="let control of programs.controls; let i = index">
-                <input type="number" [formControl]="control" placeholder="Enter Value" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <div class="form-group" style="margin-top: 20px; margin-bottom: 10px;">
-          <label for="programDetailsFile">Upload Institutional data in prescribed format:</label>
-          <input type="file" id="programDetailsFile" (change)="onFileSelected($event)" />
-      </div>
-</div>
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 form-api service:
 private universityIdSource = new BehaviorSubject<number | null>(null);
   universityId$ = this.universityIdSource.asObservable();
