@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.proj.rest.webservices.restfulwebservices.jpa.CampusRepository;
 import com.proj.rest.webservices.restfulwebservices.jpa.UniversityRepository;
@@ -34,16 +33,14 @@ public class CampusResource {
 	}
 
     @PostMapping("")
-	public ResponseEntity<Campus> createCampus(@PathVariable Integer universityId,@RequestBody Campus campus) {
+	public ResponseEntity<List<Campus>> createCampus(@PathVariable Integer universityId,@RequestBody List<Campus> campuses) {
 		University university = universityRepository.findById(universityId).get();
-		campus.setUniversity(university);
-		Campus savedCampus = campusRepository.save(campus);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(savedCampus.getId())
-				.toUri();
-
-		return ResponseEntity.created(location).build();
+		for (Campus c : campuses) {
+			c.setUniversity(university);
+			campusRepository.save(c);
+		}
+		List<Campus> savedCampuses = universityRepository.findById(universityId).get().getCampuses();
+		return ResponseEntity.ok(savedCampuses);
 	}
 
 	@PutMapping("/{campusId}")
@@ -68,6 +65,24 @@ public class CampusResource {
 			campusRepository.delete(campus);
 			return ResponseEntity.noContent().build();
 		}).orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
+	@DeleteMapping("")
+	public ResponseEntity<Object> deleteAllCampuses(@PathVariable Integer universityId) {
+		University university = universityRepository.findById(universityId).orElse(null);
+		if (university == null) {
+			return ResponseEntity.notFound().build();
+		}
+		List<Campus> campuses = university.getCampuses();
+		for (Campus c : campuses) {
+			System.out.println(c);
+		}
+		if (!campuses.isEmpty()) {
+			campusRepository.deleteAll(campuses);
+			university.getCampuses().clear();       // Remove from university
+			universityRepository.save(university);        // Persist update to university
+		}
+		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("")

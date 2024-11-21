@@ -1,29 +1,30 @@
-understand what is a promise
-
-do something about document upload in academic information , maybe create a new component\
- (that consists of 3 things reports and two descripion)
+create s3 and manage credentials in environment variables
 
 add basicsource model to Recognition details component (change the attirbutes in the model because university 
 can be recongnized under both sectoins also think about how are you going to save the file as a string or what)
 
-get the data that and fill the interim forms using it so that one can edit or add the new data and 
-also see what already data exists on backend
-
-change the request to api everywhere for basic info to go to ${this.apiUrl}/naac/university/${this.universityId}/basic-info
+add guard to every form tab in the app.routes
 
 first make apis for all these post and put request made by the subsections
 
+think about can we fix the error where we try to fill contactDetails or any other component before basic-info component
+
+check if you are working with right version of java
+
 unset areUnsavedChanges in onSaveChanges method only if the response is received , do not unset while there is error
 
-write effecient code in extended profile form
+do something about document upload in academic information , maybe create a new component\
+ (that consists of 3 things reports and two descripion)
 
-okay nvm , what if I want all subsections to call to all different api but access the same university id which is generated when a person makes the post requests in any of
- the sections,so that all subsequent requests are directed to put request rather that post request for that 
+get the data that and fill the interim forms using it so that one can edit or add the new data and 
+also see what already data exists on backend
+
+write effecient code in extended profile form frontend
 
 subscribe to formapi service in all subsections to update the data.(do it differently for contact details component)
 or do it differently for all subsections
 
-make sure if all the controllers do the work , you want them to , like university resource must not include anything about contact or campus
+make sure if all the controllers do the work , you want them to 
 
 create all pages of profile section in the pdf
 
@@ -43,7 +44,6 @@ add spring security
 add cookies to determine which university is logged in and thus save the interim data accordingly for a given university    
 
 watch angular course content from angular dynamic components
-
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 form-api service:
 private universityIdSource = new BehaviorSubject<number | null>(null);

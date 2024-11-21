@@ -84,6 +84,7 @@ export class FormDataService {
   // Basic Info API submission
   submitBasicInfo() {
     const data = this.basicInfoModelSource.value;
+    console.log("this is university id", this.universityId);
     if (this.universityId) {
       return this.http.put(`${this.apiUrl}/university/${this.universityId}/basic-info`, data)
         .pipe(catchError(error => throwError(() => error)));
@@ -113,17 +114,20 @@ export class FormDataService {
   // Campus Details API submission
   submitCampusDetails() {
     const data = this.campusModelSource.value;
-    console.log("this is university id", this.universityId);
-    console.log("this is campus id", this.campusId);
-    if (this.campusId) {
-      return this.http.put(`${this.apiUrl}/university/${this.universityId}/campus/${this.campusId}`, data)
-        .pipe(catchError(error => throwError(() => error)));
-    } else {
-      return this.http.post(`${this.apiUrl}/university/${this.universityId}/campus`, data)
+    // Split the comma-separated list of programmes offered into an array
+    data.campuses.forEach((campus: any) => {
+      campus.programmesOffered = campus.programmesOffered.split(',')
+      .map((s: string) => s.trim())
+      .filter((s: string) => s !== '');
+    });
+    this.http.delete(`${this.apiUrl}/university/${this.universityId}/campus`)
+    .subscribe({
+      next: response => console.log(`Campus Details for this university id : ${this.universityId} deleted successfully`, response),
+      error: error => console.error('Error deleting Campus Details', error)
+    });
+      return this.http.post(`${this.apiUrl}/university/${this.universityId}/campus`, data.campuses)
         .pipe(
-          tap((response: any) => this.setCampusId(response.id)),
           catchError(error => throwError(() => error))
         );
-    }
   }
 }

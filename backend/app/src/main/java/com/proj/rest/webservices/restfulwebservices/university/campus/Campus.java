@@ -20,6 +20,7 @@ public class Campus {
 	@GeneratedValue
 	private Integer id;
 
+    private String type;
     private String address;
     private String location;
     private String campusArea;
@@ -32,7 +33,7 @@ public class Campus {
 	@JsonIgnore
 	private University university;
 
-    public Campus(Integer id, String address, String location, String campusArea, String builtUpArea, List<String> programmesOffered, String establishmentDate, String recognitionDate, University university) {
+    public Campus(Integer id, String type, String address, String location, String campusArea, String builtUpArea, List<String> programmesOffered, String establishmentDate, String recognitionDate, University university) {
         this.id = id;
         this.address = address;
         this.location = location;
@@ -42,6 +43,7 @@ public class Campus {
         this.establishmentDate = establishmentDate;
         this.recognitionDate = recognitionDate;
         this.university = university;
+        this.type = type;
     }
 
     public Integer getId() {
@@ -50,6 +52,14 @@ public class Campus {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getAddress() {
@@ -120,6 +130,7 @@ public class Campus {
     public String toString() {
         return "Campus{" +
                 "id=" + id +
+                ", type='" + type + '\'' +
                 ", address='" + address + '\'' +
                 ", location='" + location + '\'' +
                 ", campusArea='" + campusArea + '\'' +

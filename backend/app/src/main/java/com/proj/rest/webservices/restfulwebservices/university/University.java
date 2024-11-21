@@ -23,10 +23,7 @@ public class University {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("university") // Prevent circular serialization
-	private List<Contact> contactDetails;
-
+    
     private String name;
     private String address;
     private String city;
@@ -38,20 +35,29 @@ public class University {
     private String establishmentDate;
     private String priorStatus;
 
-    private String recognitionSection;
-    private String recognitionDate;
-    private String recognitionDocument;
-
     private String isUPE; //university with potential for excellence
+    
+    private String recognitionDateUnderSection2f;
+    private String recognitionDateUnderSection12b;
+    // private UploadedDocument recognitionDocument2f;
+    // private UploadedDocument recognitionDocument12b;
+    
+    
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university") // Prevent circular serialization
+	private List<Contact> contactDetails;//= new ArrayList<>();
 
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university") // Prevent circular serialization
-	private List<Campus> campuses;
+    private List<Campus> campuses;//= new ArrayList<>();
 
-    
+
     public University(Integer id, String name, String address, String city, String state, String pincode,
-     String websiteUrl, String nature, String type, String establishmentDate, String priorStatus, String recognitionSection,
-      String recognitionDate, String recognitionDocument, String isUPE, List<Campus> campuses, List<Contact> contactDetails) {
+     String websiteUrl, String nature, String type, String establishmentDate, String priorStatus, 
+     String recognitionDateUnderSection2f, String recognitionDateUnderSection12b,  String isUPE, List<Campus> campuses, List<Contact> contactDetails) {
+        
+    //     UploadedDocument recognitionDocument2f, 
+    //  UploadedDocument recognitionDocument12b,
         this.id = id;
         this.name = name;
         this.address = address;
@@ -63,11 +69,13 @@ public class University {
         this.type = type;
         this.establishmentDate = establishmentDate;
         this.priorStatus = priorStatus;
-        this.recognitionSection = recognitionSection;
-        this.recognitionDate = recognitionDate;
-        this.recognitionDocument = recognitionDocument;
+        this.recognitionDateUnderSection2f = recognitionDateUnderSection2f;
+        this.recognitionDateUnderSection12b = recognitionDateUnderSection12b;
+        // this.recognitionDocument2f = recognitionDocument2f;
+        // this.recognitionDocument12b = recognitionDocument12b;
         this.isUPE = isUPE;
         this.campuses = campuses;
+        this.contactDetails = contactDetails;
     }
 
     public Integer getId() {
@@ -166,29 +174,37 @@ public class University {
         this.priorStatus = priorStatus;
     }
     
-    public String getRecognitionSection() {
-        return recognitionSection;
+    public String getRecognitionDateUnderSection2f() {
+        return recognitionDateUnderSection2f;
     }
 
-    public String setRecognitionSection(String recognitionSection) {
-        return this.recognitionSection = recognitionSection;
+    public void setRecognitionDateUnderSection2f(String recognitionDateUnderSection2f) {
+        this.recognitionDateUnderSection2f = recognitionDateUnderSection2f;
     }
 
-    public String getRecognitionDate() {
-        return recognitionDate;
+    public String getRecognitionDateUnderSection12b() {
+        return recognitionDateUnderSection12b;
     }
 
-    public void setRecognitionDate(String recognitionDate) {
-        this.recognitionDate = recognitionDate;
+    public void setRecognitionDateUnderSection12b(String recognitionDateUnderSection12b) {
+        this.recognitionDateUnderSection12b = recognitionDateUnderSection12b;
     }
 
-    public String getRecognitionDocument() {
-        return recognitionDocument;
-    }
+    // public UploadedDocument getRecognitionDocument2f() {
+    //     return recognitionDocument2f;
+    // }
 
-    public void setRecognitionDocument(String recognitionDocument) {
-        this.recognitionDocument = recognitionDocument;
-    }
+    // public void setRecognitionDocument2f(UploadedDocument recognitionDocument2f) {
+    //     this.recognitionDocument2f = recognitionDocument2f;
+    // }
+
+    // public UploadedDocument getRecognitionDocument12b() {
+    //     return recognitionDocument12b;
+    // }
+
+    // public void setRecognitionDocument12b(UploadedDocument recognitionDocument12b) {
+    //     this.recognitionDocument12b = recognitionDocument12b;
+    // }
 
     public String getIsUPE() {
         return isUPE;
@@ -221,13 +237,15 @@ public class University {
                 ", type='" + type + '\'' +
                 ", establishmentDate='" + establishmentDate + '\'' +
                 ", priorStatus='" + priorStatus + '\'' +
-                ", recognitionSection='" + recognitionSection + '\'' +
-                ", recognitionDate='" + recognitionDate + '\'' +
-                ", recognitionDocument='" + recognitionDocument + '\'' +
+                // ", recognitionDateUnderSection2f='" + recognitionDateUnderSection2f + '\'' +
+                // ", recognitionDateUnderSection12b='" + recognitionDateUnderSection12b + '\'' +
+                
                 ", isUPE='" + isUPE + '\'' +
                 ", campuses=" + campuses +
                 '}';
     }
+    // ", recognitionDocument2f=" + recognitionDocument2f +
+    //             ", recognitionDocument12b=" + recognitionDocument12b +
 
 }
 

@@ -84,15 +84,8 @@ public class UniversityResource {
 			university.setType(universityDetails.getType());
 			university.setEstablishmentDate(universityDetails.getEstablishmentDate());
 			university.setPriorStatus(universityDetails.getPriorStatus());
-
-			university.setRecognitionSection(universityDetails.getRecognitionSection());
-			university.setRecognitionDate(universityDetails.getRecognitionDate());
-			university.setRecognitionDocument(universityDetails.getRecognitionDocument());
-
+			
 			university.setIsUPE(universityDetails.getIsUPE());
-			university.setCampuses(universityDetails.getCampuses());
-
-			university.setContactDetails(universityDetails.getContactDetails());
 			University updatedUniversity = universityRepository.save(university);
 			return ResponseEntity.ok(updatedUniversity);
 		}).orElseGet(() -> ResponseEntity.notFound().build());

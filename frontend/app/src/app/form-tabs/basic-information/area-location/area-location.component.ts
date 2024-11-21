@@ -32,9 +32,9 @@ export class AreaLocationComponent implements OnInit{
       campusArea: [''],
       address: [''],
       builtInArea: [''],
-      ProgrammesOffered: [''],
-      dateOfEstablishment: [''],
-      dateOfRecognition: ['']
+      programmesOffered: [''],
+      establishmentDate: [''],
+      recognitionDate: ['']
     });
     // const campusGroup = this.fb.group({
     //   type: ['', Validators.required],
@@ -42,7 +42,7 @@ export class AreaLocationComponent implements OnInit{
     //   campusArea: ['', Validators.pattern(/^\d{5}$/)],
     //   address: ['', Validators.required],
     //   builtInArea: ['', Validators.pattern(/^\d{5}$/)],
-    //   ProgrammesOffered: ['', Validators.required],
+    //   programmesOffered: ['', Validators.required],
     //   dateOfEstablishment: ['', [Validators.required, Validators.pattern(/^\d{2} \d{2} \d{4}$/)]],
     //   dateOfRecognition: ['', [Validators.required, Validators.pattern(/^\d{2} \d{2} \d{4}$/)]]
     // });

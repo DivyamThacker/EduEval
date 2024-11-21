@@ -1,26 +1,27 @@
-<form>
+<form [formGroup]="form">
     <div class="form-group">
         <label for="recognition-date-2f">Under Section 2f of UGC - Date of Recognition</label>
-        <input type="date" id="recognition-date-2f" name="recognition-date-2f">
+        <input type="date" id="recognition-date-2f" formControlName="recognitionDateUnderSection2f">
     </div>
 
     <div class="form-group">
         <label for="recognition-date-12b">Under Section 12b of UGC - Date of Recognition</label>
-        <input type="date" id="recognition-date-12b" name="recognition-date-12b">
+        <input type="date" id="recognition-date-12b" formControlName="recognitionDateUnderSection12b">
     </div>
 
     <div class="form-group">
         <label for="recognition-upload-2f">Upload Documents for 2f</label>
-        <input type="file" id="recognition-upload-2f" name="recognition-upload-2f" multiple>
+        <input type="file" id="recognition-upload-2f" (change)="onFileChange($event, 'recognitionDocument2f')" multiple>
     </div>
 
     <div class="form-group">
         <label for="recognition-upload-12b">Upload Documents for 12b</label>
-        <input type="file" id="recognition-upload-12b" name="recognition-upload-12b" multiple>
+        <input type="file" id="recognition-upload-12b" (change)="onFileChange($event, 'recognitionDocument12b')" multiple>
     </div>
 
     <div class="form-group" style="grid-column: span 2;">
         <label for="upe-recognition">Is the University Recognised as a University with Potential for Excellence (UPE) by the UGC?</label>
-        <input type="checkbox" id="upe-recognition" name="upe-recognition">
+        <input type="checkbox" id="upe-recognition" formControlName="isUPE">
     </div>
+
 </form>
