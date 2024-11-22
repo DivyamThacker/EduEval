@@ -1,7 +1,8 @@
 import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule , Validators} from '@angular/forms';
-import { FormDataService } from '../../../shared/form-api-service';
+import { BasicFormDataService } from '../../../services/basic-form-data-service';
+import { CanComponentDeactivate } from '../../../guards/can-deactivate.guard';
 
 @Component({
   selector: 'app-contact-details',
@@ -10,10 +11,10 @@ import { FormDataService } from '../../../shared/form-api-service';
   templateUrl: './contact-details.component.html',
   styleUrl: './contact-details.component.css'
 })
-export class ContactDetailsComponent implements OnInit {
+export class ContactDetailsComponent implements OnInit , CanComponentDeactivate {
   form: FormGroup;
 
-  constructor(private fb: FormBuilder, private formDataService: FormDataService) {
+  constructor(private fb: FormBuilder, private basicFormDataService: BasicFormDataService) {
     // Initialize the form with a FormArray
     this.form = this.fb.group({
       contacts: this.fb.array([]),
@@ -50,15 +51,21 @@ export class ContactDetailsComponent implements OnInit {
     this.contacts.removeAt(index);
   }
 
-  // onSubmit(): void {
-  //   console.log(this.form.value);
-  // }
+  canDeactivate(): boolean {
+    if (this.basicFormDataService.getUnsavedChanges()) {
+      const confirmExit = confirm('You have unsaved changes. Do you really want to exit?');
+      if (confirmExit) {
+        this.basicFormDataService.setUnsavedChanges(false);
+      }
+      return confirmExit;
+    }
+    return true; 
+  }
 
   ngOnInit(): void {
-    // Set initial data and watch for changes
     this.form.valueChanges.subscribe(() => {
-      this.formDataService.setContactData(this.form.value);
-      // console.log("this is log from contactDetials component ",this.form.value);
+      this.basicFormDataService.setContactData(this.form.value);
+      this.basicFormDataService.setUnsavedChanges(true);
     });
   }
 }

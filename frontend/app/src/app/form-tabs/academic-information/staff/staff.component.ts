@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FormDataService } from '../../../shared/form-api-service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AcademicFormDataService } from '../../../services/academic-form-data-service';
 
 @Component({
   selector: 'app-staff',
@@ -16,7 +16,7 @@ export class StaffComponent implements OnInit {
 
   techStaffForm : FormGroup;
   
-  constructor(private fb: FormBuilder, private formDataService: FormDataService) {
+  constructor(private fb: FormBuilder, private academicFormDataService: AcademicFormDataService) {
     this.nonTeachStaffForm = this.fb.group({
       nonTeachStaff : this.fb.array([]),
     });
@@ -64,10 +64,10 @@ export class StaffComponent implements OnInit {
 
   ngOnInit() {
     this.nonTeachStaffForm.valueChanges.subscribe(() => {
-      // this.formDataService.setBasicInfoData(this.form.value);
+      // this.academicFormDataService.setBasicInfoData(this.form.value);
     });
     this.techStaffForm.valueChanges.subscribe(() => {
-      // this.formDataService.setBasicInfoData(this.form.value);
+      // this.academicFormDataService.setBasicInfoData(this.form.value);
     });
   }
 }

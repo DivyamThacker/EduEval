@@ -17,10 +17,10 @@ import com.proj.rest.webservices.restfulwebservices.services.PdfService;
 
 @RestController
 @RequestMapping("/api/naac")
-public class HelloWorldController {
+public class PdfController {
 
     private PdfService pdfService;
-    HelloWorldController(PdfService pdfService) {
+    PdfController(PdfService pdfService) {
         this.pdfService = pdfService;
     }
 
@@ -58,12 +58,19 @@ public class HelloWorldController {
 
     @GetMapping("/generate-ssr")//generate ssr and return
      public ResponseEntity<InputStreamResource> downloadPdf() throws IOException {
+        try {
+            pdfService.generatePdf();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Path pdfPath = new ClassPathResource("UniversityProfile.pdf").getFile().toPath();
         byte[] pdfBytes = Files.readAllBytes(pdfPath);
 
         ByteArrayInputStream pdfStream = new ByteArrayInputStream(pdfBytes);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=SSR.pdf");
+
+        Files.delete(pdfPath);
 
         return ResponseEntity.ok()
                 .headers(headers)

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { FormDataService } from '../../../shared/form-api-service';
+import { BasicFormDataService } from '../../../services/basic-form-data-service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CanComponentDeactivate } from '../../../guards/can-deactivate.guard';
 
@@ -14,7 +14,7 @@ import { CanComponentDeactivate } from '../../../guards/can-deactivate.guard';
 export class BasicInfoComponent implements OnInit, CanComponentDeactivate {
   form: FormGroup;
 
-  constructor(private fb: FormBuilder, private formDataService: FormDataService) {
+  constructor(private fb: FormBuilder, private basicFormDataService: BasicFormDataService) {
     this.form = this.fb.group({
       name: [''],
       address: [''],
@@ -30,11 +30,11 @@ export class BasicInfoComponent implements OnInit, CanComponentDeactivate {
   }
 
   canDeactivate(): boolean {
-    if (this.formDataService.getUnsavedChanges()) {
+    if (this.basicFormDataService.getUnsavedChanges()) {
       // Confirm the user wants to leave the page without saving changes
       const confirmExit = confirm('You have unsaved changes. Do you really want to exit?');
       if (confirmExit) {
-        this.formDataService.setUnsavedChanges(false);
+        this.basicFormDataService.setUnsavedChanges(false);
       }
       return confirmExit;
     }
@@ -43,8 +43,8 @@ export class BasicInfoComponent implements OnInit, CanComponentDeactivate {
 
   ngOnInit() {
     this.form.valueChanges.subscribe(() => {
-      this.formDataService.setBasicInfoData(this.form.value);
-      this.formDataService.setUnsavedChanges(true);
+      this.basicFormDataService.setBasicInfoData(this.form.value);
+      this.basicFormDataService.setUnsavedChanges(true);
     });
   }
 }

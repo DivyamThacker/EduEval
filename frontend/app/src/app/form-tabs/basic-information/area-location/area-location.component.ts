@@ -1,7 +1,8 @@
 import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormDataService } from '../../../shared/form-api-service';
+import { BasicFormDataService } from '../../../services/basic-form-data-service';
+import { CanComponentDeactivate } from '../../../guards/can-deactivate.guard';
 
 @Component({
   selector: 'app-area-location',
@@ -10,10 +11,10 @@ import { FormDataService } from '../../../shared/form-api-service';
   templateUrl: './area-location.component.html',
   styleUrl: './area-location.component.css'
 })
-export class AreaLocationComponent implements OnInit{
+export class AreaLocationComponent implements OnInit, CanComponentDeactivate {
   form: FormGroup;
 
-  constructor( private formDataService : FormDataService, private fb: FormBuilder) {
+  constructor( private basicFormDataService : BasicFormDataService, private fb: FormBuilder) {
     // Initialize the form with a FormArray
     this.form = this.fb.group({
       campuses: this.fb.array([]),//campus locations
@@ -53,10 +54,21 @@ export class AreaLocationComponent implements OnInit{
     this.campuses.removeAt(index);
   }
 
+  canDeactivate(): boolean {
+    if (this.basicFormDataService.getUnsavedChanges()) {
+      const confirmExit = confirm('You have unsaved changes. Do you really want to exit?');
+      if (confirmExit) {
+        this.basicFormDataService.setUnsavedChanges(false);
+      }
+      return confirmExit;
+    }
+    return true;
+  }
+
   ngOnInit(): void {
-    // Set initial data and watch for changes
     this.form.valueChanges.subscribe(() => {
-      this.formDataService.setCampusData(this.form.value);
+      this.basicFormDataService.setCampusData(this.form.value);
+      this.basicFormDataService.setUnsavedChanges(true);
     });
   }
 

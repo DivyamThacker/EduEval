@@ -6,13 +6,14 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class FormDataService {
+export class BasicFormDataService {
   areUnsavedChanges = false;
   apiUrl = environment.apiUrl;
 
   private universityId: number | null = null;
   private contactId: number | null = null;
   private campusId: number | null = null;
+  private recognitionDetailsId: number | null = null;
 
   private contactModelSource = new BehaviorSubject<any>({});
   contactModel$ = this.contactModelSource.asObservable();
@@ -20,12 +21,12 @@ export class FormDataService {
   private campusModelSource = new BehaviorSubject<any>({});
   campusModel$ = this.campusModelSource.asObservable();
 
+  private recognitionDetailsModelSource = new BehaviorSubject<any>({});
+  recognitionDetailsModel$ = this.recognitionDetailsModelSource.asObservable();
+
   private basicInfoModelSource = new BehaviorSubject<any>({});
   basicInfoModel$ = this.basicInfoModelSource.asObservable();
 
-  private academicInfoModelSource = new BehaviorSubject<any>({});
-  academicInfoModel$ = this.academicInfoModelSource.asObservable();
-  
   constructor(private http: HttpClient) {}
   
   setUnsavedChanges(value: boolean) {
@@ -72,13 +73,23 @@ export class FormDataService {
   getCampusData(): Observable<any> {
     return this.campusModel$;
   }
+
+  // Recognition Details ID and model management
+  setRecognitionDetailsId(id: number | null) {
+    this.recognitionDetailsId = id;
+  }
+  getRecognitionDetailsId(): number | null {
+    return this.recognitionDetailsId;
+  }
+  setRecognitionDetailsData(data: any) {
+    this.recognitionDetailsModelSource.next(data);
+  }
+  getRecognitionDetailsData(): Observable<any> {
+    return this.recognitionDetailsModel$;
+  }
   
   setBasicInfoData(data: any) {
     this.basicInfoModelSource.next({ ...this.basicInfoModelSource.value, ...data });
-  }
-
-  setAcademicInfoData(data: any) {
-    this.academicInfoModelSource.next({ ...this.academicInfoModelSource.value, ...data });
   }
 
   // Basic Info API submission
@@ -129,5 +140,42 @@ export class FormDataService {
         .pipe(
           catchError(error => throwError(() => error))
         );
+  }
+
+  // Recognition Details API submission
+  submitRecognitionDetails(): Observable<any> {
+    const data = this.recognitionDetailsModelSource.value;
+
+    // Prepare FormData for file uploads
+    const formData = new FormData();
+    formData.append('recognitionDateUnderSection2f', data.recognitionDateUnderSection2f);
+    formData.append('recognitionDateUnderSection12b', data.recognitionDateUnderSection12b);
+    formData.append('isUPE', data.isUPE);
+
+    if (data.recognitionDocument2f) {
+      formData.append('recognitionDocument2f', data.recognitionDocument2f);
+    }
+
+    if (data.recognitionDocument12b) {
+      formData.append('recognitionDocument12b', data.recognitionDocument12b);
+    }
+
+    // Submit the data
+    if (this.recognitionDetailsId) {
+      return this.http.put(
+        `${this.apiUrl}/university/${this.universityId}/recognition-details/${this.recognitionDetailsId}`,
+        formData
+      ).pipe(
+        catchError((error) => throwError(() => error))
+      );
+    } else {
+      return this.http.post(
+        `${this.apiUrl}/university/${this.universityId}/recognition-details`,
+        formData
+      ).pipe(
+        tap((response: any) => this.setRecognitionDetailsId(response.id)),
+        catchError((error) => throwError(() => error))
+      );
+    }
   }
 }

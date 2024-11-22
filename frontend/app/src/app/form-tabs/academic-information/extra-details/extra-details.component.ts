@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FormDataService } from '../../../shared/form-api-service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AcademicFormDataService } from '../../../services/academic-form-data-service';
 
 @Component({
   selector: 'app-extra-details',
@@ -17,7 +17,7 @@ export class ExtraDetailsComponent implements OnInit {
 
   devlopmentCentreForm: FormGroup;
   
-  constructor(private fb: FormBuilder, private formDataService: FormDataService) {
+  constructor(private fb: FormBuilder, private academicFormDataService: AcademicFormDataService) {
     this.chairForm = this.fb.group({
       chairs : this.fb.array([]),
     });
@@ -51,10 +51,10 @@ export class ExtraDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.devlopmentCentreForm.valueChanges.subscribe(() => {
-      // this.formDataService.setBasicInfoData(this.form.value);
+      // this.academicFormDataService.setBasicInfoData(this.form.value);
     });
     this.chairForm.valueChanges.subscribe(() => {
-      // this.formDataService.setBasicInfoData(this.form.value);
+      // this.academicFormDataService.setBasicInfoData(this.form.value);
     });
   }
 }

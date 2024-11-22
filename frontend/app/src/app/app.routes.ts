@@ -40,9 +40,9 @@ export const routes: Routes = [
         component: BasicInformationComponent,
         children: [
             { path: 'basic-info', component: BasicInfoComponent, canDeactivate: [canDeactivateGuard] },
-            { path: 'contact-details', component: ContactDetailsComponent },
-          { path: 'recognition-details', component: RecognitionDetailsComponent },
-          { path: 'area-location', component: AreaLocationComponent }
+            { path: 'contact-details', component: ContactDetailsComponent, canDeactivate: [canDeactivateGuard] },
+          { path: 'recognition-details', component: RecognitionDetailsComponent, canDeactivate: [canDeactivateGuard] },
+          { path: 'area-location', component: AreaLocationComponent, canDeactivate: [canDeactivateGuard] }
         ]
       },
     { path: 'academic-information', redirectTo: 'academic-information/college-info', pathMatch: 'full' },

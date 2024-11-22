@@ -84,8 +84,6 @@ public class UniversityResource {
 			university.setType(universityDetails.getType());
 			university.setEstablishmentDate(universityDetails.getEstablishmentDate());
 			university.setPriorStatus(universityDetails.getPriorStatus());
-			
-			university.setIsUPE(universityDetails.getIsUPE());
 			University updatedUniversity = universityRepository.save(university);
 			return ResponseEntity.ok(updatedUniversity);
 		}).orElseGet(() -> ResponseEntity.notFound().build());

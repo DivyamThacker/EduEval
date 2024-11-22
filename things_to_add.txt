@@ -1,15 +1,13 @@
-create s3 and manage credentials in environment variables
-
-add basicsource model to Recognition details component (change the attirbutes in the model because university 
-can be recongnized under both sectoins also think about how are you going to save the file as a string or what)
 
 add guard to every form tab in the app.routes
 
+make recognition work and understand how it works completelys
+
 first make apis for all these post and put request made by the subsections
 
-think about can we fix the error where we try to fill contactDetails or any other component before basic-info component
+check for validation that if recognition date is there then document should also be tehre and vice versa
 
-check if you are working with right version of java
+think about can we fix the error where we try to fill contactDetails or any other component before basic-info component
 
 unset areUnsavedChanges in onSaveChanges method only if the response is received , do not unset while there is error
 

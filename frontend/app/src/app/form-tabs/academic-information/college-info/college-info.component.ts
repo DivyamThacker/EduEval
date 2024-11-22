@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { FormDataService } from '../../../shared/form-api-service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
+import { AcademicFormDataService } from '../../../services/academic-form-data-service';
 
 @Component({
   selector: 'app-college-info',
@@ -15,7 +15,7 @@ export class CollegeInfoComponent implements OnInit {
   form: FormGroup;
   sraForm: FormGroup;
   
-  constructor(private fb: FormBuilder, private formDataService: FormDataService) {
+  constructor(private fb: FormBuilder, private academicFormDataService: AcademicFormDataService) {
     this.form = this.fb.group({
       constituentColleges: [''],
       affiliatedColleges: [''],
@@ -64,7 +64,7 @@ export class CollegeInfoComponent implements OnInit {
 
   ngOnInit() {
     this.form.valueChanges.subscribe(() => {
-      // this.formDataService.setBasicInfoData(this.form.value);
+      // this.academicFormDataService.setBasicInfoData(this.form.value);
     });
   }
 }

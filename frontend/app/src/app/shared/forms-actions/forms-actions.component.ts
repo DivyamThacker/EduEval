@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
-import { FormDataService } from '../form-api-service';
+import { BasicFormDataService } from '../../services/basic-form-data-service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -34,8 +34,7 @@ export class FormsActionsComponent implements OnInit, OnDestroy{
   private routeSub!: Subscription; // Subscription for route changes
 
 
-  constructor(private formDataService: FormDataService, private router: Router, private route: ActivatedRoute) {}
-  
+  constructor(private basicFormDataService: BasicFormDataService, private router: Router, private route: ActivatedRoute) {}
   ngOnInit() {
     this.updateNavigationState(); // Set initial state
     this.routeSub = this.router.events.subscribe((event) => {
@@ -82,28 +81,41 @@ export class FormsActionsComponent implements OnInit, OnDestroy{
   }
   
   onSaveChanges() {
-    this.formDataService.setUnsavedChanges(false); 
+    this.basicFormDataService.setUnsavedChanges(false); 
     const currentUrl = this.router.url;
 
     if (currentUrl.startsWith('/basic-information/basic-info')) {
-      this.formDataService.submitBasicInfo().subscribe({
-        next: response => console.log('Basic Info submitted successfully', response),
+      this.basicFormDataService.submitBasicInfo().subscribe({
+        next: response => {
+          console.log('Basic Info submitted successfully', response);
+          alert('Basic Info submitted successfully');
+        },
         error: error => console.error('Error submitting Basic Info', error)
       });
     } else if (currentUrl.startsWith('/basic-information/contact-details')) {
-      this.formDataService.submitContactDetails().subscribe({
-        next: response => console.log('Contact Details submitted successfully', response),
+      this.basicFormDataService.submitContactDetails().subscribe({
+        next: response => {
+          console.log('Contact Details submitted successfully', response);
+          alert('Contact Details submitted successfully');
+        },
         error: error => console.error('Error submitting Contact Details', error)
       });
     } else if (currentUrl.startsWith('/basic-information/area-location')) {
-      this.formDataService.submitCampusDetails().subscribe({
-        next: response => console.log('Campus Details submitted successfully', response),
+      this.basicFormDataService.submitCampusDetails().subscribe({
+        next: response => {
+          console.log('Campus Details submitted successfully', response);
+          alert('Campus Details submitted successfully');
+        },
         error: error => console.error('Error submitting Campus Details', error)
+      });
+    } else if (currentUrl.startsWith('/basic-information/recognition-details')) {
+      this.basicFormDataService.submitRecognitionDetails().subscribe({
+        next: response => {
+          console.log('Recognition Details submitted successfully', response);
+          alert('Recognition Details submitted successfully');
+        },
+        error: error => console.error('Error submitting Recognition Details', error)
       });
     }
   }
-
-
-  
-
 }

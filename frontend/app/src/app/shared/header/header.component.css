@@ -18,6 +18,13 @@ header {
     color: #4169e1; /* Blue color for 'EduEval' */
 }
 
+.logo-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: inherit;
+}
+
 nav a {
     margin: 0 15px;
     color: #000;

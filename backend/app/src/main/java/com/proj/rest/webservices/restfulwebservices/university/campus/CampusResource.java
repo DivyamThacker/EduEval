@@ -1,6 +1,5 @@
 package com.proj.rest.webservices.restfulwebservices.university.campus;
 
-import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
