@@ -20,6 +20,9 @@ import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ServicesComponent } from './dashboard/services/services.component';
 import { canDeactivateGuard } from './guards/can-deactivate.guard';
+import { EvaluationReportsComponent } from './form-tabs/academic-information/evaluation-reports/evaluation-reports.component';
+import { NepDetailsComponent } from './form-tabs/academic-information/nep-details/nep-details.component';
+import { ElectoralLiteracyComponent } from './form-tabs/academic-information/electoral-literacy/electoral-literacy.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -54,7 +57,10 @@ export const routes: Routes = [
             { path: 'teaching-faculty', component: TeachingFacultyComponent },
             { path: 'staff', component: StaffComponent },
             { path: 'enrollment-details', component: EnrollmentDetailsComponent },
-            { path: 'extra-details', component: ExtraDetailsComponent }
+            { path: 'extra-details', component: ExtraDetailsComponent },
+            { path: 'evaluation-reports', component: EvaluationReportsComponent },
+            { path: 'nep-details', component: NepDetailsComponent },
+            { path: 'electoral-literacy', component: ElectoralLiteracyComponent },
         ]
     },
     { path: 'extended-profile', redirectTo: 'extended-profile/program-details', pathMatch: 'full' },

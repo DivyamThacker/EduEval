@@ -1,11 +1,12 @@
+start with backend resource of each subsection and then connect backend with frontend
 
 remember to send the section name/ string in the NEP detials page
  
-create frontend and add the remaining components which are there in SSr but not yet in frontend
-
 map and add the integrated programmes into the normal enrollment
 
 add aws database rather that h2 and configure it
+
+also figure out how to structurize the storage of the files in S3 storage (that is .. send prefixes)
 
 start with collegeStats model and SraProgramme model , handle both seperately, add their attribute in University.java
 

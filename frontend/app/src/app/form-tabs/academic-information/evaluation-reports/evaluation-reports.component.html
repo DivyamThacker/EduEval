@@ -1,0 +1,73 @@
+<div style="text-align: center;">
+    <h3>Furnish the Accreditation details </h3>
+</div>
+<div style="max-height: 250px; overflow-y: auto;">
+    <form class="form" [formGroup]="accreditationForm" (ngSubmit)="onSubmit()">
+        <div formArrayName="accreditations" style="padding: 10px;">
+          <div *ngFor="let group of accreditationArray.controls; let i = index;" [formGroupName]="i" class="replica-group report-group">
+            <h4>Accreditation Cycle {{ i + 1 }}</h4>
+            <div>
+                <div class="delete-btn" (click)="removeAccreditation(i)">
+                    <i class="fas fa-trash"></i> 
+                </div>
+            </div>
+            <div class="form-group">
+              <label>Accreditation Type</label>
+              <input formControlName="accreditationType" type="text" placeholder="Accreditation" />
+            </div>
+            <div class="form-group">
+              <label>Grade</label>
+              <input formControlName="grade" type="text" placeholder="B" />
+            </div>
+            <div class="form-group">
+              <label>CGPA</label>
+              <input formControlName="cgpa" type="number" step="0.01" placeholder="numeric field data" />
+            </div>
+            <div class="form-group">
+              <label >Peer Team Report</label>
+              <input type="file" (change)="onAccreditationFileChange($event, i)" />
+            </div>
+          </div>
+        </div>
+        <div class="add-button" style="margin-top:-30px">
+            <button type="button" (click)="addAccreditation()">Add +</button>
+        </div>
+      </form>
+      
+</div>
+
+<hr style="margin-top: 10px; margin-bottom: 10px;">
+
+<div style="text-align: center;">
+    <h3>Upload the Evaluative Reports of Departments</h3>
+</div>
+
+<div style="max-height: 150px; overflow-y: auto;">
+    <form class="form" [formGroup]="departmentForm">
+        <div formArrayName="departments" style="padding: 10px;">
+          <div *ngFor="let group of departmentArray.controls; let i = index;" [formGroupName]="i" class="replica-group report-group">
+            <h4>Department {{ i + 1 }}</h4>
+            <div>
+              <div class="delete-btn" (click)="removeDepartment(i)">
+                <i class="fas fa-trash"></i>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Department Name</label>
+              <input formControlName="departmentName" type="text" placeholder="text field data" />
+            </div>
+            <div class="form-group">
+              <label>Department Report</label>
+              <input type="file" (change)="onDepartmentFileChange($event, i)" />
+            </div>
+          </div>
+        </div>
+        <div class="add-button" style="margin-top: -30px">
+          <button type="button" (click)="addDepartment()">Add +</button>
+        </div>
+    </form>
+</div>
+    
+
+
+

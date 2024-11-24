@@ -264,10 +264,10 @@ public class PdfService {
         .setBold().setFontSize(10));
         addFooter(document, pdf);
 
-        // JSONObject facultyData = jsonObject.getJSONObject("TeachingFaculty");
+        JSONObject facultyData = jsonObject.getJSONObject("TeachingFaculty");
         // System.out.println("THis is rollldlflkdsjf +++++++++++++ " + facultyData);
 
-        // addTeachingTable(document, facultyData);
+        addTeachingTable(document, facultyData);
 
         document.close();
         System.out.println("Extended PDF Created!");

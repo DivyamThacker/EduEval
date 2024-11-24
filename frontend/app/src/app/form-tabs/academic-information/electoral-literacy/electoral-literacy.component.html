@@ -1,0 +1,20 @@
+<div style="text-align: center;">
+    <h3>Institutional Initiatives for Electoral Literacy</h3>
+  </div>
+  
+  <div style="max-height: 400px; overflow-y: auto;">
+    <form class="form" [formGroup]="form">
+      <div formArrayName="sections" style="padding: 10px;">
+        <div *ngFor="let section of sections.controls; let i = index;" [formGroupName]="i" class="replica-group">
+            <h4 title="{{ electoralLiteracyQuestions[i] }}">
+                {{ electoralLiteracyQuestions[i] }}
+            </h4>
+          <div class="form-group" style="margin-top: 20px;">
+            <label>Upload Text File</label>
+            <input type="file" (change)="onFileChange($event, i)" />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  

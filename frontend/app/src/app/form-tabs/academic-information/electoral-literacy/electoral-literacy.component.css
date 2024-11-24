@@ -1,0 +1,13 @@
+.replica-group h4 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    word-wrap: break-word; /* Ensures long words break into the next line */
+    white-space: normal;   /* Prevents text from sticking to one line */
+    text-align: justify;   /* Justifies the text for better readability */
+    max-width: 100%;       /* Ensures the text doesn't overflow */
+    overflow: hidden;      /* Hides overflowing text */
+    text-overflow: ellipsis; /* Adds ellipsis for truncated text */
+  }

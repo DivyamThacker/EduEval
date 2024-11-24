@@ -13,9 +13,6 @@ import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
-
 @Entity(name = "accreditation_details")
 @Data
 @NoArgsConstructor
@@ -25,7 +22,7 @@ public class AccreditationDetails {
     private Integer id;
 
     private Integer cycleNumber;
-    private String accreditationType;
+    private String type; //accreditationType
     private String Grade;
     private Float cgpa;
 
