@@ -58,6 +58,12 @@ public class HelloWorldController {
 
     @GetMapping("/generate-ssr")//generate ssr and return
      public ResponseEntity<InputStreamResource> downloadPdf() throws IOException {
+
+        try {
+            pdfService.generatePdf();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Path pdfPath = new ClassPathResource("UniversityProfile.pdf").getFile().toPath();
         byte[] pdfBytes = Files.readAllBytes(pdfPath);
 
