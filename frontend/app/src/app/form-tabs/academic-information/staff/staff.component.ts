@@ -12,61 +12,35 @@ import { AcademicFormDataService } from '../../../services/academic-form-data-se
   styleUrl: './staff.component.css'
 })
 export class StaffComponent implements OnInit {
-  nonTeachStaffForm: FormGroup;
+  staffForm: FormGroup;
 
-  techStaffForm : FormGroup;
-  
   constructor(private fb: FormBuilder, private academicFormDataService: AcademicFormDataService) {
-    this.nonTeachStaffForm = this.fb.group({
-      nonTeachStaff : this.fb.array([]),
+    this.staffForm = this.fb.group({
+      staff : this.fb.array([]),
     });
-    this.addNonTeachStaff();
-
-    this.techStaffForm = this.fb.group({
-      techStaff: this.fb.array([]),
-    });
-    this.addTechStaff();
+    this.addStaff();
   }
 
-  get nonTeachStaff(): FormArray {
-    return this.nonTeachStaffForm.get('nonTeachStaff') as FormArray;
-  }
-
-  get techStaff(): FormArray {
-    return this.techStaffForm.get('techStaff') as FormArray;
-  }
-
-  addNonTeachStaff(): void {
-    const nonTeachStaffGroup = this.fb.group({
-      recruitmentStatus: [''],
-      gender: [''],
-      count: ['']
-    });
-    this.nonTeachStaff.push(nonTeachStaffGroup);
-  }
-
-  addTechStaff(): void {
+  addStaff(): void {
     const techStaffGroup = this.fb.group({
+      isTechnical: [''],
       recruitmentStatus: [''],
       gender: [''],
       count: ['']
     });
-    this.techStaff.push(techStaffGroup);
+    this.staff.push(techStaffGroup);
   }
 
-  removeNonTeachStaff(index: number): void {
-    this.nonTeachStaff.removeAt(index);
-  } 
+  get staff(): FormArray {
+    return this.staffForm.get('staff') as FormArray
+  }
 
-  removeTechStaff(index: number): void {
-    this.techStaff.removeAt(index);
+  removeStaff(index: number): void {
+    this.staff.removeAt(index);
   } 
 
   ngOnInit() {
-    this.nonTeachStaffForm.valueChanges.subscribe(() => {
-      // this.academicFormDataService.setBasicInfoData(this.form.value);
-    });
-    this.techStaffForm.valueChanges.subscribe(() => {
+    this.staffForm.valueChanges.subscribe(() => {
       // this.academicFormDataService.setBasicInfoData(this.form.value);
     });
   }

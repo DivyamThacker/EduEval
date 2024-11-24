@@ -70,7 +70,12 @@ public class PdfController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=SSR.pdf");
 
-        Files.delete(pdfPath);
+        try {
+            Thread.sleep(100);
+            Files.delete(pdfPath);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         return ResponseEntity.ok()
                 .headers(headers)

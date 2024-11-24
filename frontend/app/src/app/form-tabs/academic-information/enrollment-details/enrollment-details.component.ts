@@ -24,12 +24,13 @@ export class EnrollmentDetailsComponent implements OnInit {
     this.addEnrollment();
 
     this.integratedForm = this.fb.group({
-      isIntegrated: [false],
+      hasIntegrated: [false],
+      totalIntegratedProgrammes: [''],
       integratedEnrollments: this.fb.array([])
     });
 
-    this.integratedForm.get('isIntegrated')?.valueChanges.subscribe((isIntegrated: boolean) => {
-      if (isIntegrated) {
+    this.integratedForm.get('hasIntegrated')?.valueChanges.subscribe((hasIntegrated: boolean) => {
+      if (hasIntegrated) {
         this.integratedForm.setControl('integratedEnrollments', this.fb.array([this.createIntegratedFormGroup()]));
       } else {
         this.integratedForm.setControl('integratedEnrollments', this.fb.array([]));
@@ -43,7 +44,6 @@ export class EnrollmentDetailsComponent implements OnInit {
 
   createIntegratedFormGroup(): FormGroup {
     return this.fb.group({
-      totalProgrammes: [''],
       gender: [''],
       location: [''],
       count: ['']

@@ -1,12 +1,27 @@
 
+remember to send the section name/ string in the NEP detials page
+ 
+create frontend and add the remaining components which are there in SSr but not yet in frontend
+
+map and add the integrated programmes into the normal enrollment
+
+add aws database rather that h2 and configure it
+
+start with collegeStats model and SraProgramme model , handle both seperately, add their attribute in University.java
+
+think if repo is needed for SraProgramme or not
+
 think if all sections need to be managed to be in common form-data-service because UniversityId is needed everywhere, or find
-another way to get university Id whenever you need 
+another way to get university Id whenever you need (maybe take the universityId as one by default in all the feilds , when someone logs
+in we would be able to access the university Id)
 
 Start with academic subsections
 
 first make apis for all these post and put request made by the subsections
 
 check for validation that if recognition date is there then document should also be tehre and vice versa
+
+Ignore staff and staffresource for now , as they are shaped according to the api given by the company and differnt from us
 
 think about can we fix the error where we try to fill contactDetails or any other component before basic-info component
 
@@ -46,198 +61,3 @@ add cookies to determine which university is logged in and thus save the interim
 
 watch angular course content from angular dynamic components
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-form-api service:
-private universityIdSource = new BehaviorSubject<number | null>(null);
-  universityId$ = this.universityIdSource.asObservable();
-
-  // Set the universityId after the initial POST
-  setUniversityId(id: number) {
-    this.universityIdSource.next(id);
-  }
-
-  getUniversityId(): number | null {
-    return this.universityIdSource.value;
-  }
-  apiUrl = environment.apiUrl;
-
-  universityId : number = 0;
-  private basicInfoModelSource = new BehaviorSubject<any>({});
-  basicInfoModel$ = this.basicInfoModelSource.asObservable();
-
-  private academicInfoModelSource = new BehaviorSubject<any>({});
-  academicInfoModel$ = this.academicInfoModelSource.asObservable();
-
-  constructor(private http: HttpClient) {}
-
-  setBasicInfoData(data: any) {
-    this.basicInfoModelSource.next({ ...this.basicInfoModelSource.value, ...data });
-  }
-
-  setAcademicInfoData(data: any) {
-    this.academicInfoModelSource.next({ ...this.academicInfoModelSource.value, ...data });
-  }
-
-
-submitBasicInfo() {
-  if (this.universityId != 0) {
-    return this.http.put(`${this.apiUrl}/naac/basic-info/${this.universityId}`, this.basicInfoModelSource.value)
-      .pipe(
-        catchError((error) => {
-          console.error('Error in PUT request:', error);
-          return throwError(() => error);  // Updated usage of throwError
-        })
-      );
-  } else {
-    return this.http.post(this.apiUrl + '/naac/basic-info', this.basicInfoModelSource.value).pipe(
-      tap((response: any) => {
-        this.universityId = response.id;
-      }),
-      catchError((error) => {
-        console.error('Error in POST request:', error);
-        return throwError(() => error);  // Updated usage of throwError
-      })
-    );
-  }
-}
-
-  // POST or PUT for Contact section based on universityId
-  submitContactDetails(data: any, contactId?: number): Observable<any> {
-    const universityId = this.getUniversityId();
-    if (universityId) {
-      if (contactId) {
-        // Update existing contact
-        return this.http.put(`${this.apiUrl}/university/${universityId}/contacts/${contactId}`, data)
-          .pipe(catchError(error => throwError(() => error)));
-      } else {
-        // Add new contact
-        return this.http.post(`${this.apiUrl}/university/${universityId}/contacts`, data)
-          .pipe(catchError(error => throwError(() => error)));
-      }
-    } else {
-      return throwError(() => 'University ID not set.');
-    }
-  }
-
-  // POST or PUT for Campus section based on universityId
-  submitCampusDetails(data: any, campusId?: number): Observable<any> {
-    const universityId = this.getUniversityId();
-    if (universityId) {
-      if (campusId) {
-        // Update existing campus
-        return this.http.put(`${this.apiUrl}/university/${universityId}/campuses/${campusId}`, data)
-          .pipe(catchError(error => throwError(() => error)));
-      } else {
-        // Add new campus
-        return this.http.post(`${this.apiUrl}/university/${universityId}/campuses`, data)
-          .pipe(catchError(error => throwError(() => error)));
-      }
-    } else {
-      return throwError(() => 'University ID not set.');
-    }
-  }
-
-  // POST or PUT for Basic Info + Recognition Details
-  submitBasicInformation(data: any): Observable<any> {
-    const universityId = this.getUniversityId();
-    if (universityId) {
-      return this.http.put(`${this.apiUrl}/university/${universityId}`, data)
-        .pipe(catchError(error => throwError(() => error)));
-    } else {
-      return this.http.post(`${this.apiUrl}/university`, data).pipe(
-        tap((response: any) => this.setUniversityId(response.id)),
-        catchError(error => throwError(() => error))
-      );
-    }
-  }
-  
-
-  submitAcademicInfo() {
-    return this.http.post(this.apiUrl + '/naac/academic-information', this.academicInfoModelSource.value);
-  }
-++++++++++++++++++++++++++++++++++++++++++++++++++++=
-
-form actions onChages mehtod:
- onSaveChanges() {
-    const currentUrl = this.router.url;
-  
-    if (currentUrl.startsWith('/basic-information')) {
-      this.formDataService.submitBasicInfo().subscribe({
-        next: response => console.log('Basic Info submitted successfully', response),
-        error: error => console.error('Error submitting Basic Info', error)
-      });
-    } else if (currentUrl.startsWith('/academic-information')) {
-      this.formDataService.submitAcademicInfo().subscribe({
-        next: response => console.log('Academic Info submitted successfully', response),
-        error: error => console.error('Error submitting Academic Info', error)
-      });
-    } else {
-      console.warn('Unrecognized section for submission');
-    }
-  }
-
-  ++++++++++++++++++++++++++++++++++++++++++++++++++
-  updated campus form:
-  <div style="max-height: 400px; overflow-y: auto;">
-    <form class="form" [formGroup]="form">
-      <div formArrayName="campuses">
-        <div *ngFor="let campus of campuses.controls; let i = index" [formGroupName]="i" class="replica-group area-location-group">
-          <h4>Campus {{ i + 1 }}</h4>
-          <div style="grid-column: span 3;">
-            <div class="delete-btn" (click)="removeCampus(i)">
-              <i class="fas fa-trash"></i> <!-- Font Awesome trash icon -->
-            </div>
-          </div>
-  
-          <div class="form-group" style="grid-column: span 2;">
-            <label for="campus-type-{{ i }}">Campus Type</label>
-            <input type="text" id="campus-type-{{ i }}" formControlName="campusType" placeholder="Text field data">
-          </div>
-  
-          <div class="form-group" style="grid-column: span 2;">
-            <label for="location-{{ i }}">Location</label>
-            <select id="location-{{ i }}" formControlName="location">
-              <option>Urban</option>
-              <option>Rural</option>
-              <option>Tribal</option>
-              <option>Other</option>
-            </select>
-          </div>
-  
-          <div class="form-group" style="grid-column: span 4;">
-            <label for="address-{{ i }}">Address</label>
-            <input type="text" id="address-{{ i }}" formControlName="address" placeholder="Text field data">
-          </div>
-  
-          <div class="form-group">
-            <label for="campus-area-{{ i }}">Campus Area in Acres</label>
-            <input type="number" id="campus-area-{{ i }}" formControlName="campusArea" placeholder="Numeric field data">
-          </div>
-  
-          <div class="form-group">
-            <label for="built-up-area-{{ i }}">Built-up Area in Sq. Mts</label>
-            <input type="number" id="built-up-area-{{ i }}" formControlName="builtInArea" placeholder="Numeric field data">
-          </div>
-  
-          <div class="form-group" style="grid-column: span 2;">
-            <label for="programmes-offered-{{ i }}">Programmes Offered (Comma Separated)</label>
-            <input type="text" id="programmes-offered-{{ i }}" formControlName="programmesOffered" placeholder="Text field data">
-          </div>
-  
-          <div class="form-group" style="grid-column: span 2;">
-            <label for="date-establishment-{{ i }}">Date of Establishment</label>
-            <input type="date" id="date-establishment-{{ i }}" formControlName="dateOfEstablishment">
-          </div>
-  
-          <div class="form-group" style="grid-column: span 2;">
-            <label for="date-recognition-{{ i }}">Date of Recognition by UGC</label>
-            <input type="date" id="date-recognition-{{ i }}" formControlName="dateOfRecognition">
-          </div>
-        </div>
-      </div>
-  
-      <div class="add-button">
-        <button type="button" (click)="addCampus()">Add +</button>
-      </div>
-    </form>
-  </div>
-  

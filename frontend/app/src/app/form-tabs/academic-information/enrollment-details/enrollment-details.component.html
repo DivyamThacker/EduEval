@@ -61,19 +61,20 @@
 
 <div style="max-height: 200px; overflow-y: auto;">
     <form [formGroup]="integratedForm">
-        <div class="form-group" style="grid-column: span 2;">
-            <label for="isIntegrated" style="text-align: center; display: block;"> Does the University offer any Integrated Programmes? </label>
-            <input type="checkbox" id="isIntegrated" formControlName="isIntegrated">
+        <div class="checkIntegrated" style="grid-column: span 2;">
+            <div class="form-group" >
+                <label for="hasIntegrated" style="text-align: center; display: block;"> Does the University offer any Integrated Programmes? </label>
+                <input type="checkbox" id="hasIntegrated" formControlName="hasIntegrated">
+            </div>
+            <div class="form-group" *ngIf="integratedForm.get('hasIntegrated')?.value" >
+                <label for="totalIntegratedProgrammes">Total Integrated Programmes</label>
+                <input id="totalIntegratedProgrammes" type="number" formControlName="totalIntegratedProgrammes" placeholder="Numeric field data">
+            </div>
         </div>
-    
-        <div *ngIf="integratedForm.get('isIntegrated')?.value" style="grid-column: span 2; padding: 10px;">
+        <div *ngIf="integratedForm.get('hasIntegrated')?.value" style="grid-column: span 2; padding: 10px;">
             <div formArrayName="integratedEnrollments">
                 <div *ngFor="let integratedEnrollment of integratedEnrollments?.controls; let i = index" [formGroupName]="i" class="replica-group enrollment-group" style="margin-bottom: 10px;">
                     <h4 style="grid-column: span 2;">Type {{ i + 1 }}</h4>
-                    <div class="form-group">
-                        <label for="totalProgram-{{i}}">Total Programmes</label>
-                        <input id="totalProgram-{{i}}" type="number" formControlName="totalProgrammes" placeholder="Numeric field data">
-                    </div>
                     <div class="form-group">
                         <label for="gender-{{i}}">Gender</label>
                         <select id="gender-{{i}}" formControlName="gender">

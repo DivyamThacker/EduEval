@@ -1,5 +1,6 @@
 package com.proj.rest.webservices.restfulwebservices.models;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -39,13 +40,45 @@ public class University {
     @JsonIgnoreProperties("university") // Prevent circular serialization
 	private List<Contact> contactDetails;//= new ArrayList<>();
 
+    @OneToOne(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university") 
+    private RecognitionDetails recognitionDetials;
+
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("university") // Prevent circular serialization
-    private List<Campus> campuses;//= new ArrayList<>();
+    @JsonIgnoreProperties("university")
+    private List<Campus> campuses;
+
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university") 
+    private List<SraProgramme> sraProgrammes;
 
     @OneToOne(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("university") // Prevent circular serialization
-    private RecognitionDetails recognitionDetials;//= new ArrayList<>();
-}
+    @JsonIgnoreProperties("university")
+    private CollegeStats collegeStats;
 
+    private Boolean hasIntegratedProgrammes;
+    private Integer totalIntegratedProgrammes;
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university")
+    private List<EnrollmentDetails> enrollmentDetails;
+
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university")
+    private List<ChairDetails> chairDetails;
+
+    //Details of UGC Human Resource Development Centre
+    private Date hrdcEstablishmentDate=null;
+    private Integer hrdcOrientationProgrammesCount=0;
+    private Integer hrdcRefresherCourseCount=0;
+    private Integer hrdcOwnProgrammesCount=0;
+    private Integer hrdctotalProgrammes=0; //last 5 years
+
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university")
+    private List<AccreditationDetails> accreditationDetails;
+
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university")
+    private List<DepartmentEvaluation> departmentEvaluations;
+}
 

@@ -22,10 +22,10 @@ export class CollegeInfoComponent implements OnInit {
       collegesUnder2f: [''],
       collegesUnder2f12b: [''],
       naacAccredited: [''],
-      collegesExcellence: [''],
+      collegesWithExcellence: [''],
       autonomousColleges: [''],
-      pgDepartments: [''],
-      researchDepartments: [''],
+      collegesWithPgDepartments: [''],
+      collegesWithResearchDepartments: [''],
       researchInstitutes: [''],
     });
 

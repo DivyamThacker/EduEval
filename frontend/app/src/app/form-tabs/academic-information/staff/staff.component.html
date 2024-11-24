@@ -1,17 +1,22 @@
 <div style="text-align: center;">
-    <h3>Furnish the deatails about non-teaching staff </h3>
+    <h3>Furnish the details about non-teaching Staff </h3>
 </div>
 
-<div style="max-height: 200px; overflow-y: auto;">
-    <form class="form" [formGroup]="nonTeachStaffForm">
-        <div formArrayName="nonTeachStaff" style="padding: 10px;">
-            <div *ngFor="let staff of nonTeachStaff?.controls; let i = index" [formGroupName]="i" class="replica-group staff-group">
-                <h4 style="grid-column: span 2;">Type {{ i + 1 }}</h4>
+<div style="max-height: 400px; overflow-y: auto;">
+    <form class="form" [formGroup]="staffForm">
+        <div formArrayName="staff" style="padding: 10px;">
+            <div *ngFor="let people of staff?.controls; let i = index" [formGroupName]="i" class="replica-group staff-group">
+                <h4>Type {{ i + 1 }}</h4>
                 <div>
-                    <div class="delete-btn" (click)="removeNonTeachStaff(i)">
+                    <div class="delete-btn" (click)="removeStaff(i)">
                         <i class="fas fa-trash"></i> 
                     </div>
                 </div>
+
+                <div class="form-group" style="align-items: center; justify-content: center;">
+                    <label for="isTechnical" style="display: inline; margin-right: 10px;">Technical Staff ?</label>
+                    <input id="isTechnical" type="checkbox" formControlName="isTechnical">
+                </div>  
 
                 <div class="form-group"> 
                     <label for="recruitmentStatus">Recruitment Status</label>
@@ -41,58 +46,8 @@
             </div>
         </div>
         <div class="add-button" style="margin-top:-30px">
-            <button type="button" (click)="addNonTeachStaff()">Add +</button>
+            <button type="button" (click)="addStaff()">Add +</button>
         </div>
     </form>
 </div>
 
-<hr style="margin-top: 10px; margin-bottom: 10px;">
-
-
-<div style="text-align: center;">
-    <h3>Furnish the deatails about technical staff </h3>
-</div>
-
-<div style="max-height: 200px; overflow-y: auto;">
-    <form class="form" [formGroup]="techStaffForm">
-        <div formArrayName="techStaff" style="padding: 10px;">
-            <div *ngFor="let staff of techStaff?.controls; let i = index" [formGroupName]="i" class="replica-group staff-group">
-                <h4 style="grid-column: span 2;">Type {{ i + 1 }}</h4>
-                <div>
-                    <div class="delete-btn" (click)="removeTechStaff(i)">
-                        <i class="fas fa-trash"></i> 
-                    </div>
-                </div>
-
-                <div class="form-group"> 
-                    <label for="recruitmentStatus">Recruitment Status</label>
-                    <select id="recruitmentStatus" formControlName="recruitmentStatus">
-                        <option value="" disabled selected>Select an option</option>
-                        <option value="Sanctioned">Sanctioned</option>
-                        <option value="Recruited">Recruited</option>
-                        <option value="Yet to Recruit">Yet to Recruit</option>
-                        <option value="On Contract">On Contract</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="gender2">Gender</label>
-                    <select id="gender2" formControlName="gender">
-                        <option value="" disabled selected>Select an option</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option> 
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="count2">Count of Such Entities</label>
-                    <input id="count2" type="number" formControlName="count" placeholder="Numeric field data">
-                </div>
-            </div>
-        </div>
-        <div class="add-button" style="margin-top:-30px">
-            <button type="button" (click)="addTechStaff()">Add +</button>
-        </div>
-    </form>
-</div>
