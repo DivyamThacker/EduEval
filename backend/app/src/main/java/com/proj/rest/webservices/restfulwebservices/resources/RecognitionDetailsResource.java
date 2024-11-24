@@ -1,4 +1,4 @@
-package com.proj.rest.webservices.restfulwebservices.university.recognitiondetails;
+package com.proj.rest.webservices.restfulwebservices.resources;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,12 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.proj.rest.webservices.restfulwebservices.jpa.DocumentDetailsRepository;
-import com.proj.rest.webservices.restfulwebservices.jpa.RecognitionDetailsRepository;
-import com.proj.rest.webservices.restfulwebservices.jpa.UniversityRepository;
+import com.proj.rest.webservices.restfulwebservices.repositories.DocumentDetailsRepository;
+import com.proj.rest.webservices.restfulwebservices.repositories.RecognitionDetailsRepository;
+import com.proj.rest.webservices.restfulwebservices.repositories.UniversityRepository;
 import com.proj.rest.webservices.restfulwebservices.services.StorageService;
-import com.proj.rest.webservices.restfulwebservices.university.University;
-import com.proj.rest.webservices.restfulwebservices.university.document.DocumentDetails;
+import com.proj.rest.webservices.restfulwebservices.models.University;
+import com.proj.rest.webservices.restfulwebservices.models.DocumentDetails;
+import com.proj.rest.webservices.restfulwebservices.models.RecognitionDetails;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;

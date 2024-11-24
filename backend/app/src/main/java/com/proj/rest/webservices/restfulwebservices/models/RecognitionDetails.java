@@ -1,8 +1,6 @@
-package com.proj.rest.webservices.restfulwebservices.university.recognitiondetails;
+package com.proj.rest.webservices.restfulwebservices.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.proj.rest.webservices.restfulwebservices.university.University;
-import com.proj.rest.webservices.restfulwebservices.university.document.DocumentDetails;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

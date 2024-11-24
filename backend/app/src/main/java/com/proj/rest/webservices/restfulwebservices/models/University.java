@@ -1,11 +1,8 @@
-package com.proj.rest.webservices.restfulwebservices.university;
+package com.proj.rest.webservices.restfulwebservices.models;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.proj.rest.webservices.restfulwebservices.university.campus.Campus;
-import com.proj.rest.webservices.restfulwebservices.university.contact.Contact;
-import com.proj.rest.webservices.restfulwebservices.university.recognitiondetails.RecognitionDetails;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

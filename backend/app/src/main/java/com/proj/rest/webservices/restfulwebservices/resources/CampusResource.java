@@ -1,4 +1,4 @@
-package com.proj.rest.webservices.restfulwebservices.university.campus;
+package com.proj.rest.webservices.restfulwebservices.resources;
 
 import java.util.List;
 
@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.proj.rest.webservices.restfulwebservices.jpa.CampusRepository;
-import com.proj.rest.webservices.restfulwebservices.jpa.UniversityRepository;
-import com.proj.rest.webservices.restfulwebservices.university.University;
+import com.proj.rest.webservices.restfulwebservices.repositories.CampusRepository;
+import com.proj.rest.webservices.restfulwebservices.repositories.UniversityRepository;
+import com.proj.rest.webservices.restfulwebservices.models.University;
+import com.proj.rest.webservices.restfulwebservices.models.Campus;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.proj.rest.webservices.restfulwebservices.staff;
+package com.proj.rest.webservices.restfulwebservices.resources;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.proj.rest.webservices.restfulwebservices.jpa.StaffRepository;
+import com.proj.rest.webservices.restfulwebservices.repositories.StaffRepository;
+import com.proj.rest.webservices.restfulwebservices.models.Staff;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;

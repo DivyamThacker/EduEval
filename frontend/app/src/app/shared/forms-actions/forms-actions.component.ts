@@ -81,7 +81,6 @@ export class FormsActionsComponent implements OnInit, OnDestroy{
   }
   
   onSaveChanges() {
-    this.basicFormDataService.setUnsavedChanges(false); 
     const currentUrl = this.router.url;
 
     if (currentUrl.startsWith('/basic-information/basic-info')) {
@@ -89,32 +88,48 @@ export class FormsActionsComponent implements OnInit, OnDestroy{
         next: response => {
           console.log('Basic Info submitted successfully', response);
           alert('Basic Info submitted successfully');
+          this.basicFormDataService.setUnsavedChanges(false);
         },
-        error: error => console.error('Error submitting Basic Info', error)
+        error: error => {
+          console.error('Error submitting Basic Info', error);
+          alert('Error submitting Basic Info');
+        }
       });
     } else if (currentUrl.startsWith('/basic-information/contact-details')) {
       this.basicFormDataService.submitContactDetails().subscribe({
         next: response => {
           console.log('Contact Details submitted successfully', response);
           alert('Contact Details submitted successfully');
+          this.basicFormDataService.setUnsavedChanges(false);
         },
-        error: error => console.error('Error submitting Contact Details', error)
+        error: error => {
+          console.error('Error submitting Contact Details', error);
+          alert('Error submitting Contact Details');
+        }
       });
     } else if (currentUrl.startsWith('/basic-information/area-location')) {
       this.basicFormDataService.submitCampusDetails().subscribe({
         next: response => {
           console.log('Campus Details submitted successfully', response);
           alert('Campus Details submitted successfully');
+          this.basicFormDataService.setUnsavedChanges(false);
         },
-        error: error => console.error('Error submitting Campus Details', error)
+        error: error => {
+          console.error('Error submitting Campus Details', error);
+          alert('Error submitting Campus Details');
+        }
       });
     } else if (currentUrl.startsWith('/basic-information/recognition-details')) {
       this.basicFormDataService.submitRecognitionDetails().subscribe({
         next: response => {
           console.log('Recognition Details submitted successfully', response);
           alert('Recognition Details submitted successfully');
+          this.basicFormDataService.setUnsavedChanges(false);
         },
-        error: error => console.error('Error submitting Recognition Details', error)
+        error: error => {
+          console.error('Error submitting Recognition Details', error);
+          alert('Error submitting Recognition Details');
+        }
       });
     }
   }

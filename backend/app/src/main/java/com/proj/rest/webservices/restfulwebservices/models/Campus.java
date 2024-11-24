@@ -1,4 +1,4 @@
-package com.proj.rest.webservices.restfulwebservices.university.campus;
+package com.proj.rest.webservices.restfulwebservices.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.proj.rest.webservices.restfulwebservices.university.University;
 
 @Entity
 @Data

@@ -1,7 +1,6 @@
-package com.proj.rest.webservices.restfulwebservices.university.contact;
+package com.proj.rest.webservices.restfulwebservices.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.proj.rest.webservices.restfulwebservices.university.University;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

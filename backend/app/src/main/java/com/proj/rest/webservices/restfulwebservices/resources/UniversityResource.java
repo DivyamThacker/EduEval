@@ -1,4 +1,4 @@
-package com.proj.rest.webservices.restfulwebservices.university;
+package com.proj.rest.webservices.restfulwebservices.resources;
 
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.proj.rest.webservices.restfulwebservices.jpa.ContactDetailsRepository;
-import com.proj.rest.webservices.restfulwebservices.jpa.UniversityRepository;
-import com.proj.rest.webservices.restfulwebservices.university.contact.Contact;
+import com.proj.rest.webservices.restfulwebservices.repositories.ContactDetailsRepository;
+import com.proj.rest.webservices.restfulwebservices.repositories.UniversityRepository;
+import com.proj.rest.webservices.restfulwebservices.models.Contact;
+import com.proj.rest.webservices.restfulwebservices.models.University;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
