@@ -62,10 +62,10 @@
     <form [formGroup]="sraForm">
         <div class="form-group" style="grid-column: span 2;">
             <label for="is-sra-program">Is the University Offering any Programmes Recognised by any Statutory Regulatory Authority (SRA)</label>
-            <input type="checkbox" id="is-sra-program" formControlName="isSRAProgram">
+            <input type="checkbox" id="is-sra-program" formControlName="areSraProgram">
         </div>
     
-        <div *ngIf="sraForm.get('isSRAProgram')?.value" style="grid-column: span 2;">
+        <div *ngIf="sraForm.get('areSraProgram')?.value" style="grid-column: span 2;">
             <div formArrayName="sraPrograms">
                 <div *ngFor="let sraProgram of sraPrograms?.controls; let i = index" [formGroupName]="i" class="program-fields" style="margin-bottom: 15px;">
                     
@@ -80,13 +80,13 @@
                     </div>
         
                     <!-- Delete button -->
-                    <div class="delete-btn" (click)="removeSRAProgram(i)">
+                    <div class="delete-btn" (click)="removeSraProgram(i)">
                         <i class="fas fa-trash"></i> <!-- Font Awesome trash icon -->
                     </div>
                 </div>
             </div>
             <div class="add-button" style="grid-column: span 2;">
-                <button type="button" (click)="addSRAProgram()">Add +</button>
+                <button type="button" (click)="addSraProgram()">Add +</button>
             </div>
         </div>
         

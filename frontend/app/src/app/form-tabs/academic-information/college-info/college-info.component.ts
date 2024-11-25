@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
-import { AcademicFormDataService } from '../../../services/academic-form-data-service';
+import { CollegeInfoDataService } from '../../../services/academic-information-form/college-info-data-service';
 
 @Component({
   selector: 'app-college-info',
@@ -15,7 +15,7 @@ export class CollegeInfoComponent implements OnInit {
   form: FormGroup;
   sraForm: FormGroup;
   
-  constructor(private fb: FormBuilder, private academicFormDataService: AcademicFormDataService) {
+  constructor(private fb: FormBuilder, private collegeInfoDataService: CollegeInfoDataService) {
     this.form = this.fb.group({
       constituentColleges: [''],
       affiliatedColleges: [''],
@@ -30,13 +30,13 @@ export class CollegeInfoComponent implements OnInit {
     });
 
     this.sraForm = this.fb.group({
-      isSRAProgram: [false],
+      areSraProgram: [false],
       sraPrograms: this.fb.array([])
     });
 
-    this.sraForm.get('isSRAProgram')?.valueChanges.subscribe((isSRAProgram: boolean) => {
-      if (isSRAProgram) {
-        this.sraForm.setControl('sraPrograms', this.fb.array([this.createSRAFormGroup()]));
+    this.sraForm.get('areSraProgram')?.valueChanges.subscribe((areSraProgram: boolean) => {
+      if (areSraProgram) {
+        this.sraForm.setControl('sraPrograms', this.fb.array([this.createSraFormGroup()]));
       } else {
         this.sraForm.setControl('sraPrograms', this.fb.array([]));
       }
@@ -47,24 +47,27 @@ export class CollegeInfoComponent implements OnInit {
     return this.sraForm.get('sraPrograms') as FormArray;
   }
 
-  createSRAFormGroup(): FormGroup {
+  createSraFormGroup(): FormGroup {
     return this.fb.group({
       sraProgramName: [''],
       sraDocument: ['']
     });
   }
 
-  addSRAProgram(): void {
-    this.sraPrograms.push(this.createSRAFormGroup());
+  addSraProgram(): void {
+    this.sraPrograms.push(this.createSraFormGroup());
   }
 
-  removeSRAProgram(index: number): void {
+  removeSraProgram(index: number): void {
     this.sraPrograms.removeAt(index);
   } 
 
   ngOnInit() {
     this.form.valueChanges.subscribe(() => {
-      // this.academicFormDataService.setBasicInfoData(this.form.value);
+      this.collegeInfoDataService.setCollegeInfoData(this.form.value);
+    });
+    this.sraForm.valueChanges.subscribe(() => {
+      this.collegeInfoDataService.setSraProgramData(this.sraForm.value);
     });
   }
 }

@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,8 +29,8 @@ public class Campus {
     private String campusArea;
     private String builtUpArea;
     private List<String> programmesOffered;
-    private String establishmentDate;
-    private String recognitionDate;
+    private Date establishmentDate;
+    private Date recognitionDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnore

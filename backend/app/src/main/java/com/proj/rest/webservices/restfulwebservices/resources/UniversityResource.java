@@ -34,10 +34,6 @@ public class UniversityResource {
 	
 	private ContactDetailsRepository contactDetailsRepository;
 
-
-	// private static final Logger logger = LoggerFactory.getLogger(UniversityResource.class);
-
-
 	public UniversityResource(UniversityRepository universityRepository, ContactDetailsRepository contactDetailsRepository) {
 		this.universityRepository = universityRepository;
 		this.contactDetailsRepository = contactDetailsRepository;
@@ -62,12 +58,12 @@ public class UniversityResource {
 		return ResponseEntity.created(location).body(savedUniversity);
 	}
 	
-	@GetMapping("/basic-info")
+	@GetMapping("")
 	public List<University> retrieveAllUniversities() {
 		return universityRepository.findAll();
 	}
 
-	@GetMapping("/{universityId}/basic-info")
+	@GetMapping("/{universityId}")
 	public University retrieveUniversity(@PathVariable Integer universityId) {	
 		return universityRepository.findById(universityId).get();
 	}
@@ -89,12 +85,4 @@ public class UniversityResource {
 			return ResponseEntity.ok(updatedUniversity);
 		}).orElseGet(() -> ResponseEntity.notFound().build());
 	}
-
-	@PostMapping("/basic-information")
-	public University hehEntity(@RequestBody University university) {
-		//TODO: process POST request
-		System.out.println(university);
-		return university;
-	}
-	
 }

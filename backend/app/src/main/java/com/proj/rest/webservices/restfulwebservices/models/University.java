@@ -1,6 +1,5 @@
 package com.proj.rest.webservices.restfulwebservices.models;
 
-import java.sql.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -21,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class University {
-	  @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -48,13 +47,26 @@ public class University {
     @JsonIgnoreProperties("university")
     private List<Campus> campuses;
 
-    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("university") 
-    private List<SraProgramme> sraProgrammes;
-
+    
     @OneToOne(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
     private CollegeStats collegeStats;
+
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university") 
+    private List<SraProgram> sraPrograms;
+
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university")
+    private List<Faculty> faculties;
+
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university")
+    private List<DistinguishedAcademician> distinguishedAcademicians;
+
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university")
+    private List<NonTeachingStaff> nonTeachingStaff;
 
     private Boolean hasIntegratedProgrammes;
     private Integer totalIntegratedProgrammes;
@@ -67,12 +79,10 @@ public class University {
     private List<ChairDetails> chairDetails;
 
     //Details of UGC Human Resource Development Centre
-    private Date hrdcEstablishmentDate=null;
-    private Integer hrdcOrientationProgrammesCount=0;
-    private Integer hrdcRefresherCourseCount=0;
-    private Integer hrdcOwnProgrammesCount=0;
-    private Integer hrdctotalProgrammes=0; //last 5 years
-
+   @OneToOne(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university")
+    private HrdcDetails hrdcDetails;
+    
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
     private List<AccreditationDetails> accreditationDetails;
@@ -80,5 +90,12 @@ public class University {
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
     private List<DepartmentEvaluation> departmentEvaluations;
-}
 
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university")
+    private List<NepDetails> nepDetails;
+
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("university")
+    private List<ElectoralLiteracyDetails> electoralLiteracyDetails;
+}

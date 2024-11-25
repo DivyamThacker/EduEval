@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AcademicFormDataService } from '../../../services/academic-form-data-service';
 
 @Component({
   selector: 'app-evaluation-reports',
@@ -18,7 +17,7 @@ export class EvaluationReportsComponent implements OnInit {
   accreditationReports: { [key: number]: File } = {};
   departmentReports: { [key: number]: File } = {};
 
-  constructor(private fb: FormBuilder, private academicFormDataService: AcademicFormDataService) {
+  constructor(private fb: FormBuilder) {
     this.accreditationForm = this.fb.group({
       accreditations: this.fb.array([]),
     });

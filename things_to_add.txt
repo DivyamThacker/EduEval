@@ -1,10 +1,22 @@
 start with backend resource of each subsection and then connect backend with frontend
 
+see where the areUnsavedChanges variable should be handled (look in services and in formActionsComponent)
+
+
+Think if you want to manage seperate areUnsavedChanges varialbe in each subsection and also universityId
+
+think if you want to sepreate basic form data service to each subsection in frontend
+
 remember to send the section name/ string in the NEP detials page
  
 map and add the integrated programmes into the normal enrollment
 
 add aws database rather that h2 and configure it
+
+complete the DataFormaterService in backend
+
+get the data that and fill the interim forms using it so that one can edit or add the new data and 
+also see what already data exists on backend
 
 also figure out how to structurize the storage of the files in S3 storage (that is .. send prefixes)
 
@@ -30,11 +42,6 @@ unset areUnsavedChanges in onSaveChanges method only if the response is received
 
 add guard to every form tab in the app.routes
 
-do something about document upload in academic information , maybe create a new component\
- (that consists of 3 things reports and two descripion)
-
-get the data that and fill the interim forms using it so that one can edit or add the new data and 
-also see what already data exists on backend
 
 write effecient code in extended profile form frontend
 

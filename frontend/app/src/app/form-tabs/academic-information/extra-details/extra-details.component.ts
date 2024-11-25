@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AcademicFormDataService } from '../../../services/academic-form-data-service';
 
 @Component({
   selector: 'app-extra-details',
@@ -17,7 +16,7 @@ export class ExtraDetailsComponent implements OnInit {
 
   devlopmentCentreForm: FormGroup;
   
-  constructor(private fb: FormBuilder, private academicFormDataService: AcademicFormDataService) {
+  constructor(private fb: FormBuilder) {
     this.chairForm = this.fb.group({
       chairs : this.fb.array([]),
     });

@@ -5,6 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.sql.Date;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,8 @@ import com.proj.rest.webservices.restfulwebservices.models.RecognitionDetails;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 @RestController
 @RequestMapping("/api/naac/university/{universityId}/recognition-details")
@@ -40,8 +44,8 @@ public class RecognitionDetailsResource {
     @PostMapping("")
     public ResponseEntity<RecognitionDetails> submitRecognitionDetails(
             @PathVariable Integer universityId,
-            @RequestParam String recognitionDateUnderSection2f,
-            @RequestParam String recognitionDateUnderSection12b,
+            @RequestParam Date recognitionDateUnderSection2f,
+            @RequestParam Date recognitionDateUnderSection12b,
             @RequestParam(required = false) MultipartFile recognitionDocument2f,
             @RequestParam(required = false) MultipartFile recognitionDocument12b,
             @RequestParam String isUPE) {
@@ -84,8 +88,8 @@ public class RecognitionDetailsResource {
     public ResponseEntity<RecognitionDetails> updateRecognitionDetails(
         @PathVariable Integer universityId,
         @PathVariable Integer recognitionDetailsId,
-        @RequestParam String recognitionDateUnderSection2f,
-        @RequestParam String recognitionDateUnderSection12b,
+        @RequestParam Date recognitionDateUnderSection2f,
+        @RequestParam Date recognitionDateUnderSection12b,
         @RequestParam(required = false) MultipartFile recognitionDocument2f,
         @RequestParam(required = false) MultipartFile recognitionDocument12b,
         @RequestParam String isUPE) {
@@ -140,6 +144,14 @@ public class RecognitionDetailsResource {
                 .orElseThrow(() -> new RuntimeException("RecognitionDetails not found"));
         recognitionDetailsRepository.delete(recognitionDetails);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("")
+    public ResponseEntity<RecognitionDetails> getRecognitionDetails(@PathVariable Integer universityId) {
+        University university = universityRepository.findById(universityId)
+                .orElseThrow(() -> new RuntimeException("University not found"));
+        RecognitionDetails recognitionDetails = university.getRecognitionDetials();
+        return ResponseEntity.ok(recognitionDetails);
     }
 }
     

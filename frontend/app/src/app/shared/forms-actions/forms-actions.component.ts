@@ -3,6 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/ro
 import { BasicFormDataService } from '../../services/basic-form-data-service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { CollegeInfoDataService } from '../../services/academic-information-form/college-info-data-service';
 
 @Component({
   selector: 'app-forms-actions',
@@ -37,7 +38,8 @@ export class FormsActionsComponent implements OnInit, OnDestroy{
   private routeSub!: Subscription; // Subscription for route changes
 
 
-  constructor(private basicFormDataService: BasicFormDataService, private router: Router, private route: ActivatedRoute) {}
+  constructor(private basicFormDataService: BasicFormDataService, private collegeInfoDataService: CollegeInfoDataService,
+     private router: Router, private route: ActivatedRoute) {}
   ngOnInit() {
     this.updateNavigationState(); // Set initial state
     this.routeSub = this.router.events.subscribe((event) => {
@@ -132,6 +134,31 @@ export class FormsActionsComponent implements OnInit, OnDestroy{
         error: error => {
           console.error('Error submitting Recognition Details', error);
           alert('Error submitting Recognition Details');
+        }
+      });
+    } else if (currentUrl.startsWith('/academic-information/college-info')) {
+      this.collegeInfoDataService.submitCollegeInfo().subscribe({
+        next: response => {
+          console.log('College Information submitted successfully', response);
+          alert('College Information submitted successfully');
+          this.basicFormDataService.setUnsavedChanges(false);
+        },
+        error: error => {
+          console.error('Error submitting College Information', error);
+          alert('Error submitting College Information');
+        }
+      });
+    }
+    else if (currentUrl.startsWith('/academic-information/sra-program')) {
+      this.collegeInfoDataService.submitSraProgram().subscribe({
+        next: response => {
+          console.log('Sra Programs submitted successfully', response);
+          alert('Sra Programs submitted successfully');
+          this.basicFormDataService.setUnsavedChanges(false);
+        },
+        error: error => {
+          console.error('Error submitting Sra Programs', error);
+          alert('Error submitting Sra Programs');
         }
       });
     }

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AcademicFormDataService } from '../../../services/academic-form-data-service';
 import { electoralLiteracyQuestions } from '../../../shared/constants/app.constants';
 
 @Component({

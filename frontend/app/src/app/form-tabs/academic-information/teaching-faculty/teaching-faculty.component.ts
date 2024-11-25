@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AcademicFormDataService } from '../../../services/academic-form-data-service';
 
 @Component({
   selector: 'app-teaching-faculty',
@@ -17,7 +16,7 @@ export class TeachingFacultyComponent implements OnInit {
 
   academiciansForm : FormGroup;
   
-  constructor(private fb: FormBuilder, private academicFormDataService: AcademicFormDataService) {
+  constructor(private fb: FormBuilder) {
     this.facultyForm = this.fb.group({
       faculties : this.fb.array([]),
     });

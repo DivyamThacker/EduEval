@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
-import { AcademicFormDataService } from '../../../services/academic-form-data-service';
 
 
 @Component({
@@ -17,7 +16,7 @@ export class EnrollmentDetailsComponent implements OnInit {
 
   integratedForm: FormGroup;
   
-  constructor(private fb: FormBuilder, private academicFormDataService: AcademicFormDataService) {
+  constructor(private fb: FormBuilder) {
     this.enrollmentForm = this.fb.group({
       enrollments : this.fb.array([]),
     });
@@ -79,10 +78,10 @@ export class EnrollmentDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.enrollmentForm.valueChanges.subscribe(() => {
-      // this.academicFormDataService.setBasicInfoData(this.form.value);
+      // this.collegeInfoDataService.setBasicInfoData(this.form.value);
     });
     this.integratedForm.valueChanges.subscribe(() => {
-      // this.academicFormDataService.setBasicInfoData(this.form.value);
+      // this.collegeInfoDataService.setBasicInfoData(this.form.value);
     });
   }
 }
