@@ -1,0 +1,148 @@
+"universityInfo": {
+                                                                          "name": "DHIRUBHAI AMBANI INSTITUTE OF INFORMATION AND COMMUNICATION TECHNOLOGY (DA-IICT)",
+                                                                          "address": "Near Indroda Circle, Gandhinagar",
+                                                                          "city": "Gandhinagar",
+                                                                          "state": "Gujarat",
+                                                                          "pin": "382007",
+                                                                          "website": "https://www.daiict.ac.in"
+                                                                      },
+                                                                      "contacts": [
+                                                                          {
+                                                                              "designation": "Director",
+                                                                              "name": "K S Dasgupta",
+                                                                              "telephone": "079-68261572",
+                                                                              "mobile": "9327043614",
+                                                                              "fax": "079-68261710",
+                                                                              "email": "director@daiict.ac.in"
+                                                                          },
+                                                                          {
+                                                                              "designation": "IQAC / CIQA Coordinator",
+                                                                              "name": "Anil Roy",
+                                                                              "telephone": "079-68261567",
+                                                                              "mobile": "9376163094",
+                                                                              "fax": "079-68261710",
+                                                                              "email": "iqac_dir@daiict.ac.in"
+                                                                          }
+                                                                      ],
+                                                                      "recognitionDetails": [
+                                                                          {
+                                                                              "section": "2f of UGC",
+                                                                              "date": "30-11-2004",
+                                                                              "document": "View Document"
+                                                                          },
+                                                                          {
+                                                                              "section": "12B of UGC",
+                                                                              "date": "Not Applicable",
+                                                                              "document": "Not Available"
+                                                                          }
+                                                                      ],
+                                                                      "campusDetails": [
+                                                                          {
+                                                                              "type": "Main Campus",
+                                                                              "address": "Near Indroda Circle, Gandhinagar",
+                                                                              "location": "Urban",
+                                                                              "area": "50",
+                                                                              "builtUpArea": "202350",
+                                                                              "programs": "Undergraduate, Postgraduate, PhD",
+                                                                              "establishmentDate": "06-08-2001",
+                                                                              "dateOfRecognitionByUGC": ""
+                                                                          }
+                                                                      ],
+                                                                      "natureOfUniversity": "State Private University",
+                                                                      "typeOfUniversity": "Unitary",
+                                                                      "establishmentDate": "06-08-2001",
+                                                                      "priorDate": "NA",
+                                                                      "universityPotential": "No",
+                                                                      "academicDetails": {
+                                                                          "Constituent Colleges": 0,
+                                                                          "Affiliated Colleges": 0,
+                                                                          "Colleges Under 2(f)": 0,
+                                                                          "Colleges Under 2(f) and 12B": 0,
+                                                                          "NAAC Accredited Colleges": 0,
+                                                                          "Colleges with Potential for Excellence (UGC)": 0,
+                                                                          "Autonomous Colleges": 0,
+                                                                          "Colleges with Postgraduate Departments": 0,
+                                                                          "Colleges with Research Departments": 0,
+                                                                          "University Recognized Research Institutes/Centers": 0
+                                                                      },
+                                                                      "isSRAProgram": "Yes",
+                                                                        "sraPrograms": [
+                                                                            {
+                                                                                "program": "PCI",
+                                                                                "document": "url1.pdf"
+                                                                            },
+                                                                            {
+                                                                                "program": "BCI",
+                                                                                "document": "url2.pdf"
+                                                                            },
+                                                                            {
+                                                                                "program": "COA",
+                                                                                "document": "url3.pdf"
+                                                                            }
+                                                                        ],
+
+                                                                      "affiliatedInstitution": [
+                                                      {"Type of Colleges": "Education/Teachers Training", "Permanent": 4, "Temporary": 0, "Total": 4},
+                                                      {"Type of Colleges": "Arts", "Permanent": 1, "Temporary": 0, "Total": 1},
+                                                      {"Type of Colleges": "Rehabilitation Sciences", "Permanent": 2, "Temporary": 0, "Total": 2},
+                                                      {"Type of Colleges": "Engineering/Technology/Architecture/Design", "Permanent": 1, "Temporary": 0, "Total": 1},
+                                                      {"Type of Colleges": "General", "Permanent": 64, "Temporary": 0, "Total": 64},
+                                                      {"Type of Colleges": "Medicine & Surgery/Ayurveda/Unani/Homeopathy/Health & Allied Sciences/Paramedical/Sciences", "Permanent": 18, "Temporary": 0, "Total": 18}
+                                                    ],
+
+                        "TeachingFaculty": {
+                    "Sanctioned": {
+                        "Professor": { "Male": 10, "Female": 5, "Others": 0, "Total": 15 },
+                        "Associate Professor": { "Male": 8, "Female": 7, "Others": 1, "Total": 16 },
+                        "Assistant Professor": { "Male": 12, "Female": 10, "Others": 0, "Total": 22 }
+                    },
+                    "Recruited": {
+                        "Professor": { "Male": 8, "Female": 4, "Others": 0, "Total": 12 },
+                        "Associate Professor": { "Male": 7, "Female": 5, "Others": 0, "Total": 12 },
+                        "Assistant Professor": { "Male": 10, "Female": 8, "Others": 1, "Total": 19 }
+                    },
+                    "Yet to Recruit": {
+                        "Professor": { "Male": 2, "Female": 1, "Others": 0, "Total": 3 },
+                        "Associate Professor": { "Male": 1, "Female": 2, "Others": 1, "Total": 4 },
+                        "Assistant Professor": { "Male": 2, "Female": 2, "Others": 0, "Total": 4 }
+                    },
+                    "Contractual": {
+                        "Professor": { "Male": 1, "Female": 1, "Others": 0, "Total": 2 },
+                        "Associate Professor": { "Male": 2, "Female": 0, "Others": 0, "Total": 2 },
+                        "Assistant Professor": { "Male": 5, "Female": 3, "Others": 0, "Total": 8 }
+                    },
+                                                              },
+                    "NonTeachingStaff": {
+                        "Sanctioned": { "Male": 10, "Female": 8, "Others": 2, "Total": 20 },
+                        "Recruited": { "Male": 8, "Female": 6, "Others": 1, "Total": 15 },
+                        "Yet to Recruit": { "Male": 2, "Female": 2, "Others": 1, "Total": 5 },
+                        "Contractual": { "Male": 5, "Female": 3, "Others": 0, "Total": 8 }
+                    },
+                    "TechnicalStaff": {
+                        "Sanctioned": { "Male": 15, "Female": 10, "Others": 0, "Total": 25 },
+                        "Recruited": { "Male": 12, "Female": 8, "Others": 0, "Total": 20 },
+                        "Yet to Recruit": { "Male": 3, "Female": 2, "Others": 0, "Total": 5 },
+                        "Contractual": { "Male": 6, "Female": 4, "Others": 0, "Total": 10 }
+                    },
+
+                     "QualificationDetails": {
+                        "permanentTeacher": {
+                        "D.sc/D.Litt": { "Professor": { "Male": 3, "Female": 2, "Others": 0 }, "Associate Professor": { "Male": 4, "Female": 1, "Others": 0 }, "Assistant Professor": { "Male": 5, "Female": 3, "Others": 0 } },
+                        "Ph.D.": { "Professor": { "Male": 6, "Female": 4, "Others": 1 }, "Associate Professor": { "Male": 8, "Female": 6, "Others": 0 }, "Assistant Professor": { "Male": 12, "Female": 8, "Others": 1 } },
+                        "M.Phil.": { "Professor": { "Male": 1, "Female": 0, "Others": 0 }, "Associate Professor": { "Male": 2, "Female": 2, "Others": 0 }, "Assistant Professor": { "Male": 3, "Female": 2, "Others": 0 } },
+                        "PG": { "Professor": { "Male": 2, "Female": 1, "Others": 0 }, "Associate Professor": { "Male": 3, "Female": 2, "Others": 0 }, "Assistant Professor": { "Male": 5, "Female": 3, "Others": 1 } }
+                        },
+                        "temporaryTeacher": {
+                        "D.sc/D.Litt": { "Professor": { "Male": 1, "Female": 0, "Others": 0 }, "Associate Professor": { "Male": 0, "Female": 1, "Others": 0 }, "Assistant Professor": { "Male": 1, "Female": 1, "Others": 0 } },
+                        "Ph.D.": { "Professor": { "Male": 3, "Female": 2, "Others": 0 }, "Associate Professor": { "Male": 4, "Female": 2, "Others": 0 }, "Assistant Professor": { "Male": 5, "Female": 4, "Others": 0 } },
+                        "M.Phil.": { "Professor": { "Male": 0, "Female": 1, "Others": 0 }, "Associate Professor": { "Male": 1, "Female": 1, "Others": 0 }, "Assistant Professor": { "Male": 2, "Female": 2, "Others": 0 } },
+                        "PG": { "Professor": { "Male": 2, "Female": 1, "Others": 0 }, "Associate Professor": { "Male": 3, "Female": 1, "Others": 0 }, "Assistant Professor": { "Male": 4, "Female": 2, "Others": 0 } }
+                        },
+                        "partTimeTeacher": {
+                        "D.sc/D.Litt": { "Professor": { "Male": 1, "Female": 1, "Others": 0 }, "Associate Professor": { "Male": 1, "Female": 0, "Others": 0 }, "Assistant Professor": { "Male": 0, "Female": 1, "Others": 0 } },
+                        "Ph.D.": { "Professor": { "Male": 2, "Female": 2, "Others": 0 }, "Associate Professor": { "Male": 3, "Female": 1, "Others": 0 }, "Assistant Professor": { "Male": 4, "Female": 3, "Others": 0 } },
+                        "M.Phil.": { "Professor": { "Male": 1, "Female": 1, "Others": 0 }, "Associate Professor": { "Male": 1, "Female": 1, "Others": 0 }, "Assistant Professor": { "Male": 1, "Female": 2, "Others": 0 } },
+                        "PG": { "Professor": { "Male": 3, "Female": 2, "Others": 0 }, "Associate Professor": { "Male": 4, "Female": 2, "Others": 0 }, "Assistant Professor": { "Male": 5, "Female": 3, "Others": 0 } }
+                        }
+                                                                  }
+                                                              """;

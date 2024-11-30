@@ -1,6 +1,8 @@
-
 package com.proj.rest.webservices.restfulwebservices.services;
 
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.borders.SolidBorder;
+import com.google.gson.*;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -41,113 +43,193 @@ public class PdfService {
         try {
             // JSON String
             String jsonData = """
-                        {
-                            "universityInfo": {
-                                "name": "DHIRUBHAI AMBANI INSTITUTE OF INFORMATION AND COMMUNICATION TECHNOLOGY (DA-IICT)",
-                                "address": "Near Indroda Circle, Gandhinagar",
-                                "city": "Gandhinagar",
-                                "state": "Gujarat",
-                                "pin": "382007",
-                                "website": "https://www.daiict.ac.in"
-                            },
-                            "contacts": [
-                                {
-                                    "designation": "Director",
-                                    "name": "K S Dasgupta",
-                                    "telephone": "079-68261572",
-                                    "mobile": "9327043614",
-                                    "fax": "079-68261710",
-                                    "email": "director@daiict.ac.in"
-                                },
-                                {
-                                    "designation": "IQAC / CIQA Coordinator",
-                                    "name": "Anil Roy",
-                                    "telephone": "079-68261567",
-                                    "mobile": "9376163094",
-                                    "fax": "079-68261710",
-                                    "email": "iqac_dir@daiict.ac.in"
-                                }
-                            ],
-                            "recognitionDetails": [
-                                {
-                                    "section": "2f of UGC",
-                                    "date": "30-11-2004",
-                                    "document": "View Document"
-                                },
-                                {
-                                    "section": "12B of UGC",
-                                    "date": "Not Applicable",
-                                    "document": "Not Available"
-                                }
-                            ],
-                            "campusDetails": [
-                                {
-                                    "type": "Main Campus",
-                                    "address": "Near Indroda Circle, Gandhinagar",
-                                    "location": "Urban",
-                                    "area": "50",
-                                    "builtUpArea": "202350",
-                                    "programs": "Undergraduate, Postgraduate, PhD",
-                                    "establishmentDate": "06-08-2001",
-                                    "dateOfRecognitionByUGC": ""
-                                }
-                            ],
-                            "natureOfUniversity": "State Private University",
-                            "typeOfUniversity": "Unitary",
-                            "establishmentDate": "06-08-2001",
-                            "priorDate": "NA",
-                            "universityPotential": "No",
-                            "academicDetails": {
-                                "Constituent Colleges": 0,
-                                "Affiliated Colleges": 0,
-                                "Colleges Under 2(f)": 0,
-                                "Colleges Under 2(f) and 12B": 0,
-                                "NAAC Accredited Colleges": 0,
-                                "Colleges with Potential for Excellence (UGC)": 0,
-                                "Autonomous Colleges": 0,
-                                "Colleges with Postgraduate Departments": 0,
-                                "Colleges with Research Departments": 0,
-                                "University Recognized Research Institutes/Centers": 0
-                            },
-                            "isSRAProgram": "NO",
-
-                            "TeachingFaculty": {
-                            "Professor": {
-                                "Sanctioned": 20,
-                                "Recruited": {"Male": 9, "Female": 2, "Others": 0, "Total": 11},
-                                "YetToRecruit": 9,
-                                "OnContract": {"Male": 7, "Female": 1, "Others": 0, "Total": 8}
-                            },
-                            "AssociateProfessor": {
-                                "Sanctioned": 25,
-                                "Recruited": {"Male": 15, "Female": 3, "Others": 0, "Total": 18},
-                                "YetToRecruit": 7,
-                                "OnContract": {"Male": 8, "Female": 1, "Others": 0, "Total": 9}
-                            },
-                            "AssistantProfessor": {
-                                "Sanctioned": 35,
-                                "Recruited": {"Male": 24, "Female": 4, "Others": 0, "Total": 28},
-                                "YetToRecruit": 7,
-                                "OnContract": {"Male": 6, "Female": 3, "Others": 0, "Total": 9}
-                            }
-                        }
-                        }
-                    """;
+{
+    "universityInfo": {
+    "name": "DHIRUBHAI AMBANI INSTITUTE OF INFORMATION AND COMMUNICATION TECHNOLOGY (DA-IICT)",
+    "address": "Near Indroda Circle, Gandhinagar",
+    "city": "Gandhinagar",
+    "state": "Gujarat",
+    "pin": "382007",
+    "website": "https://www.daiict.ac.in"
+  },
+  "contacts": [
+    {
+      "designation": "Director",
+      "name": "K S Dasgupta",
+      "telephone": "079-68261572",
+      "mobile": "9327043614",
+      "fax": "079-68261710",
+      "email": "director@daiict.ac.in"
+    },
+    {
+      "designation": "IQAC / CIQA Coordinator",
+      "name": "Anil Roy",
+      "telephone": "079-68261567",
+      "mobile": "9376163094",
+      "fax": "079-68261710",
+      "email": "iqac_dir@daiict.ac.in"
+    }
+  ],
+  "recognitionDetails": [
+    {
+      "section": "2f of UGC",
+      "date": "30-11-2004",
+      "document": "View Document"
+    },
+    {
+      "section": "12B of UGC",
+      "date": "Not Applicable",
+      "document": "Not Available"
+    }
+  ],
+  "campusDetails": [
+    {
+      "type": "Main Campus",
+      "address": "Near Indroda Circle, Gandhinagar",
+      "location": "Urban",
+      "area": "50",
+      "builtUpArea": "202350",
+      "programs": "Undergraduate, Postgraduate, PhD",
+      "establishmentDate": "06-08-2001",
+      "dateOfRecognitionByUGC": ""
+    }
+  ],
+  "natureOfUniversity": "State Private University",
+  "typeOfUniversity": "Unitary",
+  "establishmentDate": "06-08-2001",
+  "priorDate": "NA",
+  "universityPotential": "No",
+  "academicDetails": {
+    "Constituent Colleges": 0,
+    "Affiliated Colleges": 0,
+    "Colleges Under 2(f)": 0,
+    "Colleges Under 2(f) and 12B": 0,
+    "NAAC Accredited Colleges": 0,
+    "Colleges with Potential for Excellence (UGC)": 0,
+    "Autonomous Colleges": 0,
+    "Colleges with Postgraduate Departments": 0,
+    "Colleges with Research Departments": 0,
+    "University Recognized Research Institutes/Centers": 0
+  },
+  "isSRAProgram": "Yes",
+  "sraPrograms": [
+    { "program": "PCI", "document": "url1.pdf" },
+    { "program": "BCI", "document": "url2.pdf" },
+    { "program": "COA", "document": "url3.pdf" }
+  ],
+  "affiliatedInstitution": [
+    { "Type of Colleges": "Education/Teachers Training", "Permanent": 4, "Temporary": 0, "Total": 4 },
+    { "Type of Colleges": "Arts", "Permanent": 1, "Temporary": 0, "Total": 1 },
+    { "Type of Colleges": "Rehabilitation Sciences", "Permanent": 2, "Temporary": 0, "Total": 2 },
+    { "Type of Colleges": "Engineering/Technology/Architecture/Design", "Permanent": 1, "Temporary": 0, "Total": 1 },
+    { "Type of Colleges": "General", "Permanent": 64, "Temporary": 0, "Total": 64 },
+    {
+      "Type of Colleges": "Medicine & Surgery/Ayurveda/Unani/Homeopathy/Health & Allied Sciences/Paramedical/Sciences",
+      "Permanent": 18,
+      "Temporary": 0,
+      "Total": 18
+    }
+  ],
+  "TeachingFaculty": {
+    "Sanctioned": {
+      "Professor": { "Male": 10, "Female": 5, "Others": 0, "Total": 15 },
+      "Associate Professor": { "Male": 8, "Female": 7, "Others": 1, "Total": 16 },
+      "Assistant Professor": { "Male": 12, "Female": 10, "Others": 0, "Total": 22 }
+    },
+    "Recruited": {
+      "Professor": { "Male": 8, "Female": 4, "Others": 0, "Total": 12 },
+      "Associate Professor": { "Male": 7, "Female": 5, "Others": 0, "Total": 12 },
+      "Assistant Professor": { "Male": 10, "Female": 8, "Others": 1, "Total": 19 }
+    },
+    "Yet to Recruit": {
+      "Professor": { "Male": 2, "Female": 1, "Others": 0, "Total": 3 },
+      "Associate Professor": { "Male": 1, "Female": 2, "Others": 1, "Total": 4 },
+      "Assistant Professor": { "Male": 2, "Female": 2, "Others": 0, "Total": 4 }
+    },
+    "Contractual": {
+      "Professor": { "Male": 1, "Female": 1, "Others": 0, "Total": 2 },
+      "Associate Professor": { "Male": 2, "Female": 0, "Others": 0, "Total": 2 },
+      "Assistant Professor": { "Male": 5, "Female": 3, "Others": 0, "Total": 8 }
+    }
+  },
+  "NonTeachingStaff": {
+    "Sanctioned": { "Male": 10, "Female": 8, "Others": 2, "Total": 20 },
+    "Recruited": { "Male": 8, "Female": 6, "Others": 1, "Total": 15 },
+    "Yet to Recruit": { "Male": 2, "Female": 2, "Others": 1, "Total": 5 },
+    "Contractual": { "Male": 5, "Female": 3, "Others": 0, "Total": 8 }
+  },
+  "TechnicalStaff": {
+    "Sanctioned": { "Male": 15, "Female": 10, "Others": 0, "Total": 25 },
+    "Recruited": { "Male": 12, "Female": 8, "Others": 0, "Total": 20 },
+    "Yet to Recruit": { "Male": 3, "Female": 2, "Others": 0, "Total": 5 },
+    "Contractual": { "Male": 6, "Female": 4, "Others": 0, "Total": 10 }
+  },
+  "QualificationDetails": {
+    "permanentTeacher": {
+      "D.sc/D.Litt": {
+        "Professor": { "Male": 3, "Female": 2, "Others": 0 },
+        "Associate Professor": { "Male": 4, "Female": 1, "Others": 0 },
+        "Assistant Professor": { "Male": 5, "Female": 3, "Others": 0 }
+      },
+      "Ph.D.": {
+        "Professor": { "Male": 6, "Female": 4, "Others": 1 },
+        "Associate Professor": { "Male": 8, "Female": 6, "Others": 0 },
+        "Assistant Professor": { "Male": 12, "Female": 8, "Others": 1 }
+      },
+      "M.Phil.": {
+        "Professor": { "Male": 1, "Female": 0, "Others": 0 },
+        "Associate Professor": { "Male": 2, "Female": 2, "Others": 0 },
+        "Assistant Professor": { "Male": 3, "Female": 2, "Others": 0 }
+      },
+      "PG": {
+        "Professor": { "Male": 2, "Female": 1, "Others": 0 },
+        "Associate Professor": { "Male": 3, "Female": 2, "Others": 0 },
+        "Assistant Professor": { "Male": 5, "Female": 3, "Others": 1 }
+      }
+    },
+    "temporaryTeacher": {
+      "D.sc/D.Litt": {
+        "Professor": { "Male": 1, "Female": 0, "Others": 0 },
+        "Associate Professor": { "Male": 0, "Female": 1, "Others": 0 },
+        "Assistant Professor": { "Male": 1, "Female": 1, "Others": 0 }
+      },
+      "Ph.D.": {
+        "Professor": { "Male": 3, "Female": 2, "Others": 0 },
+        "Associate Professor": { "Male": 1, "Female": 2, "Others": 0 },
+        "Assistant Professor": { "Male": 4, "Female": 3, "Others": 0 }
+      },
+      "M.Phil.": {
+        "Professor": { "Male": 0, "Female": 0, "Others": 0 },
+        "Associate Professor": { "Male": 0, "Female": 1, "Others": 0 },
+        "Assistant Professor": { "Male": 1, "Female": 1, "Others": 0 }
+      },
+      "PG": {
+        "Professor": { "Male": 1, "Female": 1, "Others": 0 },
+        "Associate Professor": { "Male": 2, "Female": 2, "Others": 0 },
+        "Assistant Professor": { "Male": 3, "Female": 2, "Others": 0 }
+      }
+    },
+    "partTimeTeacher": {
+      "D.sc/D.Litt": { "Professor": { "Male": 1, "Female": 1, "Others": 0 }, "Associate Professor": { "Male": 1, "Female": 0, "Others": 0 }, "Assistant Professor": { "Male": 0, "Female": 1, "Others": 0 } },
+      "Ph.D.": { "Professor": { "Male": 2, "Female": 2, "Others": 0 }, "Associate Professor": { "Male": 3, "Female": 1, "Others": 0 }, "Assistant Professor": { "Male": 4, "Female": 3, "Others": 0 } },
+      "M.Phil.": { "Professor": { "Male": 1, "Female": 1, "Others": 0 }, "Associate Professor": { "Male": 1, "Female": 1, "Others": 0 }, "Assistant Professor": { "Male": 1, "Female": 2, "Others": 0 } },
+      "PG": { "Professor": { "Male": 3, "Female": 2, "Others": 0 }, "Associate Professor": { "Male": 4, "Female": 2, "Others": 0 }, "Assistant Professor": { "Male": 5, "Female": 3, "Others": 0 } }
+    }
+  }
+}""";
             // Parse JSON data
             JSONObject jsonObject = new JSONObject(jsonData);
-
+            JsonObject tempJsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
             // Call the function to generate PDF
-            generateUniversityProfilePDF(jsonObject);
+            generateUniversityProfilePDF(jsonObject, tempJsonObject);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void generateUniversityProfilePDF(JSONObject jsonObject) throws Exception {
+    public static void generateUniversityProfilePDF(JSONObject jsonObject, JsonObject tempJsonObject) throws Exception {
         // Extract university info
-        // path to font library
-
         JSONObject universityInfo = jsonObject.getJSONObject("universityInfo");
         String name = universityInfo.getString("name");
         String address = universityInfo.getString("address");
@@ -156,26 +238,22 @@ public class PdfService {
         String pin = universityInfo.getString("pin");
         String website = universityInfo.getString("website");
 
-        // Extract contacts
+        // Extract other data as usual
         JSONArray contactsArray = jsonObject.getJSONArray("contacts");
-
-        // Extract recognition details
         JSONArray recognitionDetails = jsonObject.getJSONArray("recognitionDetails");
-
-        // Extract campus details
         JSONArray campusDetails = jsonObject.getJSONArray("campusDetails");
-
-        // Extract Academic Info
         JSONObject academicDetails = jsonObject.getJSONObject("academicDetails");
-
-        // Extract other details
         String natureOfUniversity = jsonObject.getString("natureOfUniversity");
         String typeOfUniversity = jsonObject.getString("typeOfUniversity");
         String establishmentDate = jsonObject.getString("establishmentDate");
         String priorDate = jsonObject.getString("priorDate");
         String universityPotential = jsonObject.getString("universityPotential");
         String isSRA = jsonObject.getString("isSRAProgram");
+        JSONObject facultyData = jsonObject.getJSONObject("TeachingFaculty");
+        JsonArray affiliatedInstitutionArray = tempJsonObject.getAsJsonArray("affiliatedInstitution");
+        JSONArray sraProgramsArray = jsonObject.getJSONArray("sraPrograms");
 
+        // Create PDF document
         PdfWriter writer = new PdfWriter(DEST);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf, PageSize.A4);
@@ -184,141 +262,339 @@ public class PdfService {
         // Add Header
         addHeader(document, "Self Study Report of " + name);
 
-        // Title
-        Paragraph profileTitle = new Paragraph("2. PROFILE").setBold().setFontSize(15).setMarginBottom(5);
-        document.add(profileTitle);
-
-        // Add a line beneath "Profile"
+        // Add Sections
+        document.add(new Paragraph("2. PROFILE").setBold().setFontSize(15).setMarginBottom(5));
         document.add(new LineSeparator(new SolidLine(1f)).setStrokeWidth(1f).setMarginBottom(5));
 
-        // Add Basic Information Section
         document.add(new Paragraph("2.1 BASIC INFORMATION").setBold().setFontSize(15).setMarginBottom(5));
         addUniversityInfoTable(document, name, address, city, state, pin, website);
 
-        // Add Contacts Table
+        // Add Dynamic Tables
         addDynamicContactsTable(document, contactsArray);
-
-        // Add Nature and Type of University
         addSimpleRowTable(document, "Nature of University", natureOfUniversity);
         addSimpleRowTable(document, "Type of University", typeOfUniversity);
-
-        // Add Establishment Date
         addEstablishmentTable(document, "Establishment Date of the University", establishmentDate,
                 priorDate.equals("NA") ? "" : priorDate);
 
         document.add(new AreaBreak());
-        // Add Recognition Details
 
+        // Add other sections
         addRecognitionDetailsTable(document, recognitionDetails);
-
-        // Add University Potential for Excellence
         addSimpleRowTable(document, "University with Potential for Excellence", universityPotential);
-
-        // Add Campus Details
         addCampusDetailsTable(document, campusDetails);
 
-        document.add(new Paragraph("2.2 ACADEMIC INFROMATION").setBold().setFontSize(15).setMarginBottom(5));
+        // Academic Info
+        document.add(new Paragraph("2.2 ACADEMIC INFORMATION").setBold().setFontSize(15).setMarginBottom(5));
 
-        document.add(new Paragraph("Furnish the Details of Colleges of University").setBold().setFontSize(10)
+        // add affilated institution if any
+        document.add(new Paragraph("Affiliated Institutions to the University").setBold().setFontSize(10)
                 .setMarginBottom(5));
-        // Add Academic Table
+
+        if (!natureOfUniversity.equalsIgnoreCase("private") &&
+                !natureOfUniversity.equalsIgnoreCase("deemed to be")) {
+            addAffiliatedInstitution(document, affiliatedInstitutionArray);
+        } else {
+            document.add(new Paragraph("(Not applicable for private and deemed to be Universities)")
+                    .setFontSize(10).setItalic());
+        }
+        document.add(new Paragraph("Furnish the Details of Colleges of University\r").setBold().setFontSize(10));
         addAcademicTable(document, academicDetails);
-        // Add SRA
-        addSRATable(document, isSRA);
-        // Add Teaching and Non-Teaching Details
-        document.add(new Paragraph("Details Of Teaching & Non-Teaching Staff Of University")
-                .setBold().setFontSize(10));
-        
+        // addSRATable(document, isSRA);
+        addDynamicSRATable(document, isSRA, sraProgramsArray);
+        // Faculty Data
+        document.add(new Paragraph("\n"));
+        document.add(new Paragraph("Details Of Teaching & Non-Teaching Staff Of University").setBold().setFontSize(10));
+        addTeachingFacultyTable(document, facultyData);
+        document.add(new Paragraph("\n")); // Add some space between tables
 
-        // JSONObject jsonData = new JSONObject(jsonObject);
-        // JSONObject facultyData = jsonData.getJSONObject("TeachingFaculty");
+        addStaffTable(document, "Non-Teaching Staff", jsonObject.getJSONObject("NonTeachingStaff"));
+        document.add(new Paragraph("\n")); // Add some space between tables
+        addStaffTable(document, "Technical Staff", jsonObject.getJSONObject("TechnicalStaff"));
+        document.add(new Paragraph("\n")); // Add some space between tables
 
-        // addTeachingTable(document, facultyData);
-        // Add Footer
-        addFooter(document, pdf);
+        // add Qualification Details
+        document.add(new Paragraph("Qualifications of the Teaching Staff ").setBold().setFontSize(10));
+        addQualificationTable(document, "Permanent Teachers", jsonObject.getJSONObject("QualificationDetails").getJSONObject("permanentTeacher"));
+        document.add(new Paragraph("\n")); // Add space
+        addQualificationTable(document, "Temporary Teachers", jsonObject.getJSONObject("QualificationDetails").getJSONObject("temporaryTeacher"));
+        document.add(new Paragraph("\n")); // Add space
+        addQualificationTable(document, "Part-time Teachers", jsonObject.getJSONObject("QualificationDetails").getJSONObject("partTimeTeacher"));
 
+        // Close Document
         document.close();
         System.out.println("Extended PDF Created!");
     }
 
-    private static void addTeachingTable(Document document,JSONObject facultyData)
-    {
-        float[] columnWidths = {3, 2, 2, 2, 2}; // Adjust as needed
-            Table table = new Table(columnWidths);
+// Method to create the qualification table
+    private static void addQualificationTable(Document document, String title, JSONObject jsonObject) {
+        
+        // Create table with 11 columns (Qualification + 3 Columns per Teacher Type + Total)
+        // Title
+        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 1, 1, 1, 1, 1, 1, 1, 1, 1,2}))
+                .useAllAvailableWidth();
+        table.addHeaderCell(new Cell(1, 11).add(new Paragraph(title).setBold().setFontSize(10))
+                .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.CENTER));
+        // Header Row
+        table.addCell(createHeaderCell("Highest Qualification",2,1));
+        table.addCell(createHeaderCell("Professor",2,3));
+        table.addCell(createHeaderCell("Associate Professor",2,3));
+        table.addCell(createHeaderCell("Assistant Professor",2,3));
+        table.addCell(createHeaderCell("Total",2,1));
 
-            // Add Header Row
-            table.addHeaderCell(new Cell().add(new Paragraph("Teaching Faculty").setBold()));
-            table.addHeaderCell(new Cell().add(new Paragraph("Male").setBold()));
-            table.addHeaderCell(new Cell().add(new Paragraph("Female").setBold()));
-            table.addHeaderCell(new Cell().add(new Paragraph("Others").setBold()));
-            table.addHeaderCell(new Cell().add(new Paragraph("Total").setBold()));
+        // Sub-header Row
+        table.addCell("");
+        for (int i = 0; i < 3; i++) {
+            table.addCell(createSubHeaderCell("Male"));
+            table.addCell(createSubHeaderCell("Female"));
+            table.addCell(createSubHeaderCell("Others"));
+        }
+        table.addCell(""); // Total column
 
-            // Add rows dynamically
-            for (String role : facultyData.keySet()) {
-                JSONObject roleData = facultyData.getJSONObject(role);
+        // Data Rows
+        String[] qualifications = {"D.sc/D.Litt", "Ph.D.", "M.Phil.", "PG"};
+        for (String qualification : qualifications) {
+            table.addCell(createBodyCell(qualification));
+            JSONObject profData = jsonObject.getJSONObject(qualification).getJSONObject("Professor");
+            table.addCell(createBodyCell(String.valueOf(profData.getInt("Male"))));
+            table.addCell(createBodyCell(String.valueOf(profData.getInt("Female"))));
+            table.addCell(createBodyCell(String.valueOf(profData.getInt("Others"))));
 
-                // Add rows for Sanctioned
-                table.addCell(new Cell().add(new Paragraph(role + " (Sanctioned)")));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(roleData.getInt("Sanctioned")))));
-                table.addCell(new Cell().add(new Paragraph("")));
-                table.addCell(new Cell().add(new Paragraph("")));
-                table.addCell(new Cell().add(new Paragraph("")));
+            JSONObject assocProfData = jsonObject.getJSONObject(qualification).getJSONObject("Associate Professor");
+            table.addCell(createBodyCell(String.valueOf(assocProfData.getInt("Male"))));
+            table.addCell(createBodyCell(String.valueOf(assocProfData.getInt("Female"))));
+            table.addCell(createBodyCell(String.valueOf(assocProfData.getInt("Others"))));
 
-                // Add rows for Recruited
-                JSONObject recruited = roleData.getJSONObject("Recruited");
-                table.addCell(new Cell().add(new Paragraph(role + " (Recruited)")));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(recruited.getInt("Male")))));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(recruited.getInt("Female")))));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(recruited.getInt("Others")))));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(recruited.getInt("Total")))));
+            JSONObject assistProfData = jsonObject.getJSONObject(qualification).getJSONObject("Assistant Professor");
+            table.addCell(createBodyCell(String.valueOf(assistProfData.getInt("Male"))));
+            table.addCell(createBodyCell(String.valueOf(assistProfData.getInt("Female"))));
+            table.addCell(createBodyCell(String.valueOf(assistProfData.getInt("Others"))));
 
-                // Add rows for Yet to Recruit
-                table.addCell(new Cell().add(new Paragraph(role + " (Yet to Recruit)")));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(roleData.getInt("YetToRecruit")))));
-                table.addCell(new Cell().add(new Paragraph("")));
-                table.addCell(new Cell().add(new Paragraph("")));
-                table.addCell(new Cell().add(new Paragraph("")));
+            int total = profData.getInt("Male") + profData.getInt("Female") + profData.getInt("Others")
+                    + assocProfData.getInt("Male") + assocProfData.getInt("Female") + assocProfData.getInt("Others")
+                    + assistProfData.getInt("Male") + assistProfData.getInt("Female") + assistProfData.getInt("Others");
+            table.addCell(createBodyCell(String.valueOf(total)));
+        }
 
-                // Add rows for On Contract
-                JSONObject onContract = roleData.getJSONObject("OnContract");
-                table.addCell(new Cell().add(new Paragraph(role + " (On Contract)")));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(onContract.getInt("Male")))));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(onContract.getInt("Female")))));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(onContract.getInt("Others")))));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(onContract.getInt("Total")))));
-            }
-
-            // Add table to document
-            document.add(table);
+        // Add table to document
+        document.add(table);
     }
 
-    private static void addSRATable(Document document, String isSRA) {
-        // Create a table with two columns: one wide, one narrow
-        Table table = new Table(UnitValue.createPercentArray(new float[] { 5, 2 }));
-        table.setWidth(UnitValue.createPercentValue(100)); // Set table width to 100% of the page width
+    private static Cell createHeaderCell(String content,int rowspan,int colspan) {
+        return new Cell(rowspan, colspan)
+                .add(new Paragraph(content).setBold())
+                .setTextAlignment(TextAlignment.CENTER);
+    }
 
-        // Add the question cell
+    private static Cell createSubHeaderCell(String content) {
+        return new Cell().add(new Paragraph(content).setBold()).setTextAlignment(TextAlignment.CENTER);
+    }
+
+
+
+    private static void addStaffTable(Document document, String title, JSONObject jsonObject) {
+        // Title for the table
+        document.add(new Paragraph(title).setBold().setTextAlignment(TextAlignment.LEFT));
+
+        // Create table with 5 columns
+        Table table = new Table(UnitValue.createPercentArray(new float[]{2, 2, 2, 2, 2}))
+                .useAllAvailableWidth();
+
+        // Add header row
+        table.addCell(createHeaderCell(""));
+        table.addCell(createHeaderCell("Male"));
+        table.addCell(createHeaderCell("Female"));
+        table.addCell(createHeaderCell("Others"));
+        table.addCell(createHeaderCell("Total"));
+
+        // Populate table rows dynamically from JSON
+        String[] categories = {"Sanctioned", "Recruited", "Yet to Recruit", "Contractual"};
+        for (String category : categories) {
+            table.addCell(createBodyCell(category));
+            JSONObject data = jsonObject.getJSONObject(category);
+            table.addCell(createBodyCell(String.valueOf(data.getInt("Male"))));
+            table.addCell(createBodyCell(String.valueOf(data.getInt("Female"))));
+            table.addCell(createBodyCell(String.valueOf(data.getInt("Others"))));
+            table.addCell(createBodyCell(String.valueOf(data.getInt("Total"))));
+        }
+
+        // Add table to document
+        document.add(table);
+    }
+
+    // Helper to create header cell
+    private static Cell createHeaderCell(String content) {
+        return new Cell()
+                .add(new Paragraph(content).setBold())
+                .setTextAlignment(TextAlignment.CENTER);
+    }
+
+    // Helper to create body cell
+    private static Cell createBodyCell(String content) {
+        return new Cell()
+                .add(new Paragraph(content))
+                .setTextAlignment(TextAlignment.CENTER);
+    }
+
+
+    private static void addTeachingFacultyTable(Document document, JSONObject facultyData) {
+        // Create table with 13 columns
+        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}))
+                .useAllAvailableWidth();
+
+        
+        table.addCell(createBodyCell("", 1,3));
+
+        table.addCell(createHeaderCell("Designation", 12));
+
+        table.addCell(createHeaderCell("Professor", 4));
+        table.addCell(createHeaderCell("Associate Professor", 4));
+        table.addCell(createHeaderCell("Assistant Professor", 4));
+
+
+        // Header Row 3
+        for (int i = 0; i < 3; i++) {
+            table.addCell(createHeaderCell("Male", 1));
+            table.addCell(createHeaderCell("Female", 1));
+            table.addCell(createHeaderCell("Others", 1));
+            table.addCell(createHeaderCell("Total", 1));
+        }
+
+        // Populate table rows dynamically from JSON
+        String[] categories = {"Sanctioned", "Recruited", "Yet to Recruit", "Contractual"};
+        String[] designations = {"Professor", "Associate Professor", "Assistant Professor"};
+
+        for (String category : categories) {
+            table.addCell(createBodyCell(category, 1));
+            for (String designation : designations) {
+                JSONObject data = facultyData.getJSONObject(category).getJSONObject(designation);
+                table.addCell(createBodyCell(String.valueOf(data.getInt("Male")), 1));
+                table.addCell(createBodyCell(String.valueOf(data.getInt("Female")), 1));
+                table.addCell(createBodyCell(String.valueOf(data.getInt("Others")), 1));
+                table.addCell(createBodyCell(String.valueOf(data.getInt("Total")), 1));
+            }
+        }
+
+        // Add table to document
+        document.add(table);
+    }
+
+    // Helper to create header cell
+    private static Cell createHeaderCell(String content, int colspan) {
+        return new Cell(1, colspan)
+                .add(new Paragraph(content).setBold())
+                .setTextAlignment(TextAlignment.CENTER);
+    }
+
+    // Helper to create body cell
+    private static Cell createBodyCell(String content, int colspan) {
+        return new Cell(1, colspan)
+                .add(new Paragraph(content))
+                .setTextAlignment(TextAlignment.CENTER);
+    }
+    private static Cell createBodyCell(String content, int colspan,int rowspan) {
+        return new Cell(rowspan, colspan)
+                .add(new Paragraph(content))
+                .setTextAlignment(TextAlignment.CENTER);
+    }
+
+    private static void addDynamicSRATable(Document document, String isSRA, JSONArray sraProgramsArray) {
+        // Outer table with two equal-width columns
+        Table outerTable = new Table(new float[] { 1, 1 }); // 1:1 ratio
+        outerTable.setWidth(UnitValue.createPercentValue(100)); // Set width to 100%
+
+        // Add the question cell (Column 1)
         Cell questionCell = new Cell()
                 .add(new Paragraph(
                         "Is the University Offering any Programmes Recognised by any Statutory Regulatory Authority (SRA)")
-                        .setFontSize(10)) // Use Arial font
-                .setPadding(5); // Add padding
-        table.addCell(questionCell);
+                        .setFontSize(10)) // Set font size
+                .setPadding(5) // Add padding
+                .setBorder(new SolidBorder(1)); // Ensure visible border
+        outerTable.addCell(questionCell);
 
-        // Add the response cell
+        // Add the response cell (Column 2)
         Cell responseCell = new Cell()
                 .add(new Paragraph(": " + isSRA)
-                        .setFontSize(10)) // Use Arial font
+                        .setFontSize(10)) // Set font size
                 .setPadding(5) // Add padding
-                .setTextAlignment(TextAlignment.LEFT); // Align text to the left
-        table.addCell(responseCell);
+                .setTextAlignment(TextAlignment.LEFT) // Align text to the left
+                .setBorder(new SolidBorder(1)); // Ensure visible border
+        outerTable.addCell(responseCell);
 
-        // Add the table to the document
+        // If "Yes", create and add the inner table in column 1
+        if ("Yes".equalsIgnoreCase(isSRA)) {
+            // Create an inner table for SRA programs and documents
+            Table innerTable = new Table(new float[] { 3, 2 }); // Adjust column widths for SRA Program and Document
+            innerTable.setWidth(UnitValue.createPercentValue(100)); // Inner table takes full width of column 1
+
+            // Add headers to the inner table
+            innerTable.addCell(new Cell().add(new Paragraph("SRA Program").setBold().setFontSize(10)).setPadding(5));
+            innerTable.addCell(new Cell().add(new Paragraph("Document").setBold().setFontSize(10)).setPadding(5));
+
+            // Loop through the JSONArray to add rows for each program
+            for (int i = 0; i < sraProgramsArray.length(); i++) {
+                JSONObject program = sraProgramsArray.getJSONObject(i);
+
+                // Add SRA Program
+                innerTable.addCell(
+                        new Cell().add(new Paragraph(program.getString("program")).setFontSize(10)).setPadding(5));
+
+                // Add Document (as a hyperlink)
+                innerTable.addCell(new Cell().add(new Paragraph(new Link(program.getString("document"),
+                        PdfAction.createURI(program.getString("document"))).setFontSize(10))).setPadding(5));
+            }
+
+            // Add the inner table to column 1
+            Cell innerTableCell = new Cell(1, 2); // Span across both columns of the outer table
+            innerTableCell.add(innerTable);
+            innerTableCell.setPadding(5); // Add padding for separation
+            innerTableCell.setBorder(new SolidBorder(1)); // Ensure proper border for outer table
+            outerTable.addCell(innerTableCell);
+        } else {
+            // If no SRA programs, add an empty cell to column 2 to maintain the structure
+            outerTable.addCell(new Cell(1, 2)
+                    .add(new Paragraph("No programs recognized").setFontSize(10))
+                    .setPadding(5)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setBorder(new SolidBorder(1))); // Ensure border for the cell
+        }
+
+        // Add the outer table to the document
         try {
-            document.add(table);
+            document.add(outerTable.setMarginBottom(10));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static void addAffiliatedInstitution(Document document, JsonArray affiliatedInstitutionArray) {
+        Table table = new Table(new float[] { 3, 1, 1, 1 }); // Column widths
+        table.setWidth(UnitValue.createPercentValue(100));
+
+        table.addCell(new Cell().add(new Paragraph("Type of Colleges").setBold())
+                .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.CENTER));
+        table.addCell(new Cell().add(new Paragraph("Permanent").setBold())
+                .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.CENTER));
+        table.addCell(new Cell().add(new Paragraph("Temporary").setBold())
+                .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.CENTER));
+        table.addCell(new Cell().add(new Paragraph("Total").setBold())
+                .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.CENTER));
+
+        // Loop through the affiliated institution array to fill the data
+        for (JsonElement element : affiliatedInstitutionArray) {
+            JsonObject row = element.getAsJsonObject();
+
+            table.addCell(new Cell().add(new Paragraph(row.get("Type of Colleges").getAsString()))
+                    .setFontSize(10).setPadding(5));
+            table.addCell(new Cell().add(new Paragraph(String.valueOf(row.get("Permanent").getAsInt())))
+                    .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.RIGHT));
+            table.addCell(new Cell().add(new Paragraph(String.valueOf(row.get("Temporary").getAsInt())))
+                    .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.RIGHT));
+            table.addCell(new Cell().add(new Paragraph(String.valueOf(row.get("Total").getAsInt())))
+                    .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.RIGHT));
+        }
+
+        // Add the table to the document
+        document.add(table.setMarginBottom(10));
     }
 
     // Spacing Cell

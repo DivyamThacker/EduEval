@@ -31,6 +31,8 @@
 		<!-- <itext.version>8.0.5</itext.version> -->
 		<itext.version>7.2.5</itext.version>  
 	</properties>
+
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -86,12 +88,18 @@
 			<version>8.0.5</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20240303</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.10.1</version> <!-- Use the latest version -->
+		</dependency>
+
 
 		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -116,6 +124,9 @@
 
 
 </dependencies>
+
+
+
 
    
 
