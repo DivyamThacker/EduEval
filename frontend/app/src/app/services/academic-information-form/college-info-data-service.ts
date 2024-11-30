@@ -17,7 +17,10 @@ private sraProgramId: number | null = null;
 private collegeInfoModelSource = new BehaviorSubject<any>({});
 collegeInfoModel$ = this.collegeInfoModelSource.asObservable();
 
-private sraProgramModelSource = new BehaviorSubject<any>({});
+private sraProgramModelSource = new BehaviorSubject<any>({
+  formValue: { areSraProgram : [''] , sraPrograms: [] },
+  files: [] // Initialize as an array
+});
 sraProgramModel$ = this.sraProgramModelSource.asObservable();
 
 constructor(private http: HttpClient, private basicFormDataService : BasicFormDataService){}
@@ -85,29 +88,29 @@ submitCollegeInfo() {
 }
 
 // Submit SRA Program API
-submitSraProgram() {
-  const data = this.sraProgramModelSource.value;
+  submitSraProgram(): Observable<any> {
+    this.universityId = this.getUniversityId();
+    const formData = new FormData();
+    const data = this.sraProgramModelSource.value;
+    console.log("This is Data : ", data);
+    // formData.append('sraProgramName', data.formValue.sraPrograms[0]);
+    // formData.append('file', data.files[0]);
+    console.log("This is area : ", data.formValue.areSraProgram);
+    formData.append('areSraProgram', data.formValue.areSraProgram);
 
-  if (!this.universityId) {
-    console.error('University ID is missing!');
-    return throwError(() => new Error('University ID is required'));
-  }
+    const sraProgramNames = data.formValue.sraPrograms.map((program: any) => program.sraProgramName);
 
-  if (this.sraProgramId) {
-    // Update (PUT) existing SRA Program
-    return this.http.put(`${this.apiUrl}/university/${this.universityId}/sra-program/${this.sraProgramId}`, data).pipe(
-      catchError(error => throwError(() => error))
-    );
-  } else {
-    // Create (POST) new SRA Program
-    return this.http.post(`${this.apiUrl}/university/${this.universityId}/sra-program`, data).pipe(
-      tap((response: any) => {
-        if (response && response.id) {
-          this.setSraProgramId(response.id); // Update the program ID
-        }
-      }),
-      catchError(error => throwError(() => error))
-    );
+    formData.append('sraProgramNames', sraProgramNames);
+    data.files.forEach((file: File) => {
+      formData.append('files', file);
+  });
+  
+    if (this.sraProgramId !=null) { 
+      // Update (PUT) existing SRA Program
+      return this.http.put(`${this.apiUrl}/university/${this.universityId}/sra-program/${this.sraProgramId}`, formData);
+    } else { 
+      // Create (POST) new SRA Program
+      return this.http.post(`${this.apiUrl}/university/${this.universityId}/sra-program`, formData);
+    }
   }
-}
 }

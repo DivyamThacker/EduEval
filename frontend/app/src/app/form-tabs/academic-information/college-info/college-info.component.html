@@ -76,7 +76,7 @@
         
                     <div class="form-group">
                         <label for="sra-document-{{i}}">Document</label>
-                        <input type="file" id="sra-document-{{i}}" formControlName="sraDocument" multiple>
+                        <input type="file" id="sra-document-{{i}}" formControlName="sraDocument" (change)="onFileChange($event, i)">
                     </div>
         
                     <!-- Delete button -->

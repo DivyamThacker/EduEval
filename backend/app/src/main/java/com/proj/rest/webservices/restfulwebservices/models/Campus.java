@@ -8,8 +8,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.sql.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,10 +29,11 @@ public class Campus {
     private String campusArea;
     private String builtUpArea;
     private List<String> programmesOffered;
-    private Date establishmentDate;
-    private Date recognitionDate;
+    private String establishmentDate;
+    private String recognitionDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnore
+    @ToString.Exclude
 	private University university;
 }

@@ -1,7 +1,12 @@
+check controller for areSraPrograms = false . and put it in university model
+
+fix the error happening due to String to date conversion (right now I am changing dates into strings in model which is wrong )
+
 start with backend resource of each subsection and then connect backend with frontend
 
 see where the areUnsavedChanges variable should be handled (look in services and in formActionsComponent)
 
+fix the table when the university type (nature of universitys) is not private
 
 Think if you want to manage seperate areUnsavedChanges varialbe in each subsection and also universityId
 
@@ -69,3 +74,4 @@ add cookies to determine which university is logged in and thus save the interim
 
 watch angular course content from angular dynamic components
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+

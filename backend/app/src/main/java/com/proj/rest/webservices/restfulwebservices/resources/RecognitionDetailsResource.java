@@ -5,8 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.sql.Date;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,8 +42,8 @@ public class RecognitionDetailsResource {
     @PostMapping("")
     public ResponseEntity<RecognitionDetails> submitRecognitionDetails(
             @PathVariable Integer universityId,
-            @RequestParam Date recognitionDateUnderSection2f,
-            @RequestParam Date recognitionDateUnderSection12b,
+            @RequestParam String recognitionDateUnderSection2f,
+            @RequestParam String recognitionDateUnderSection12b,
             @RequestParam(required = false) MultipartFile recognitionDocument2f,
             @RequestParam(required = false) MultipartFile recognitionDocument12b,
             @RequestParam String isUPE) {
@@ -88,8 +86,8 @@ public class RecognitionDetailsResource {
     public ResponseEntity<RecognitionDetails> updateRecognitionDetails(
         @PathVariable Integer universityId,
         @PathVariable Integer recognitionDetailsId,
-        @RequestParam Date recognitionDateUnderSection2f,
-        @RequestParam Date recognitionDateUnderSection12b,
+        @RequestParam String recognitionDateUnderSection2f,
+        @RequestParam String recognitionDateUnderSection12b,
         @RequestParam(required = false) MultipartFile recognitionDocument2f,
         @RequestParam(required = false) MultipartFile recognitionDocument12b,
         @RequestParam String isUPE) {

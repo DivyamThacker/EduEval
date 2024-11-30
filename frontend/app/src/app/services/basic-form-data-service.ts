@@ -127,9 +127,11 @@ export class BasicFormDataService {
     const data = this.campusModelSource.value;
     // Split the comma-separated list of programmes offered into an array
     data.campuses.forEach((campus: any) => {
-      campus.programmesOffered = campus.programmesOffered.split(',')
-      .map((s: string) => s.trim())
-      .filter((s: string) => s !== '');
+      if (campus.programmesOffered !=null) {
+        campus.programmesOffered = campus.programmesOffered.split(',')
+        .map((s: string) => s.trim())
+        .filter((s: string) => s !== '');
+      }
     });
     this.http.delete(`${this.apiUrl}/university/${this.universityId}/campus`)
     .subscribe({

@@ -1,7 +1,5 @@
 package com.proj.rest.webservices.restfulwebservices.models;
 
-import java.sql.Date;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -22,8 +20,8 @@ public class RecognitionDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Date recognitionDateUnderSection2f;
-    private Date recognitionDateUnderSection12b;
+    private String recognitionDateUnderSection2f;
+    private String recognitionDateUnderSection12b;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private DocumentDetails recognitionDocument2f;

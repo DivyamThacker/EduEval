@@ -148,8 +148,8 @@ export class FormsActionsComponent implements OnInit, OnDestroy{
           alert('Error submitting College Information');
         }
       });
-    }
-    else if (currentUrl.startsWith('/academic-information/sra-program')) {
+
+      //sra program
       this.collegeInfoDataService.submitSraProgram().subscribe({
         next: response => {
           console.log('Sra Programs submitted successfully', response);

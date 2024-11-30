@@ -14,6 +14,7 @@ import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity(name = "university_details")
 @Data
@@ -37,65 +38,81 @@ public class University {
 
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university") // Prevent circular serialization
+    @ToString.Exclude
 	private List<Contact> contactDetails;//= new ArrayList<>();
 
     @OneToOne(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university") 
+    @ToString.Exclude
     private RecognitionDetails recognitionDetials;
 
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
+    @ToString.Exclude
     private List<Campus> campuses;
 
     
     @OneToOne(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
+    @ToString.Exclude
     private CollegeStats collegeStats;
 
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university") 
+    @ToString.Exclude
     private List<SraProgram> sraPrograms;
+    private Boolean areSraProgram=false;
 
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
+    @ToString.Exclude
     private List<Faculty> faculties;
 
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
+    @ToString.Exclude
     private List<DistinguishedAcademician> distinguishedAcademicians;
 
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
+    @ToString.Exclude
     private List<NonTeachingStaff> nonTeachingStaff;
 
     private Boolean hasIntegratedProgrammes;
     private Integer totalIntegratedProgrammes;
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
+    @ToString.Exclude
     private List<EnrollmentDetails> enrollmentDetails;
 
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
+    @ToString.Exclude
     private List<ChairDetails> chairDetails;
 
     //Details of UGC Human Resource Development Centre
    @OneToOne(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
+    @ToString.Exclude
     private HrdcDetails hrdcDetails;
     
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
+    @ToString.Exclude
     private List<AccreditationDetails> accreditationDetails;
 
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
+    @ToString.Exclude
     private List<DepartmentEvaluation> departmentEvaluations;
 
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
+    @ToString.Exclude
     private List<NepDetails> nepDetails;
 
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
+    @ToString.Exclude
     private List<ElectoralLiteracyDetails> electoralLiteracyDetails;
 }

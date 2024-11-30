@@ -12,6 +12,12 @@ application:
   bucket:
     name: edu-eval-bucket
 
+spring: 
+  servlet: 
+    multipart: 
+      max-file-size: 10MB 
+      max-request-size: 10MB
+
 
 # spring:
 #   servlet:
