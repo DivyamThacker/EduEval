@@ -22,10 +22,10 @@ public class HrdcDetails {
     private Integer id;
 
     private Date hrdcEstablishmentDate=null;
-    private Integer hrdcOrientationProgrammesCount=0;
+    private Integer hrdcOrientationProgramCount=0;
     private Integer hrdcRefresherCourseCount=0;
-    private Integer hrdcOwnProgrammesCount=0;
-    private Integer hrdctotalProgrammes=0; //last 5 years
+    private Integer hrdcOwnProgramCount=0;
+    private Integer hrdctotalProgramCount=0; //last 5 years
 
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore

@@ -1,16 +1,19 @@
 package com.proj.rest.webservices.restfulwebservices.resources;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.proj.rest.webservices.restfulwebservices.models.EnrollmentDetails;
 import com.proj.rest.webservices.restfulwebservices.models.University;
 import com.proj.rest.webservices.restfulwebservices.repositories.EnrollmentDetailsRepository;
@@ -31,8 +34,19 @@ public class EnrollmentDetailsResource {
 
      @PostMapping("")
 	public ResponseEntity<List<EnrollmentDetails>> createEnrollmentDetails(@PathVariable Integer universityId,
-    @RequestBody Boolean hasIntegrated, @RequestBody (required = false) Integer totalIntegratedPrograms,
-    @RequestBody (required = false) List<EnrollmentDetails> enrollments) {
+    @RequestParam("hasIntegrated") String hasIntegratedJson, @RequestParam(required = false, name = "totalIntegratedPrograms") String totalIntegratedProgramsJson,
+    @RequestPart(required = false, name="enrollments") String enrollmentsJson) throws JsonProcessingException {
+
+    // Deserialize JSON 
+    ObjectMapper objectMapper = new ObjectMapper();
+    List<EnrollmentDetails> enrollments = objectMapper.readValue(
+        enrollmentsJson, 
+        new TypeReference<List<EnrollmentDetails>>() {}
+    );
+
+    Boolean hasIntegrated = objectMapper.readValue(hasIntegratedJson, Boolean.class);
+    Integer totalIntegratedPrograms = objectMapper.readValue(totalIntegratedProgramsJson, Integer.class);
+
 		University university = universityRepository.findById(universityId).get();
         university.setHasIntegratedPrograms(hasIntegrated);
         university.setTotalIntegratedPrograms(totalIntegratedPrograms);

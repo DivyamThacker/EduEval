@@ -14,8 +14,9 @@ private universityId: number | null = null;
 private enrollmentId: number | null = null;
 
 private enrollmentModelSource = new BehaviorSubject<any>({
-  formValue: { hasIntegrated: false , enrollments: [] , totalIntegratedPrograms: '' },
+   hasIntegrated: false , enrollments: [] , totalIntegratedPrograms: '' 
 });
+// private enrollmentModelSource = new BehaviorSubject<any>({});
 enrollmentModel$ = this.enrollmentModelSource.asObservable();
 
 constructor(private http: HttpClient, private basicFormDataService : BasicFormDataService){}
@@ -52,9 +53,9 @@ submitEnrollmentData() {
   console.log('Enrollment Id:', this.enrollmentId);
   console.log('Data:', data);
 
-  formData.append('enrollments', data.formValue.enrollments);
-  formData.append('hasIntegrated', data.formValue.hasIntegrated);
-  formData.append('totalIntegratedPrograms', data.formValue.totalIntegratedPrograms);
+  formData.append('enrollments', JSON.stringify(data.enrollments));
+  formData.append('hasIntegrated', JSON.stringify(data.hasIntegrated));
+  formData.append('totalIntegratedPrograms', JSON.stringify(data.totalIntegratedPrograms));
 
   if (this.enrollmentId != null) {
     return this.http.put(`${this.apiUrl}/university/${this.universityId}/enrollment/${this.enrollmentId}`, formData)

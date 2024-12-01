@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ChairsHrdcDataService } from '../../../services/academic-information-form/chairs-hrdc-data-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-chairs-hrdc-details',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './chairs-hrdc-details.component.html',
   styleUrl: './chairs-hrdc-details.component.css'
 })
@@ -15,18 +17,18 @@ export class ChairsHrdcDetailsComponent implements OnInit {
 
   devlopmentCentreForm: FormGroup;
   
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private chairsHrdcDataService: ChairsHrdcDataService) {
     this.chairForm = this.fb.group({
       chairs : this.fb.array([]),
     });
     this.addChair();
 
     this.devlopmentCentreForm = this.fb.group({
-      establishmentDate : [''],
-      numOrientationProgrammes : [''],
-      numRefresherCourses : [''],
-      numOwnProgrammes : [''],
-      totalProgrammes : ['']
+      hrdcEstablishmentDate : [''],
+      hrdcOrientationProgramCount : [''],
+      hrdcRefresherCourseCount : [''],
+      hrdcOwnProgramCount : [''],
+      hrdctotalProgramCount : ['']
     });
   }
 
@@ -48,11 +50,11 @@ export class ChairsHrdcDetailsComponent implements OnInit {
   } 
 
   ngOnInit() {
-    this.devlopmentCentreForm.valueChanges.subscribe(() => {
-      // this.academicFormDataService.setBasicInfoData(this.form.value);
-    });
     this.chairForm.valueChanges.subscribe(() => {
-      // this.academicFormDataService.setBasicInfoData(this.form.value);
+      this.chairsHrdcDataService.setChairsInfoData(this.chairForm.value);
+    });
+    this.devlopmentCentreForm.valueChanges.subscribe(() => {
+      this.chairsHrdcDataService.setHrdcInfoData(this.devlopmentCentreForm.value);
     });
   }
 }

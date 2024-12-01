@@ -21,7 +21,7 @@ public class NepDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String section;
+    private Integer section;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private DocumentDetails document;

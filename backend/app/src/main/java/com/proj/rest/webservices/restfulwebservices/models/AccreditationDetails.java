@@ -23,7 +23,7 @@ public class AccreditationDetails {
 
     private Integer cycleNumber;
     private String type; //accreditationType
-    private String Grade;
+    private String grade;
     private Float cgpa;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

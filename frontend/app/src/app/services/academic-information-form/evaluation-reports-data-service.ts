@@ -11,10 +11,20 @@ export class EvaluationReportsDataService {
 apiUrl = environment.apiUrl;
 
 private universityId: number | null = null;
-private collegeInfoId: number | null = null;
+private departmentId: number | null = null;
+private accreditationId: number | null = null;
 
-private collegeInfoModelSource = new BehaviorSubject<any>({});
-collegeInfoModel$ = this.collegeInfoModelSource.asObservable();
+private departmentModelSource = new BehaviorSubject<any>({
+  formValue: { departments: [] },
+  files: [] // Initialize as an array
+});
+departmentModel$ = this.departmentModelSource.asObservable();
+
+private accreditationModelSource = new BehaviorSubject<any>({
+  formValue: { accreditations: [] },
+  files: [] // Initialize as an array
+});
+accreditationModel$ = this.accreditationModelSource.asObservable();
 
 constructor(private http: HttpClient, private basicFormDataService : BasicFormDataService){}
 
@@ -23,50 +33,111 @@ getUniversityId(): number | null {
   return this.basicFormDataService.getUniversityId();
 }
 
-// College Info ID and model management
-setCollegeInfoId(id: number | null) {
-  this.collegeInfoId = id;
+
+// Accreditation ID and model management
+setAccreditationId(id: number | null) {
+  this.accreditationId = id;
 }
 
-getCollegeInfoId(): number | null {
-  return this.collegeInfoId;
+getAccreditationId(): number | null {
+  return this.accreditationId;
 }
 
-setCollegeInfoData(data: any) {
-  this.collegeInfoModelSource.next(data);
+setAccreditationData(data: any) {
+  this.accreditationModelSource.next(data);
 }
 
-getCollegeInfoData(): Observable<any> {
-  return this.collegeInfoModel$;
+getAccreditationData(): Observable<any> {
+  return this.accreditationModel$;
 }
 
-// College Info API submission
-submitCollegeInfo() {
-  const data = this.collegeInfoModelSource.value;
+// Department ID and model management
+setDepartmentId(id: number | null) {
+  this.departmentId = id;
+}
+
+getDepartmentId(): number | null {
+  return this.departmentId;
+}
+
+setDepartmentData(data: any) {
+  this.departmentModelSource.next(data);
+}
+
+getDepartmentData(): Observable<any> {
+  return this.departmentModel$;
+}
+
+submitAccredationDetails(): Observable<any> {
   this.universityId = this.getUniversityId();
-  console.log('University Id:', this.universityId);
-  console.log('College Info Id:', this.collegeInfoId);
-  if (this.collegeInfoId != null) {
-    return this.http.put(`${this.apiUrl}/university/${this.universityId}/college-info/${this.collegeInfoId}`, data)
+  const formData = new FormData();
+  const data = this.accreditationModelSource.value;
+
+  // Convert accreditations to JSON
+  formData.append('accreditations', JSON.stringify(data.formValue.accreditations));
+
+  data.files.forEach((file: File) => {
+    formData.append('files', file);
+  });
+
+  if (this.accreditationId != null) {
+    // Update (PUT) existing Accreditation
+    return this.http.put(`${this.apiUrl}/university/${this.universityId}/accreditation/${this.accreditationId}`, formData)
       .pipe(
-        catchError(error => throwError(() => error))
+        tap(response => console.log('Accreditation updated:', response)),
+        catchError(error => {
+          console.error('Error updating Accreditation:', error);
+          return throwError(error);
+        })
       );
   } else {
-    return this.http.post(`${this.apiUrl}/university/${this.universityId}/college-info`, data)
+    // Create (POST) new Accreditation
+    return this.http.post(`${this.apiUrl}/university/${this.universityId}/accreditation`, formData)
       .pipe(
-        tap((response: any) => {
-          this.collegeInfoId = response.id;
-          this.setCollegeInfoId(response.id);
-        }),
-        catchError(error => throwError(() => error))
+        tap(response => console.log('Accreditation created:', response)),
+        catchError(error => {
+          console.error('Error creating Accreditation:', error);
+          return throwError(error);
+        })
       );
   }
 }
 
-submitEvaluationReports() {
-}
+submitEvaluationReports(): Observable<any> {
+  this.universityId = this.getUniversityId();
+  const formData = new FormData();
+  const data = this.departmentModelSource.value;
 
-submitAccredationDetails() {
+  // Convert departments to JSON
+  const departmentNames = data.formValue.departments.map((department: any) => department.departmentName);
+
+  formData.append('departmentNames', JSON.stringify(departmentNames));
+
+  data.files.forEach((file: File) => {
+    formData.append('files', file);
+  });
+
+  if (this.departmentId != null) {
+    // Update (PUT) existing Department
+    return this.http.put(`${this.apiUrl}/university/${this.universityId}/department-evaluation/${this.departmentId}`, formData)
+      .pipe(
+        tap(response => console.log('Department updated:', response)),
+        catchError(error => {
+          console.error('Error updating Department:', error);
+          return throwError(error);
+        })
+      );
+  } else {
+    // Create (POST) new Department
+    return this.http.post(`${this.apiUrl}/university/${this.universityId}/department-evaluation`, formData)
+      .pipe(
+        tap(response => console.log('Department created:', response)),
+        catchError(error => {
+          console.error('Error creating Department:', error);
+          return throwError(error);
+        })
+      );
+  }
 }
 
 }

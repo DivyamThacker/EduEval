@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { electoralLiteracyQuestions } from '../../../shared/constants/app.constants';
+import { ElectoralLiteracyDataService } from '../../../services/academic-information-form/electoral-literacy-data-service';
 
 @Component({
   selector: 'app-electoral-literacy',
@@ -14,8 +15,9 @@ import { electoralLiteracyQuestions } from '../../../shared/constants/app.consta
 export class ElectoralLiteracyComponent implements OnInit {
   form!: FormGroup;
   electoralLiteracyQuestions = electoralLiteracyQuestions;
+  files: { [key: number]: File } = {}; 
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private electoralLiteracyDataService : ElectoralLiteracyDataService) {}
 
   // Initialize form
   initForm(): void {
@@ -35,19 +37,25 @@ export class ElectoralLiteracyComponent implements OnInit {
     return this.form.get('sections') as FormArray;
   }
 
+  // Update the Electoral Literacy Details in the service
+  private updateElectoralLiteracyDetails(): void {
+    this.electoralLiteracyDataService.setElectoralLiteracyDetailsData({
+      files: Object.values(this.files), // Convert file object to array
+    });
+  }
+
   // Handle file change
   onFileChange(event: any, index: number): void {
     const file = event.target.files[0];
-    if (file) {
-      const sectionGroup = this.sections.at(index);
-      sectionGroup.patchValue({ file });
-    }
+    this.files[index] = file; // Store file by program index
+
+    this.updateElectoralLiteracyDetails();
   }
 
   ngOnInit() {
     this.initForm();
     this.form.valueChanges.subscribe(() => {
-      // this.academicFormDataService.setBasicInfoData(this.form.value);
+      this.updateElectoralLiteracyDetails();
     });
   }
 }

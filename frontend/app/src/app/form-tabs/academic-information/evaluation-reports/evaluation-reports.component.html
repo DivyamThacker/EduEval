@@ -2,7 +2,7 @@
     <h3>Furnish the Accreditation details </h3>
 </div>
 <div style="max-height: 250px; overflow-y: auto;">
-    <form class="form" [formGroup]="accreditationForm" (ngSubmit)="onSubmit()">
+    <form class="form" [formGroup]="accreditationForm">
         <div formArrayName="accreditations" style="padding: 10px;">
           <div *ngFor="let group of accreditationArray.controls; let i = index;" [formGroupName]="i" class="replica-group report-group">
             <h4>Accreditation Cycle {{ i + 1 }}</h4>
@@ -13,7 +13,7 @@
             </div>
             <div class="form-group">
               <label>Accreditation Type</label>
-              <input formControlName="accreditationType" type="text" placeholder="Accreditation" />
+              <input formControlName="type" type="text" placeholder="Accreditation" />
             </div>
             <div class="form-group">
               <label>Grade</label>

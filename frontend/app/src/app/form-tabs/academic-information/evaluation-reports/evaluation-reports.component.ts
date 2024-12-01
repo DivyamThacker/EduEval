@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { EvaluationReportsDataService } from '../../../services/academic-information-form/evaluation-reports-data-service';
 
 @Component({
   selector: 'app-evaluation-reports',
@@ -17,7 +18,7 @@ export class EvaluationReportsComponent implements OnInit {
   accreditationReports: { [key: number]: File } = {};
   departmentReports: { [key: number]: File } = {};
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private evaluationReportsDataService: EvaluationReportsDataService) {
     this.accreditationForm = this.fb.group({
       accreditations: this.fb.array([]),
     });
@@ -37,10 +38,10 @@ export class EvaluationReportsComponent implements OnInit {
     const index = this.accreditationArray.length;
     const accreditationGroup = this.fb.group({
       cycleNumber: [index+1],
-      accreditationType: [''],
+      type: [''],
       grade: [''],
       cgpa: [''],
-      peerTeamReport: [''],
+      // peerTeamReport: [''],
     });
     this.accreditationArray.push(accreditationGroup);
   
@@ -52,13 +53,6 @@ export class EvaluationReportsComponent implements OnInit {
     delete this.accreditationReports[index];
   }
 
-  onAccreditationFileChange(event: Event, index: number): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.accreditationReports[index] = input.files[0];
-    }
-  }
-
   // Department Form Handling
   get departmentArray(): FormArray {
     return this.departmentForm.get('departments') as FormArray;
@@ -67,7 +61,7 @@ export class EvaluationReportsComponent implements OnInit {
   addDepartment(): void {
     const departmentGroup = this.fb.group({
       departmentName: [''],
-      departmentReport: [''],
+      // departmentReport: [''],
     });
     this.departmentArray.push(departmentGroup);
   }
@@ -77,32 +71,46 @@ export class EvaluationReportsComponent implements OnInit {
     delete this.departmentReports[index];
   }
 
-  onDepartmentFileChange(event: Event, index: number): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.departmentReports[index] = input.files[0];
-    }
+  // Handle file input change for accreditation
+  onAccreditationFileChange(event: any, index: number): void {
+    const file = event.target.files[0];
+    this.accreditationReports[index] = file; // Store file by accreditation index
+
+    // Update Accreditation data in service
+    this.updateAccreditationModelSource();
   }
 
+  // Handle file input change for department
+  onDepartmentFileChange(event: any, index: number): void {
+    const file = event.target.files[0];
+    this.departmentReports[index] = file; // Store file by department index
 
-  onSubmit(): void {
-    const formData = new FormData();
-    formData.append('accreditations', JSON.stringify(this.accreditationForm.value.accreditations));
+    // Update Department data in service
+    this.updateDepartmentModelSource();
+  }
 
-    Object.entries(this.accreditationReports).forEach(([index, file]) => {
-      formData.append(`file${index}`, file);
+  // Update the Accreditation Model Source in the service
+  private updateAccreditationModelSource(): void {
+    this.evaluationReportsDataService.setAccreditationData({
+      formValue: this.accreditationForm.value,
+      files: Object.values(this.accreditationReports), // Convert file object to array
     });
+  }
 
-    // Make HTTP request here
-    console.log(formData);
+  // Update the Department Model Source in the service
+  private updateDepartmentModelSource(): void {
+    this.evaluationReportsDataService.setDepartmentData({
+      formValue: this.departmentForm.value,
+      files: Object.values(this.departmentReports), // Convert file object to array
+    });
   }
 
   ngOnInit() {
     this.accreditationForm.valueChanges.subscribe(() => {
-      // this.academicFormDataService.setBasicInfoData(this.form.value);
+      this.updateAccreditationModelSource();
     });
     this.departmentForm.valueChanges.subscribe(() => {
-      // this.academicFormDataService.setBasicInfoData(this.form.value);
+      this.updateDepartmentModelSource();
     });
   }
 }

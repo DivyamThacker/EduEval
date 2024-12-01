@@ -230,80 +230,80 @@ export class FormsActionsComponent implements OnInit, OnDestroy{
           alert('Error submitting Enrollment Information');
         }
       });
-    // }  else if (currentUrl.startsWith('/academic-information/chairs-hrdc-details')) {
-    //   this.chairHrdcDataService.submitChairs().subscribe({
-    //     next: response => {
-    //       console.log('Chairs Information submitted successfully', response);
-    //       alert('Chairs Information submitted successfully');
-    //       this.basicFormDataService.setUnsavedChanges(false);
-    //     },
-    //     error: error => {
-    //       console.error('Error submitting CollChairsege Information', error);
-    //       alert('Error submitting Chairs Information');
-    //     }
-    //   });
+    }  else if (currentUrl.startsWith('/academic-information/chairs-hrdc-details')) {
+      this.chairHrdcDataService.submitChairs().subscribe({
+        next: response => {
+          console.log('Chairs Information submitted successfully', response);
+          alert('Chairs Information submitted successfully');
+          this.basicFormDataService.setUnsavedChanges(false);
+        },
+        error: error => {
+          console.error('Error submitting CollChairsege Information', error);
+          alert('Error submitting Chairs Information');
+        }
+      });
 
-    //   // HRDC Details
-    //   this.chairHrdcDataService.submitHrdc().subscribe({
-    //     next: response => {
-    //       console.log('Hrdc Details submitted successfully', response);
-    //       alert('Hrdc Details submitted successfully');
-    //       this.basicFormDataService.setUnsavedChanges(false);
-    //     },
-    //     error: error => {
-    //       console.error('Error submitting Hrdc Details', error);
-    //       alert('Error submitting Hrdc Details');
-    //     }
-    //   });
-    // }  else if (currentUrl.startsWith('/academic-information/evaluation-reports')) {
-    //   this.evaluationReportsDataService.submitAccredationDetails().subscribe({
-    //     next: response => {
-    //       console.log('Accredation Details submitted successfully', response);
-    //       alert('Accredation Details submitted successfully');
-    //       this.basicFormDataService.setUnsavedChanges(false);
-    //     },
-    //     error: error => {
-    //       console.error('Error submitting Accredation Details', error);
-    //       alert('Error submitting Accredation Details');
-    //     }
-    //   });
+      // HRDC Details
+      this.chairHrdcDataService.submitHrdc().subscribe({
+        next: response => {
+          console.log('Hrdc Details submitted successfully', response);
+          alert('Hrdc Details submitted successfully');
+          this.basicFormDataService.setUnsavedChanges(false);
+        },
+        error: error => {
+          console.error('Error submitting Hrdc Details', error);
+          alert('Error submitting Hrdc Details');
+        }
+      });
+    }  else if (currentUrl.startsWith('/academic-information/evaluation-reports')) {
+      this.evaluationReportsDataService.submitAccredationDetails().subscribe({
+        next: response => {
+          console.log('Accredation Details submitted successfully', response);
+          alert('Accredation Details submitted successfully');
+          this.basicFormDataService.setUnsavedChanges(false);
+        },
+        error: error => {
+          console.error('Error submitting Accredation Details', error);
+          alert('Error submitting Accredation Details');
+        }
+      });
 
-    //   //Evaluation Reports
-    //   this.evaluationReportsDataService.submitEvaluationReports().subscribe({
-    //     next: response => {
-    //       console.log('Evaluation Reports submitted successfully', response);
-    //       alert('Evaluation Reports  submitted successfully');
-    //       this.basicFormDataService.setUnsavedChanges(false);
-    //     },
-    //     error: error => {
-    //       console.error('Error submitting Evaluation Reports ', error);
-    //       alert('Error submitting Evaluation Reports ');
-    //     }
-    //   });
-    // }  else if (currentUrl.startsWith('/academic-information/nep-details')) {
-    //   this.nepDetailsDataService.submitNepDetails().subscribe({
-    //     next: response => {
-    //       console.log('Nep Details  submitted successfully', response);
-    //       alert('Nep Details submitted successfully');
-    //       this.basicFormDataService.setUnsavedChanges(false);
-    //     },
-    //     error: error => {
-    //       console.error('Error submitting Nep Details ', error);
-    //       alert('Error submitting Nep Details ');
-    //     }
-    //   });
-    // }  else if (currentUrl.startsWith('/academic-information/electoral-literacy')) {
-    //   this.electoralLiteracyDataService.submitElectoralLiteracy().subscribe({
-    //     next: response => {
-    //       console.log('Electoral Literacy Details submitted successfully', response);
-    //       alert('Electoral Literacy Details  submitted successfully');
-    //       this.basicFormDataService.setUnsavedChanges(false);
-    //     },
-    //     error: error => {
-    //       console.error('Error submitting Electoral Literacy Details ', error);
-    //       alert('Error submitting Electoral Literacy Details ');
-    //     }
-    //   });
+      //Evaluation Reports
+      this.evaluationReportsDataService.submitEvaluationReports().subscribe({
+        next: response => {
+          console.log('Evaluation Reports submitted successfully', response);
+          alert('Evaluation Reports  submitted successfully');
+          this.basicFormDataService.setUnsavedChanges(false);
+        },
+        error: error => {
+          console.error('Error submitting Evaluation Reports ', error);
+          alert('Error submitting Evaluation Reports ');
+        }
+      });
+    }  else if (currentUrl.startsWith('/academic-information/nep-details')) {
+      this.nepDetailsDataService.submitNepDetails().subscribe({
+        next: response => {
+          console.log('Nep Details  submitted successfully', response);
+          alert('Nep Details submitted successfully');
+          this.basicFormDataService.setUnsavedChanges(false);
+        },
+        error: error => {
+          console.error('Error submitting Nep Details ', error);
+          alert('Error submitting Nep Details ');
+        }
+      });
+    }  else if (currentUrl.startsWith('/academic-information/electoral-literacy')) {
+      this.electoralLiteracyDataService.submitElectoralLiteracyDetails().subscribe({
+        next: response => {
+          console.log('Electoral Literacy Details submitted successfully', response);
+          alert('Electoral Literacy Details  submitted successfully');
+          this.basicFormDataService.setUnsavedChanges(false);
+        },
+        error: error => {
+          console.error('Error submitting Electoral Literacy Details ', error);
+          alert('Error submitting Electoral Literacy Details ');
+        }
+      });
     }
     
   }

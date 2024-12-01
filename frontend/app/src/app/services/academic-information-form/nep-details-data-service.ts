@@ -11,10 +11,12 @@ export class NepDetailsDataService {
 apiUrl = environment.apiUrl;
 
 private universityId: number | null = null;
-private collegeInfoId: number | null = null;
+private nepDetailsId: number | null = null;
 
-private collegeInfoModelSource = new BehaviorSubject<any>({});
-collegeInfoModel$ = this.collegeInfoModelSource.asObservable();
+private nepDetailsModelSource = new BehaviorSubject<any>({
+  files: [] // Initialize as an array
+});
+nepDetailsModel$ = this.nepDetailsModelSource.asObservable();
 
 constructor(private http: HttpClient, private basicFormDataService : BasicFormDataService){}
 
@@ -23,47 +25,52 @@ getUniversityId(): number | null {
   return this.basicFormDataService.getUniversityId();
 }
 
-// College Info ID and model management
-setCollegeInfoId(id: number | null) {
-  this.collegeInfoId = id;
+// NEP Details ID and model management
+setNepDetailsId(id: number | null) {
+  this.nepDetailsId = id;
 }
 
-getCollegeInfoId(): number | null {
-  return this.collegeInfoId;
+getNepDetailsId(): number | null {
+  return this.nepDetailsId;
 }
 
-setCollegeInfoData(data: any) {
-  this.collegeInfoModelSource.next(data);
+setNepDetailsData(data: any) {
+  this.nepDetailsModelSource.next(data);
 }
 
-getCollegeInfoData(): Observable<any> {
-  return this.collegeInfoModel$;
+getNepDetailsData(): Observable<any> {
+  return this.nepDetailsModel$;
 }
 
-// College Info API submission
-submitCollegeInfo() {
-  const data = this.collegeInfoModelSource.value;
+submitNepDetails(): Observable<any> {
   this.universityId = this.getUniversityId();
-  console.log('University Id:', this.universityId);
-  console.log('College Info Id:', this.collegeInfoId);
-  if (this.collegeInfoId != null) {
-    return this.http.put(`${this.apiUrl}/university/${this.universityId}/college-info/${this.collegeInfoId}`, data)
+  const formData = new FormData();
+  const data = this.nepDetailsModelSource.value;
+
+  data.files.forEach((file: File) => {
+    formData.append('files', file);
+  });
+
+  if (this.nepDetailsId != null) {
+    // Update (PUT) existing NEP Details
+    return this.http.put(`${this.apiUrl}/university/${this.universityId}/nep-details/${this.nepDetailsId}`, formData)
       .pipe(
-        catchError(error => throwError(() => error))
+        tap(response => console.log('NEP Details updated:', response)),
+        catchError(error => {
+          console.error('Error updating NEP Details:', error);
+          return throwError(error);
+        })
       );
   } else {
-    return this.http.post(`${this.apiUrl}/university/${this.universityId}/college-info`, data)
+    // Create (POST) new NEP Details
+    return this.http.post(`${this.apiUrl}/university/${this.universityId}/nep-details`, formData)
       .pipe(
-        tap((response: any) => {
-          this.collegeInfoId = response.id;
-          this.setCollegeInfoId(response.id);
-        }),
-        catchError(error => throwError(() => error))
+        tap(response => console.log('NEP Details created:', response)),
+        catchError(error => {
+          console.error('Error creating NEP Details:', error);
+          return throwError(error);
+        })
       );
   }
 }
-
-submitNepDetails() {
-}
-
 }

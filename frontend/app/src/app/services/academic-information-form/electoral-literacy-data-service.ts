@@ -11,10 +11,13 @@ export class ElectoralLiteracyDataService {
 apiUrl = environment.apiUrl;
 
 private universityId: number | null = null;
-private collegeInfoId: number | null = null;
+private electoralLiteracyDetailsId: number | null = null;
 
-private collegeInfoModelSource = new BehaviorSubject<any>({});
-collegeInfoModel$ = this.collegeInfoModelSource.asObservable();
+private electoralLiteracyDetailsModelSource = new BehaviorSubject<any>({
+  files: [] // Initialize as an array
+});
+electoralLiteracyDetailsModel$ = this.electoralLiteracyDetailsModelSource.asObservable();
+
 
 constructor(private http: HttpClient, private basicFormDataService : BasicFormDataService){}
 
@@ -23,47 +26,53 @@ getUniversityId(): number | null {
   return this.basicFormDataService.getUniversityId();
 }
 
-// College Info ID and model management
-setCollegeInfoId(id: number | null) {
-  this.collegeInfoId = id;
+
+// Electoral Literacy Details ID and model management
+setElectoralLiteracyDetailsId(id: number | null) {
+  this.electoralLiteracyDetailsId = id;
 }
 
-getCollegeInfoId(): number | null {
-  return this.collegeInfoId;
+getElectoralLiteracyDetailsId(): number | null {
+  return this.electoralLiteracyDetailsId;
 }
 
-setCollegeInfoData(data: any) {
-  this.collegeInfoModelSource.next(data);
+setElectoralLiteracyDetailsData(data: any) {
+  this.electoralLiteracyDetailsModelSource.next(data);
 }
 
-getCollegeInfoData(): Observable<any> {
-  return this.collegeInfoModel$;
+getElectoralLiteracyDetailsData(): Observable<any> {
+  return this.electoralLiteracyDetailsModel$;
 }
 
-// College Info API submission
-submitCollegeInfo() {
-  const data = this.collegeInfoModelSource.value;
+submitElectoralLiteracyDetails(): Observable<any> {
   this.universityId = this.getUniversityId();
-  console.log('University Id:', this.universityId);
-  console.log('College Info Id:', this.collegeInfoId);
-  if (this.collegeInfoId != null) {
-    return this.http.put(`${this.apiUrl}/university/${this.universityId}/college-info/${this.collegeInfoId}`, data)
+  const formData = new FormData();
+  const data = this.electoralLiteracyDetailsModelSource.value;
+
+  data.files.forEach((file: File) => {
+    formData.append('files', file);
+  });
+
+  if (this.electoralLiteracyDetailsId != null) {
+    // Update (PUT) existing Electoral Literacy Details
+    return this.http.put(`${this.apiUrl}/university/${this.universityId}/electoral-literacy-details/${this.electoralLiteracyDetailsId}`, formData)
       .pipe(
-        catchError(error => throwError(() => error))
+        tap(response => console.log('Electoral Literacy Details updated:', response)),
+        catchError(error => {
+          console.error('Error updating Electoral Literacy Details:', error);
+          return throwError(error);
+        })
       );
   } else {
-    return this.http.post(`${this.apiUrl}/university/${this.universityId}/college-info`, data)
+    // Create (POST) new Electoral Literacy Details
+    return this.http.post(`${this.apiUrl}/university/${this.universityId}/electoral-literacy-details`, formData)
       .pipe(
-        tap((response: any) => {
-          this.collegeInfoId = response.id;
-          this.setCollegeInfoId(response.id);
-        }),
-        catchError(error => throwError(() => error))
+        tap(response => console.log('Electoral Literacy Details created:', response)),
+        catchError(error => {
+          console.error('Error creating Electoral Literacy Details:', error);
+          return throwError(error);
+        })
       );
   }
 }
-
-submitElectoralLiteracy() {
-}
-
 }

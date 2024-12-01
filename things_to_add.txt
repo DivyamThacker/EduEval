@@ -1,4 +1,7 @@
-add conditional option for integrated program in enrollment details
+check and fix why enrollment is not working
+
+put data.sql in things.txt so that you can show for other universities
+
 
 fix the error happening due to String to date conversion (right now I am changing dates into strings in model which is wrong )
 
@@ -74,4 +77,3 @@ add cookies to determine which university is logged in and thus save the interim
 
 watch angular course content from angular dynamic components
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-

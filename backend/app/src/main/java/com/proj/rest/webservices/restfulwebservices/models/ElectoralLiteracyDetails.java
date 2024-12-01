@@ -21,7 +21,7 @@ public class ElectoralLiteracyDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String question;
+    private Integer section;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private DocumentDetails document;
