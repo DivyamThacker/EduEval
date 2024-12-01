@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TeachingFacultyDataService } from '../../../services/academic-information-form/teaching-faculty-data-service';
 
 @Component({
   selector: 'app-teaching-faculty',
@@ -16,7 +17,7 @@ export class TeachingFacultyComponent implements OnInit {
 
   academiciansForm : FormGroup;
   
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private teachingFacultyDataService: TeachingFacultyDataService) {
     this.facultyForm = this.fb.group({
       faculties : this.fb.array([]),
     });
@@ -75,10 +76,10 @@ export class TeachingFacultyComponent implements OnInit {
 
   ngOnInit() {
     this.facultyForm.valueChanges.subscribe(() => {
-      // this.academicFormDataService.setBasicInfoData(this.form.value);
+      this.teachingFacultyDataService.setFacultyData(this.facultyForm.value);
     });
     this.academiciansForm.valueChanges.subscribe(() => {
-      // this.academicFormDataService.setBasicInfoData(this.form.value);
+      this.teachingFacultyDataService.setAcademicianData(this.academiciansForm.value);
     });
   }
 }

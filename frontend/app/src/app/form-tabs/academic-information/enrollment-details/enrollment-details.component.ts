@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
+import { EnrollmentDataService } from '../../../services/academic-information-form/enrollment-data-service';
 
 
 @Component({
@@ -14,48 +15,14 @@ import { CommonModule, NgIf } from '@angular/common';
 export class EnrollmentDetailsComponent implements OnInit {
   enrollmentForm: FormGroup;
 
-  integratedForm: FormGroup;
-  
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private enrollmentDataService: EnrollmentDataService) {
     this.enrollmentForm = this.fb.group({
+      hasIntegrated: [false],
+      totalIntegratedPrograms: [''],
       enrollments : this.fb.array([]),
     });
     this.addEnrollment();
-
-    this.integratedForm = this.fb.group({
-      hasIntegrated: [false],
-      totalIntegratedProgrammes: [''],
-      integratedEnrollments: this.fb.array([])
-    });
-
-    this.integratedForm.get('hasIntegrated')?.valueChanges.subscribe((hasIntegrated: boolean) => {
-      if (hasIntegrated) {
-        this.integratedForm.setControl('integratedEnrollments', this.fb.array([this.createIntegratedFormGroup()]));
-      } else {
-        this.integratedForm.setControl('integratedEnrollments', this.fb.array([]));
-      }
-    });
   }
-
-  get integratedEnrollments(): FormArray {
-    return this.integratedForm.get('integratedEnrollments') as FormArray;
-  }
-
-  createIntegratedFormGroup(): FormGroup {
-    return this.fb.group({
-      gender: [''],
-      location: [''],
-      count: ['']
-    });
-  }
-
-  addIntegratedEnrollment(): void {
-    this.integratedEnrollments.push(this.createIntegratedFormGroup());
-  }
-
-  removeIntegratedEnrollment(index: number): void {
-    this.integratedEnrollments.removeAt(index);
-  } 
 
   get enrollments(): FormArray {
     return this.enrollmentForm.get('enrollments') as FormArray;
@@ -63,7 +30,7 @@ export class EnrollmentDetailsComponent implements OnInit {
 
   addEnrollment(): void {
     const enrollmentGroup = this.fb.group({
-      programme: [''],
+      program: [''],
       gender: [''],
       location: [''],
       count: ['']
@@ -78,10 +45,7 @@ export class EnrollmentDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.enrollmentForm.valueChanges.subscribe(() => {
-      // this.collegeInfoDataService.setBasicInfoData(this.form.value);
-    });
-    this.integratedForm.valueChanges.subscribe(() => {
-      // this.collegeInfoDataService.setBasicInfoData(this.form.value);
+      this.enrollmentDataService.setEnrollmentData(this.enrollmentForm.value);
     });
   }
 }

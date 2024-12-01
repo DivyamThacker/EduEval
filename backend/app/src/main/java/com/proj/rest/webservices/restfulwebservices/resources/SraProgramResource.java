@@ -46,7 +46,7 @@ public class SraProgramResource {
     @PostMapping(value="")
     public ResponseEntity<?> createSraPrograms(
         @PathVariable Integer universityId,
-        @RequestParam String areSraProgram,
+        @RequestParam boolean areSraProgram,
         @RequestParam(required = false) List<String> sraProgramNames,
         @RequestParam(required = false) List<MultipartFile> files)  {
     
@@ -54,8 +54,8 @@ public class SraProgramResource {
             .orElseThrow(() -> new RuntimeException("University not found"));
             System.out.println(areSraProgram);
 
-            if (areSraProgram == null || areSraProgram.equals("false")) {
-                return ResponseEntity.status(HttpStatus.OK).body("Not an SRA Program");
+            if (Boolean.FALSE.equals(areSraProgram)) {
+                return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"Not an SRA Program\"}");
             }
             university.setAreSraProgram(true);
             universityRepository.save(university);

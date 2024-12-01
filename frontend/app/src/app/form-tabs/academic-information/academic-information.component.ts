@@ -18,7 +18,7 @@ export class AcademicInformationComponent {
     { label: 'Teaching Faculty', route: '/academic-information/teaching-faculty' },
     { label: 'Non Teaching Staff', route: '/academic-information/staff' },
     { label: 'Enrollment Details', route: '/academic-information/enrollment-details' },
-    { label: 'Chairs and HRDC Details', route: '/academic-information/extra-details' },
+    { label: 'Chairs and HRDC Details', route: '/academic-information/chairs-hrdc-details' },
     { label: 'Evaluation Reports', route: '/academic-information/evaluation-reports' },
     { label: 'NEP Details', route: '/academic-information/nep-details' },
     { label: 'Electoral Literacy Details', route: '/academic-information/electoral-literacy'}

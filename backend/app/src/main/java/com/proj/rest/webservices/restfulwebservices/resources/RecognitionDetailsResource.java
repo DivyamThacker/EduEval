@@ -76,7 +76,7 @@ public class RecognitionDetailsResource {
 
         recognitionDetails.setUniversity(university);
         recognitionDetailsRepository.save(recognitionDetails);
-        university.setRecognitionDetials(recognitionDetails);
+        university.setRecognitionDetails(recognitionDetails);
 
         universityRepository.save(university);
         return ResponseEntity.ok(recognitionDetails);
@@ -130,7 +130,7 @@ public class RecognitionDetailsResource {
 
         recognitionDetails.setUniversity(university);
         recognitionDetailsRepository.save(recognitionDetails);
-        university.setRecognitionDetials(recognitionDetails);
+        university.setRecognitionDetails(recognitionDetails);
 
         universityRepository.save(university);
         return ResponseEntity.ok(recognitionDetails);
@@ -148,7 +148,7 @@ public class RecognitionDetailsResource {
     public ResponseEntity<RecognitionDetails> getRecognitionDetails(@PathVariable Integer universityId) {
         University university = universityRepository.findById(universityId)
                 .orElseThrow(() -> new RuntimeException("University not found"));
-        RecognitionDetails recognitionDetails = university.getRecognitionDetials();
+        RecognitionDetails recognitionDetails = university.getRecognitionDetails();
         return ResponseEntity.ok(recognitionDetails);
     }
 }

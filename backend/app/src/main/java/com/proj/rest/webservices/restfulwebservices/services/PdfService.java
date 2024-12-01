@@ -1,6 +1,5 @@
 package com.proj.rest.webservices.restfulwebservices.services;
 
-import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.google.gson.*;
 import com.itextpdf.html2pdf.HtmlConverter;
@@ -29,6 +28,13 @@ public class PdfService {
     // "EduEval/backend/app/src/main/resources/static/Arial.ttf";
     // PdfFont arialFont = PdfFontFactory.createFont(arialFontPath,
     // PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+    private StaticDataService staticDataService;
+    private DataFormaterService dataFormaterService;
+
+    public PdfService( StaticDataService staticDataService, DataFormaterService dataFormaterService) {
+        this.staticDataService = staticDataService;
+        this.dataFormaterService = dataFormaterService;
+    }
 
     public void convertHtmlToPdf() throws IOException {
         try {
@@ -221,14 +227,14 @@ public class PdfService {
             JSONObject jsonObject = new JSONObject(jsonData);
             JsonObject tempJsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
             // Call the function to generate PDF
-            generateUniversityProfilePDF(jsonObject, tempJsonObject);
+            generateUniversityProfilePDF(jsonObject, tempJsonObject, dataFormaterService);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void generateUniversityProfilePDF(JSONObject jsonObject, JsonObject tempJsonObject) throws Exception {
+    public static void generateUniversityProfilePDF(JSONObject jsonObject, JsonObject tempJsonObject, DataFormaterService dataFormaterService) throws Exception {
         // Extract university info
         // path to font library
 
@@ -255,6 +261,8 @@ public class PdfService {
         JsonArray affiliatedInstitutionArray = tempJsonObject.getAsJsonArray("affiliatedInstitution");
         JSONArray sraProgramsArray = jsonObject.getJSONArray("sraPrograms");
 
+        // JSONObject recognitionJsonObject = new JSONObject(dataFormaterService.getRecognitionDetails(1));
+        JsonObject tempRecognitionJsonObject = JsonParser.parseString(dataFormaterService.getRecognitionDetails(1)).getAsJsonObject();
         // Create PDF document
         PdfWriter writer = new PdfWriter(DEST);
         PdfDocument pdf = new PdfDocument(writer);

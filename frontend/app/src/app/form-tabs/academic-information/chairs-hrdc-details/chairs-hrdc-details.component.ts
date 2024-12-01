@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-extra-details',
+  selector: 'app-chairs-hrdc-details',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './extra-details.component.html',
-  styleUrl: './extra-details.component.css'
+  imports: [ReactiveFormsModule],
+  templateUrl: './chairs-hrdc-details.component.html',
+  styleUrl: './chairs-hrdc-details.component.css'
 })
-export class ExtraDetailsComponent implements OnInit {
+export class ChairsHrdcDetailsComponent implements OnInit {
 
   chairForm : FormGroup;
 
@@ -57,3 +56,4 @@ export class ExtraDetailsComponent implements OnInit {
     });
   }
 }
+

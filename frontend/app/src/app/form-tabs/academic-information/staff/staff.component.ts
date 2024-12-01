@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { StaffDataService } from '../../../services/academic-information-form/staff-data-service';
 
 @Component({
   selector: 'app-staff',
@@ -13,7 +14,7 @@ import { CommonModule } from '@angular/common';
 export class StaffComponent implements OnInit {
   staffForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private staffDataService: StaffDataService) {
     this.staffForm = this.fb.group({
       staff : this.fb.array([]),
     });
@@ -40,7 +41,7 @@ export class StaffComponent implements OnInit {
 
   ngOnInit() {
     this.staffForm.valueChanges.subscribe(() => {
-      // this.academicFormDataService.setBasicInfoData(this.form.value);
+      this.staffDataService.setStaffInfoData(this.staffForm.value);
     });
   }
 }

@@ -1,8 +1,18 @@
 <div style="text-align: center; margin-bottom: 10px;">
     <h4>Provide following details of students enrolled in the university during the current academic year </h4>
 </div>
-<div style="max-height: 250px; overflow-y: auto;">
+<div style="max-height: 400px; overflow-y: auto;">
     <form class="form" [formGroup]="enrollmentForm">
+        <div class="checkIntegrated" style="grid-column: span 2;">
+            <div class="form-group" >
+                <label for="hasIntegrated" style="text-align: center; display: block;"> Does the University offer any Integrated Programmes? </label>
+                <input type="checkbox" id="hasIntegrated" formControlName="hasIntegrated">
+            </div>
+            <div class="form-group" *ngIf="enrollmentForm.get('hasIntegrated')?.value" >
+                <label for="totalIntegratedPrograms">Total Integrated Programmes</label>
+                <input id="totalIntegratedPrograms" type="number" formControlName="totalIntegratedPrograms" placeholder="Numeric field data">
+            </div>
+        </div>
         <div formArrayName="enrollments" style="padding: 10px;">
             <div *ngFor="let enrollment of enrollments?.controls; let i = index" [formGroupName]="i" class="replica-group enrollment-group">
                 <h4>Type {{ i + 1 }}</h4>
@@ -12,9 +22,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="programme">Programme</label>
-                    <select id="programme" formControlName="programme">
+                    <label for="program">Program</label>
+                    <select id="program" formControlName="program">
                         <option value="" disabled selected>Select an option</option>
+                        <option *ngIf="enrollmentForm.get('hasIntegrated')?.value" value="Integrated">Integrated</option>
                         <option value="PG-Diploma">PG Diploma</option>
                         <option value="Doctoral">Doctoral (Ph.D)</option>
                         <option value="Diploma">Diploma</option>   
@@ -54,60 +65,5 @@
         <div class="add-button" style="margin-top:-30px">
             <button type="button" (click)="addEnrollment()">Add +</button>
         </div>
-    </form>
-</div>
-
-<hr style="margin-top: 10px; margin-bottom: 10px;">
-
-<div style="max-height: 200px; overflow-y: auto;">
-    <form [formGroup]="integratedForm">
-        <div class="checkIntegrated" style="grid-column: span 2;">
-            <div class="form-group" >
-                <label for="hasIntegrated" style="text-align: center; display: block;"> Does the University offer any Integrated Programmes? </label>
-                <input type="checkbox" id="hasIntegrated" formControlName="hasIntegrated">
-            </div>
-            <div class="form-group" *ngIf="integratedForm.get('hasIntegrated')?.value" >
-                <label for="totalIntegratedProgrammes">Total Integrated Programmes</label>
-                <input id="totalIntegratedProgrammes" type="number" formControlName="totalIntegratedProgrammes" placeholder="Numeric field data">
-            </div>
-        </div>
-        <div *ngIf="integratedForm.get('hasIntegrated')?.value" style="grid-column: span 2; padding: 10px;">
-            <div formArrayName="integratedEnrollments">
-                <div *ngFor="let integratedEnrollment of integratedEnrollments?.controls; let i = index" [formGroupName]="i" class="replica-group enrollment-group" style="margin-bottom: 10px;">
-                    <h4 style="grid-column: span 2;">Type {{ i + 1 }}</h4>
-                    <div class="form-group">
-                        <label for="gender-{{i}}">Gender</label>
-                        <select id="gender-{{i}}" formControlName="gender">
-                            <option value="" disabled selected>Select an option</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option> 
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-    
-                    <div class="form-group">
-                        <label for="location-{{i}}">Location</label>
-                        <select id="location-{{i}}" formControlName="location">
-                            <option value="" disabled selected>Select an option</option>
-                            <option value="sameState">From the State Where  University is Located</option>
-                            <option value="otherStates">From Other States of India</option>
-                            <option value="NRI">NRI Students</option>
-                            <option value="Foreign">Foreign Students</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="count-{{i}}">Count of Such Entities</label>
-                        <input id="count-{{i}}" type="number" formControlName="count" placeholder="Numeric field data">
-                    </div>
-                    <div class="delete-btn" (click)="removeIntegratedEnrollment(i)">
-                        <i class="fas fa-trash"></i> <!-- Font Awesome trash icon -->
-                    </div>
-                </div>
-            </div>
-            <div class="add-button" style="grid-column: span 2;">
-                <button type="button" (click)="addIntegratedEnrollment()">Add +</button>
-            </div>
-        </div>
-        
     </form>
 </div>

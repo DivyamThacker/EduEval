@@ -11,7 +11,6 @@ import { ProgramDetialsComponent } from './form-tabs/extended-profile/program-de
 import { ExtendedProfileComponent } from './form-tabs/extended-profile/extended-profile.component';
 import { TeachingFacultyComponent } from './form-tabs/academic-information/teaching-faculty/teaching-faculty.component';
 import { StaffComponent } from './form-tabs/academic-information/staff/staff.component';
-import { ExtraDetailsComponent } from './form-tabs/academic-information/extra-details/extra-details.component';
 import { EnrollmentDetailsComponent } from './form-tabs/academic-information/enrollment-details/enrollment-details.component';
 import { StudentDetailsComponent } from './form-tabs/extended-profile/student-details/student-details.component';
 import { AcademicDetailsComponent } from './form-tabs/extended-profile/academic-details/academic-details.component';
@@ -23,6 +22,7 @@ import { canDeactivateGuard } from './guards/can-deactivate.guard';
 import { EvaluationReportsComponent } from './form-tabs/academic-information/evaluation-reports/evaluation-reports.component';
 import { NepDetailsComponent } from './form-tabs/academic-information/nep-details/nep-details.component';
 import { ElectoralLiteracyComponent } from './form-tabs/academic-information/electoral-literacy/electoral-literacy.component';
+import { ChairsHrdcDetailsComponent } from './form-tabs/academic-information/chairs-hrdc-details/chairs-hrdc-details.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -57,7 +57,7 @@ export const routes: Routes = [
             { path: 'teaching-faculty', component: TeachingFacultyComponent },
             { path: 'staff', component: StaffComponent },
             { path: 'enrollment-details', component: EnrollmentDetailsComponent },
-            { path: 'extra-details', component: ExtraDetailsComponent },
+            { path: 'chairs-hrdc-details', component: ChairsHrdcDetailsComponent },
             { path: 'evaluation-reports', component: EvaluationReportsComponent },
             { path: 'nep-details', component: NepDetailsComponent },
             { path: 'electoral-literacy', component: ElectoralLiteracyComponent },

@@ -44,7 +44,7 @@ public class University {
     @OneToOne(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university") 
     @ToString.Exclude
-    private RecognitionDetails recognitionDetials;
+    private RecognitionDetails recognitionDetails;
 
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
@@ -78,8 +78,8 @@ public class University {
     @ToString.Exclude
     private List<NonTeachingStaff> nonTeachingStaff;
 
-    private Boolean hasIntegratedProgrammes;
-    private Integer totalIntegratedProgrammes;
+    private Boolean hasIntegratedPrograms;
+    private Integer totalIntegratedPrograms;
     @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("university")
     @ToString.Exclude

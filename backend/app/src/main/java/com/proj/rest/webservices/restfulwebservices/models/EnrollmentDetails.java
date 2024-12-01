@@ -19,7 +19,7 @@ public class EnrollmentDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String programme;
+    private String program;
     private String gender;
     private String location;
     private Integer count;
