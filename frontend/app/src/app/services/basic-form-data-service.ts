@@ -10,7 +10,7 @@ export class BasicFormDataService {
   areUnsavedChanges = false;
   apiUrl = environment.apiUrl;
 
-  private universityId: number | null = null;
+  private universityId: number | null = 1;
   private contactId: number | null = null;
   private campusId: number | null = null;
   private recognitionDetailsId: number | null = null;

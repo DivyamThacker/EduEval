@@ -11,6 +11,7 @@ cloud:
 application:
   bucket:
     name: edu-eval-bucket
+    prefix: https://edu-eval-bucket.s3.us-east-1.amazonaws.com/
 
 spring: 
   servlet: 
