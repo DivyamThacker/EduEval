@@ -7,5 +7,4 @@ import com.proj.rest.webservices.restfulwebservices.models.University;
 
 @Repository
 public interface UniversityRepository extends JpaRepository<University, Integer> {
-
 }

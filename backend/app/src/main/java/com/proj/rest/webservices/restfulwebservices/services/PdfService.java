@@ -1,6 +1,5 @@
 package com.proj.rest.webservices.restfulwebservices.services;
 
-import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.google.gson.*;
 import com.itextpdf.html2pdf.HtmlConverter;
@@ -14,6 +13,7 @@ import com.itextpdf.layout.properties.VerticalAlignment;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class PdfService {
     // "EduEval/backend/app/src/main/resources/static/Arial.ttf";
     // PdfFont arialFont = PdfFontFactory.createFont(arialFontPath,
     // PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
-
+    
     public void convertHtmlToPdf() throws IOException {
         try {
             HtmlConverter.convertToPdf(new FileInputStream(SRC),
@@ -215,7 +215,117 @@ public class PdfService {
       "M.Phil.": { "Professor": { "Male": 1, "Female": 1, "Others": 0 }, "Associate Professor": { "Male": 1, "Female": 1, "Others": 0 }, "Assistant Professor": { "Male": 1, "Female": 2, "Others": 0 } },
       "PG": { "Professor": { "Male": 3, "Female": 2, "Others": 0 }, "Associate Professor": { "Male": 4, "Female": 2, "Others": 0 }, "Assistant Professor": { "Male": 5, "Female": 3, "Others": 0 } }
     }
-  }
+  },
+  "DistinguishedAcademicians": {
+            "Emeritus Professor": { "Male": 2, "Female": 1, "Others": 0, "Total": 3 },
+            "Adjunct Professor": { "Male": 3, "Female": 2, "Others": 1, "Total": 6 },
+            "Visiting Professor": { "Male": 4, "Female": 3, "Others": 0, "Total": 7 }
+          },
+  "chairs": [
+                        {
+                            "serialNo": 1,
+                            "department": "Department of Computer Science",
+                            "chair": "AI Research Chair",
+                            "sponsor": "Google AI"
+                        },
+                        {
+                            "serialNo": 2,
+                            "department": "Department of Physics",
+                            "chair": "Quantum Mechanics Chair",
+                            "sponsor": "NASA"
+                        }
+            ],
+
+            "programmes": [
+                {
+                  "name": "PG",
+                  "categories": [
+                    {
+                      "gender": "Male",
+                      "fromState": 50,
+                      "fromOtherStates": 30,
+                      "nri": 5,
+                      "foreign": 10,
+                      "total": 95
+                    },
+                    {
+                      "gender": "Female",
+                      "fromState": 60,
+                      "fromOtherStates": 40,
+                      "nri": 7,
+                      "foreign": 8,
+                      "total": 115
+                    },
+                    {
+                      "gender": "Others",
+                      "fromState": 5,
+                      "fromOtherStates": 3,
+                      "nri": 1,
+                      "foreign": 2,
+                      "total": 11
+                    }
+                  ]
+                },
+                {
+                  "name": "UG",
+                  "categories": [
+                    {
+                      "gender": "Male",
+                      "fromState": 80,
+                      "fromOtherStates": 50,
+                      "nri": 10,
+                      "foreign": 15,
+                      "total": 155
+                    },
+                    {
+                      "gender": "Female",
+                      "fromState": 90,
+                      "fromOtherStates": 60,
+                      "nri": 12,
+                      "foreign": 20,
+                      "total": 182
+                    },
+                    {
+                      "gender": "Others",
+                      "fromState": 10,
+                      "fromOtherStates": 5,
+                      "nri": 2,
+                      "foreign": 3,
+                      "total": 20
+                    }
+                  ]
+                },
+                {
+                  "name": "PG Diploma recognized by statutory authority",
+                  "categories": [
+                    {
+                      "gender": "Male",
+                      "fromState": 25,
+                      "fromOtherStates": 15,
+                      "nri": 3,
+                      "foreign": 4,
+                      "total": 47
+                    },
+                    {
+                      "gender": "Female",
+                      "fromState": 30,
+                      "fromOtherStates": 20,
+                      "nri": 5,
+                      "foreign": 6,
+                      "total": 61
+                    },
+                    {
+                      "gender": "Others",
+                      "fromState": 3,
+                      "fromOtherStates": 2,
+                      "nri": 0,
+                      "foreign": 1,
+                      "total": 6
+                    }
+                  ]
+                }
+              ]
+      
 }""";
             // Parse JSON data
             JSONObject jsonObject = new JSONObject(jsonData);
@@ -322,10 +432,95 @@ public class PdfService {
         addQualificationTable(document, "Temporary Teachers", jsonObject.getJSONObject("QualificationDetails").getJSONObject("temporaryTeacher"));
         document.add(new Paragraph("\n")); // Add space
         addQualificationTable(document, "Part-time Teachers", jsonObject.getJSONObject("QualificationDetails").getJSONObject("partTimeTeacher"));
-
+        JSONObject distinguishedAcademicians = jsonObject.getJSONObject("DistinguishedAcademicians");
+        addDistinguishedAcademicians(document,distinguishedAcademicians);
+        JSONArray chairs = jsonObject.getJSONArray("chairs");
+        addChairs(document,chairs);
+        // JsonArray programmes = tempJsonObject.getAsJsonArray("programmes");
+        // JSONArray programmes = jsonObject.getJSONArray("programmes");
+        // addProgrammes(document,programmes);
         // Close Document
         document.close();
         System.out.println("Extended PDF Created!");
+    }
+
+    // Method to create a cell
+    private static Cell createCell(String content, int rowSpan, int colSpan, boolean isBold) {
+        Cell cell = new Cell(rowSpan, colSpan);
+        cell.add(new Paragraph(content));
+        cell.setTextAlignment(TextAlignment.CENTER);
+        cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+        if (isBold) cell.setBold();
+        return cell;
+    }
+
+    private static void addChairs(Document document, JSONArray chairs)
+    {
+      Paragraph title = new Paragraph("Chairs Instituted by the University")
+                .setBold()
+                .setFontSize(10);
+        document.add(title);
+      // Define table with 4 columns
+            float[] columnWidths = {1, 4, 4, 5};
+            Table table = new Table(columnWidths);
+
+            // Add table headers
+            table.addHeaderCell(new Cell().add(new Paragraph("Sl.No").setBold()));
+            table.addHeaderCell(new Cell().add(new Paragraph("Name of the Department").setBold()));
+            table.addHeaderCell(new Cell().add(new Paragraph("Name of the Chair").setBold()));
+            table.addHeaderCell(new Cell().add(new Paragraph("Name of the Sponsor Organisation/Agency").setBold()));
+
+            // Add data rows
+            if (chairs.length() > 0) {
+                for (int i = 0; i < chairs.length(); i++) {
+                    JSONObject chair = chairs.getJSONObject(i);
+                    table.addCell(new Cell().add(new Paragraph(String.valueOf(chair.getInt("serialNo")))));
+                    table.addCell(new Cell().add(new Paragraph(chair.getString("department"))));
+                    table.addCell(new Cell().add(new Paragraph(chair.getString("chair"))));
+                    table.addCell(new Cell().add(new Paragraph(chair.getString("sponsor"))));
+                }
+            } else {
+                // Add a single row with "NILL" if there are no chairs
+                table.addCell(new Cell(1, 4).add(new Paragraph("NILL").setTextAlignment(TextAlignment.CENTER)));
+            }
+
+            // Add table to document
+            document.add(table);
+
+    }
+
+    private static void addDistinguishedAcademicians(Document document,JSONObject distinguishedAcademicians)
+    {
+      // Add title
+        Paragraph title = new Paragraph("Distinguished Academicians Appointed")
+                .setBold()
+                .setFontSize(10);
+        document.add(title);
+
+        // Create the table
+        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 2}))
+                .setWidth(UnitValue.createPercentValue(100));
+
+        // Add header row
+        table.addHeaderCell(createHeaderCell("Position"));
+        table.addHeaderCell(createHeaderCell("Male"));
+        table.addHeaderCell(createHeaderCell("Female"));
+        table.addHeaderCell(createHeaderCell("Others"));
+        table.addHeaderCell(createHeaderCell("Total"));
+
+        // Add data rows
+        for (String key : distinguishedAcademicians.keySet()) {
+            JSONObject row = distinguishedAcademicians.getJSONObject(key);
+            table.addCell(createBodyCell(key));
+            table.addCell(createBodyCell(String.valueOf(row.getInt("Male"))));
+            table.addCell(createBodyCell(String.valueOf(row.getInt("Female"))));
+            table.addCell(createBodyCell(String.valueOf(row.getInt("Others"))));
+            table.addCell(createBodyCell(String.valueOf(row.getInt("Total"))));
+        }
+
+        // Add table to document
+        document.add(table);
+
     }
 
 // Method to create the qualification table
@@ -822,8 +1017,8 @@ public class PdfService {
         table.addCell(new Cell().add(new Paragraph("Status Prior to Establishment,If applicable")).setFontSize(10)
                 .setPadding(5));
         table.addCell(new Cell().add(new Paragraph("Prior Date")).setFontSize(10).setPadding(5));
-        table.addCell(
-                new Cell().add(new Paragraph(priorDate.isEmpty() ? "N/A" : priorDate)).setFontSize(10).setPadding(5));
+        // table.addCell(
+        //         new Cell().add(new Paragraph(priorDate.isEmpty() ? "N/A" : priorDate)).setFontSize(10).setPadding(5));
         document.add(table.setMarginBottom(10));
     }
 }
