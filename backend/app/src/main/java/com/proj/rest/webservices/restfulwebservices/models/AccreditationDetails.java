@@ -20,7 +20,6 @@ public class AccreditationDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private Integer cycleNumber;
     private String type; //accreditationType
     private String grade;

@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Lob;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,7 +26,10 @@ public class NepDetails {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private DocumentDetails document;
-    
+    // step 1
+    @Lob
+    private String extractedText;
+
     @ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnore
     private University university;

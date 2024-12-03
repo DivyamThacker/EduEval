@@ -15,11 +15,10 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
-import org.json.JSONArray;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.function.BiConsumer;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.*;
@@ -28,7 +27,7 @@ import com.itextpdf.kernel.pdf.action.PdfAction;
 @Service
 public class PdfService {
     // @Value("${application.bucket.prefix}")
-    private static String recognitionDetailsPrefixURL = "https://edu-eval-bucket.s3.us-east-1.amazonaws.com/";
+    private static final String recognitionDetailsPrefixURL = "https://edu-eval-bucket.s3.us-east-1.amazonaws.com/";
 
     private static final String SRC = "src/main/resources/static/input.html";
     private static final String DEST = "target/classes/UniversityProfile.pdf";
@@ -36,12 +35,17 @@ public class PdfService {
     // "EduEval/backend/app/src/main/resources/static/Arial.ttf";
     // PdfFont arialFont = PdfFontFactory.createFont(arialFontPath,
     // PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
-    private StaticDataService staticDataService;
-    private DataFormaterService dataFormaterService;
+    private final StaticDataService staticDataService;
+    // private final PdfTextExtractionService pdfTextExtractionService;
+    private final DataFormaterService dataFormaterService;
+    // private final StorageService storageService;
 
-    public PdfService( StaticDataService staticDataService, DataFormaterService dataFormaterService) {
+    public PdfService( StaticDataService staticDataService, DataFormaterService dataFormaterService
+    ,PdfTextExtractionService pdfTextExtractionService,StorageService storageService) {
         this.staticDataService = staticDataService;
         this.dataFormaterService = dataFormaterService;
+        // this.pdfTextExtractionService = pdfTextExtractionService;
+        // this.storageService = storageService;
     }
 
     public void convertHtmlToPdf() throws IOException {
@@ -352,10 +356,10 @@ public class PdfService {
         }
     }
 
-    public static void generateUniversityProfilePDF(JSONObject jsonObject, JsonObject tempJsonObject, DataFormaterService dataFormaterService) throws Exception {
+    private void generateUniversityProfilePDF(JSONObject jsonObject, JsonObject tempJsonObject, DataFormaterService dataFormaterService) throws Exception {
         // Extract university info
         // path to font library
-// ------------------------------------------ //
+// ---------------------------------------------------------------------------- //
         // University Models Data
         JsonObject universityJsonObject = JsonParser.parseString(dataFormaterService.getBasicInfo(1)).getAsJsonObject();
         String name = getJsonValue(universityJsonObject, "name");
@@ -367,37 +371,59 @@ public class PdfService {
         String natureOfUniversity = getJsonValue(universityJsonObject, "nature");
         String typeOfUniversity = getJsonValue(universityJsonObject, "type");
         String establishmentDate = getJsonValue(universityJsonObject, "establishmentDate");
+        String areSRAProgram = getJsonValue(universityJsonObject, "areSraProgram");
 
-// ------------------------------------------- //
+// ------------------------------------------------------------------------------- //
 
       // Contact Details
       JsonArray contactsJsonArray = JsonParser.parseString(dataFormaterService.getContactDetials(1)).getAsJsonArray();
 
         // JSONArray campusDetails = jsonObject.getJSONArray("campusDetails");
-        JSONObject academicDetails = jsonObject.getJSONObject("academicDetails");
         String priorDate = jsonObject.getString("priorDate");
-        String isSRA = jsonObject.getString("isSRAProgram");
-        JSONObject facultyData = jsonObject.getJSONObject("TeachingFaculty");
+        // String isSRA = jsonObject.getString("isSRAProgram");
         JsonArray affiliatedInstitutionArray = tempJsonObject.getAsJsonArray("affiliatedInstitution");
-        JSONArray sraProgramsArray = jsonObject.getJSONArray("sraPrograms");
+        // JSONArray sraProgramsArray = jsonObject.getJSONArray("sraPrograms");
 
-// ---------------------------------------------------------------------------- //
+// -------------------------------------------------------------------------------- //
         
         // Recognition Detail
 
         JsonObject RecognitionDetailsJsonObject = JsonParser.parseString(dataFormaterService.getRecognitionDetails(1)).getAsJsonObject();
         
-// ------------------------------------------------------------------------------//
+// --------------------------------------------- ---------------------------------//
 // Campus Details
 
         JsonArray CampusDetailsJsonObject = JsonParser.parseString(dataFormaterService.getCampusDetails(1)).getAsJsonArray();
 
-// -----------------------------------------------------------
+// -------------------------------------------------------------------------------- //
 // College Stats
 
         JsonObject CollegeStatsJsonObject = JsonParser.parseString(dataFormaterService.getCollegeStatsDetails(1)).getAsJsonObject();
-        System.out.println(CollegeStatsJsonObject);
-        // Create PDF document
+// SRA Program
+// -----------------------------------------------------------------------------------------------------------------
+// Faculty Details       
+        JsonArray FacultyDetails = JsonParser.parseString(dataFormaterService.getFacultyDetails(1)).getAsJsonArray();
+// Non Teaching Staff
+        JsonArray NonTeachingStaff = JsonParser.parseString(dataFormaterService.getNonTeachingDetails(1)).getAsJsonArray();
+// Distinguish Academician
+        JsonArray DistinguishedAcademicianDetail = JsonParser.parseString(dataFormaterService.getDistinguishAcadmecian(1)).getAsJsonArray();
+// Chairs Details
+        JsonArray ChairsDetails = JsonParser.parseString(dataFormaterService.getChairsDetails(1)).getAsJsonArray();
+// HRDC Details
+        JsonObject HRDCDetails = JsonParser.parseString(dataFormaterService.getHRDCDetails(1)).getAsJsonObject();
+// Accrediation Details
+// -------------------------------------------------------------------------------------------------------------------
+        JsonArray AccreditationDetails = JsonParser.parseString(dataFormaterService.getAccreditationDetails(1)).getAsJsonArray();
+// Create PDF document
+// Departement Evaluation
+        JsonArray DepartmentEvaluationJson = JsonParser.parseString(dataFormaterService.getDepartmetEvaluation(1)).getAsJsonArray();
+// ------------------------------------------------------------
+// NEP Detials
+        JsonArray NEPDetailsJson = JsonParser.parseString(dataFormaterService.getNepDetails(1)).getAsJsonArray();
+        // Electoral Details
+        JsonArray electrolDetails = JsonParser.parseString(dataFormaterService.getElectoralDetails(1)).getAsJsonArray();
+        System.out.println("Electrola KI DETAILSSSS _________________--------------" + electrolDetails);
+
         PdfWriter writer = new PdfWriter(DEST);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf, PageSize.A4);
@@ -441,45 +467,217 @@ public class PdfService {
 
         if (!natureOfUniversity.equalsIgnoreCase("private") &&
                 !natureOfUniversity.equalsIgnoreCase("deemed to be")) {
-            addAffiliatedInstitution(document, CollegeStatsJsonObject);
+            addAffiliatedInstitution(document, affiliatedInstitutionArray);
         } else {
             document.add(new Paragraph("(Not applicable for private and deemed to be Universities)")
                     .setFontSize(10).setItalic());
         }
         document.add(new Paragraph("Furnish the Details of Colleges of University\r").setBold().setFontSize(10));
-        addAcademicTable(document, academicDetails);
-        // addSRATable(document, isSRA);
-        addDynamicSRATable(document, isSRA, sraProgramsArray);
+        // 8) College Stats
+        addCollegeStatsTable(document, CollegeStatsJsonObject);
+        // 9) addSRATable;
+        addDynamicSRATable(document, dataFormaterService, areSRAProgram);
         // Faculty Data
-        document.add(new Paragraph("\n"));
         document.add(new Paragraph("Details Of Teaching & Non-Teaching Staff Of University").setBold().setFontSize(10));
-        addTeachingFacultyTable(document, facultyData);
-        document.add(new Paragraph("\n")); // Add some space between tables
-
-        addStaffTable(document, "Non-Teaching Staff", jsonObject.getJSONObject("NonTeachingStaff"));
-        document.add(new Paragraph("\n")); // Add some space between tables
-        addStaffTable(document, "Technical Staff", jsonObject.getJSONObject("TechnicalStaff"));
-        document.add(new Paragraph("\n")); // Add some space between tables
-
-        // add Qualification Details
+        // 10) Teaching Faculty Table
+        addTeachingFacultyTable(document, FacultyDetails);
+        // 11) Staff Details Table
+        addStaffTable(document, NonTeachingStaff);
+        // 12) Qualification Detail
         document.add(new Paragraph("Qualifications of the Teaching Staff ").setBold().setFontSize(10));
-        addQualificationTable(document, "Permanent Teachers", jsonObject.getJSONObject("QualificationDetails").getJSONObject("permanentTeacher"));
-        document.add(new Paragraph("\n")); // Add space
-        addQualificationTable(document, "Temporary Teachers", jsonObject.getJSONObject("QualificationDetails").getJSONObject("temporaryTeacher"));
-        document.add(new Paragraph("\n")); // Add space
-        addQualificationTable(document, "Part-time Teachers", jsonObject.getJSONObject("QualificationDetails").getJSONObject("partTimeTeacher"));
-        JSONObject distinguishedAcademicians = jsonObject.getJSONObject("DistinguishedAcademicians");
-        addDistinguishedAcademicians(document,distinguishedAcademicians);
-        JSONArray chairs = jsonObject.getJSONArray("chairs");
-        addChairs(document,chairs);
-        // JsonArray programmes = tempJsonObject.getAsJsonArray("programmes");
-        // JSONArray programmes = jsonObject.getJSONArray("programmes");
-        // addProgrammes(document,programmes);
-        // Close Document
+        addQualificationTable(document, FacultyDetails);
+        // 13) Distinguish Academicians
+        addDistinguishedAcademicians(document,DistinguishedAcademicianDetail);
+        // 14) Chairs
+        addChairs(document,ChairsDetails);
+        /*
+         * Student Enrolled in Current Academic Year Info
+         */
+        // 15) HRDC Details
+        addHRDCDetails(document,HRDCDetails);
+        // 16) Accrediation Details
+        // 17) Department Evaluation Details
+        addEvaluativeReportTable(document, DepartmentEvaluationJson);
+
+
+        // 18) NEP details
+        createNEPTable(document,NEPDetailsJson);
+
+        // 19) Electoral Details
+        createElectoralTable(document,electrolDetails);
+
         document.close();
         System.out.println("Extended PDF Created!");
     }
 
+public void createElectoralTable(Document document,JsonArray jsonArray) throws Exception {
+
+  Paragraph title = new Paragraph("Institutional Initiatives for Electoral Literacy")
+            .setBold()
+            .setTextAlignment(TextAlignment.LEFT)
+            .setFontSize(10);
+    document.add(title);
+
+        // Define the categories in order
+        String[] categories = {
+            "1. Whether Electoral Literacy Club (ELC) has been" +
+                "set up in the College?",
+            "2. Whether students’ co-ordinator and co-ordinating" +
+                "faculty members are appointed by the College and" +
+                "whether the ELCs are functional? Whether the ELCs" +
+                "are representative in character?",
+            "3. What innovative programmes and initiatives undertaken by the ELCs? These may include voluntary contribution by the students in electoral processes-participation in voter registration of students and communities where they come from, assisting district election administration in conduct of poll, voter awareness campaigns, promotion of ethical voting, enhancing participation of the under privileged sections of society especially transgender, commercial sex workers, disabled persons, senior citizens, etc.",
+            "4. Any socially relevant projects/initiatives taken by College in electoral related issues especially research projects, surveys, awareness drives, creating content, publications highlighting their contribution to advancing democratic values and participation in electoral processes, etc.",
+            "5. Extent of students above 18 years who are yet to be enrolled as voters in the electoral roll and efforts by ELCs as well as efforts by the College to institutionalize mechanisms to register eligible students as voters.",
+        };
+
+        // Create PDF writer and document
+
+        // Add a table with 2 columns
+        Table table = new Table(UnitValue.createPercentArray(new float[]{30, 70}));
+        table.setWidth(UnitValue.createPercentValue(100));
+
+        // Iterate over the JSON array and populate the table
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+            int section = jsonObject.get("section").getAsInt();
+            String extractedText = jsonObject.get("extractedText").getAsString();
+
+            // Clean up the extracted text (e.g., remove "\r\n")
+            String formattedText = extractedText.replace("\\r\\n", " ").replace("\\n", " ").trim();
+
+            // Add category and formatted text to the table
+            table.addCell(new Cell().add(new Paragraph(categories[section])));
+            table.addCell(new Cell().add(new Paragraph(formattedText)));
+        }
+
+        // Add table to document and close
+        document.add(table);
+
+    }
+
+
+public void createNEPTable(Document document,JsonArray jsonArray) throws Exception {
+
+  Paragraph title = new Paragraph("Institutional preparedness for NEP")
+            .setBold()
+            .setTextAlignment(TextAlignment.LEFT)
+            .setFontSize(10);
+    document.add(title);
+
+        // Define the categories in order
+        String[] categories = {
+            "Multidisciplinary / interdisciplinary",
+            "Academic bank of credits (ABC)",
+            "Skill development",
+            "Appropriate integration of Indian Knowledge system (teaching in Indian Language, culture, using online course)",
+            "Focus on Outcome based education (OBE)",
+            "Distance education/online education"
+        };
+
+        // Create PDF writer and document
+
+        // Add a table with 2 columns
+        Table table = new Table(UnitValue.createPercentArray(new float[]{30, 70}));
+        table.setWidth(UnitValue.createPercentValue(100));
+
+        // Iterate over the JSON array and populate the table
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+            int section = jsonObject.get("section").getAsInt();
+            String extractedText = jsonObject.get("extractedText").getAsString();
+
+            // Clean up the extracted text (e.g., remove "\r\n")
+            String formattedText = extractedText.replace("\\r\\n", " ").replace("\\n", " ").trim();
+
+            // Add category and formatted text to the table
+            table.addCell(new Cell().add(new Paragraph(categories[section])));
+            table.addCell(new Cell().add(new Paragraph(formattedText)));
+        }
+
+        // Add table to document and close
+        document.add(table);
+
+    }
+
+    private static void addEvaluativeReportTable(Document document, JsonArray departmentEvaluationJson) {
+    // Add title
+    Paragraph title = new Paragraph("EVALUATIVE REPORT OF THE DEPARTMENTS")
+            .setBold()
+            .setTextAlignment(TextAlignment.CENTER)
+            .setFontSize(10);
+    document.add(title);
+
+    // Define table with 2 columns
+    float[] columnWidths = {5, 5};
+    Table table = new Table(columnWidths).useAllAvailableWidth();
+
+    // Add table headers
+    table.addHeaderCell(new Cell().add(new Paragraph("Name of the Department").setBold()));
+    table.addHeaderCell(new Cell().add(new Paragraph("Evaluative Report").setBold()));
+
+    // Add data rows
+    if (departmentEvaluationJson.size() > 0) {
+        for (JsonElement element : departmentEvaluationJson) {
+            JsonObject department = element.getAsJsonObject();
+            String departmentName = department.get("departmentName").getAsString();
+
+            // Extract evaluative report details
+            JsonObject report = department.getAsJsonObject("report");
+            String fileIdentifierUrl = recognitionDetailsPrefixURL + report.get("fileIdentifier").getAsString();
+            // String fileName = report.get("fileName").getAsString();
+
+            // Create a clickable link for the file
+            Link fileLink = new Link("View Document", PdfAction.createURI(fileIdentifierUrl));
+            Paragraph fileLinkParagraph = new Paragraph().add(fileLink).setFontColor(com.itextpdf.kernel.colors.ColorConstants.BLUE);
+
+            table.addCell(new Cell().add(new Paragraph(departmentName)));
+            table.addCell(new Cell().add(fileLinkParagraph).setUnderline());
+        }
+    } else {
+        // If no data, add a row with "NILL"
+        table.addCell(new Cell(1, 2).add(new Paragraph("NILL").setTextAlignment(TextAlignment.CENTER)));
+    }
+
+    // Add table to document
+    document.add(table);
+}
+
+
+    private static void addHRDCDetails(Document document, JsonObject hrdcDetails) {
+    // Add title
+    Paragraph title = new Paragraph("Details of programmes under the UGC Human Resource Development Centre, If applicable")
+            .setBold()
+            .setFontSize(10);
+    document.add(title);
+
+    // Define the table structure
+    float[] columnWidths = {6, 4};
+    Table table = new Table(columnWidths).useAllAvailableWidth();
+
+    // Add rows to the table
+    table.addCell(new Cell().add(new Paragraph("Year of Establishment")));
+    // Convert the establishment date from epoch to year
+    long establishmentDate = hrdcDetails.get("hrdcEstablishmentDate").getAsLong();
+    String establishmentYear = String.valueOf(java.time.Instant.ofEpochMilli(establishmentDate)
+            .atZone(java.time.ZoneId.systemDefault()).getYear());
+    table.addCell(new Cell().add(new Paragraph(establishmentYear)));
+
+    table.addCell(new Cell().add(new Paragraph("Number of UGC Orientation Programmes")));
+    table.addCell(new Cell().add(new Paragraph(String.valueOf(hrdcDetails.get("hrdcOrientationProgramCount").getAsInt()))));
+
+    table.addCell(new Cell().add(new Paragraph("Number of UGC Refresher Course")));
+    table.addCell(new Cell().add(new Paragraph(String.valueOf(hrdcDetails.get("hrdcRefresherCourseCount").getAsInt()))));
+
+    table.addCell(new Cell().add(new Paragraph("Number of University's own Programmes")));
+    table.addCell(new Cell().add(new Paragraph(String.valueOf(hrdcDetails.get("hrdcOwnProgramCount").getAsInt()))));
+
+    table.addCell(new Cell().add(new Paragraph("Total Number of Programmes Conducted\n(during the last five years)")));
+    table.addCell(new Cell().add(new Paragraph(String.valueOf(hrdcDetails.get("hrdctotalProgramCount").getAsInt()))));
+
+    // Add the table to the document
+    document.add(table);
+}
 
     private static String getJsonValue(JsonObject jsonObject, String key) {
     return jsonObject.has(key) && !jsonObject.get(key).isJsonNull()
@@ -487,90 +685,160 @@ public class PdfService {
             : ""; // Return empty string if key is missing or value is null
 }
 
-    private static void addChairs(Document document, JSONArray chairs)
-    {
-      Paragraph title = new Paragraph("Chairs Instituted by the University")
-                .setBold()
-                .setFontSize(10);
-        document.add(title);
-      // Define table with 4 columns
-            float[] columnWidths = {1, 4, 4, 5};
-            Table table = new Table(columnWidths);
+    private static void addChairs(Document document, JsonArray chairs) {
+    // Add title
+    Paragraph title = new Paragraph("Chairs Instituted by the University")
+            .setBold()
+            .setFontSize(10);
+    document.add(title);
 
-            // Add table headers
-            table.addHeaderCell(new Cell().add(new Paragraph("Sl.No").setBold()));
-            table.addHeaderCell(new Cell().add(new Paragraph("Name of the Department").setBold()));
-            table.addHeaderCell(new Cell().add(new Paragraph("Name of the Chair").setBold()));
-            table.addHeaderCell(new Cell().add(new Paragraph("Name of the Sponsor Organisation/Agency").setBold()));
+    // Define table with 4 columns
+    float[] columnWidths = {1, 4, 4, 5};
+    Table table = new Table(columnWidths).useAllAvailableWidth();
 
-            // Add data rows
-            if (chairs.length() > 0) {
-                for (int i = 0; i < chairs.length(); i++) {
-                    JSONObject chair = chairs.getJSONObject(i);
-                    table.addCell(new Cell().add(new Paragraph(String.valueOf(chair.getInt("serialNo")))));
-                    table.addCell(new Cell().add(new Paragraph(chair.getString("department"))));
-                    table.addCell(new Cell().add(new Paragraph(chair.getString("chair"))));
-                    table.addCell(new Cell().add(new Paragraph(chair.getString("sponsor"))));
-                }
-            } else {
-                // Add a single row with "NILL" if there are no chairs
-                table.addCell(new Cell(1, 4).add(new Paragraph("NILL").setTextAlignment(TextAlignment.CENTER)));
-            }
+    // Add table headers
+    table.addHeaderCell(new Cell().add(new Paragraph("Sl.No").setBold().setTextAlignment(TextAlignment.CENTER)));
+    table.addHeaderCell(new Cell().add(new Paragraph("Name of the Department").setBold().setTextAlignment(TextAlignment.CENTER)));
+    table.addHeaderCell(new Cell().add(new Paragraph("Name of the Chair").setBold().setTextAlignment(TextAlignment.CENTER)));
+    table.addHeaderCell(new Cell().add(new Paragraph("Name of the Sponsor Organisation/Agency").setBold().setTextAlignment(TextAlignment.CENTER)));
 
-            // Add table to document
-            document.add(table);
-
-    }
-
-    private static void addDistinguishedAcademicians(Document document,JSONObject distinguishedAcademicians)
-    {
-      // Add title
-        Paragraph title = new Paragraph("Distinguished Academicians Appointed")
-                .setBold()
-                .setFontSize(10);
-        document.add(title);
-
-        // Create the table
-        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 2}))
-                .setWidth(UnitValue.createPercentValue(100));
-
-        // Add header row
-        table.addHeaderCell(createHeaderCell("Position"));
-        table.addHeaderCell(createHeaderCell("Male"));
-        table.addHeaderCell(createHeaderCell("Female"));
-        table.addHeaderCell(createHeaderCell("Others"));
-        table.addHeaderCell(createHeaderCell("Total"));
-
-        // Add data rows
-        for (String key : distinguishedAcademicians.keySet()) {
-            JSONObject row = distinguishedAcademicians.getJSONObject(key);
-            table.addCell(createBodyCell(key));
-            table.addCell(createBodyCell(String.valueOf(row.getInt("Male"))));
-            table.addCell(createBodyCell(String.valueOf(row.getInt("Female"))));
-            table.addCell(createBodyCell(String.valueOf(row.getInt("Others"))));
-            table.addCell(createBodyCell(String.valueOf(row.getInt("Total"))));
+    // Add data rows
+    if (chairs.size() > 0) {
+        for (int i = 0; i < chairs.size(); i++) {
+            JsonObject chair = chairs.get(i).getAsJsonObject();
+            table.addCell(new Cell().add(new Paragraph(String.valueOf(i + 1)).setTextAlignment(TextAlignment.CENTER))); // Serial Number
+            table.addCell(new Cell().add(new Paragraph(chair.get("departmentName").getAsString()).setTextAlignment(TextAlignment.LEFT)));
+            table.addCell(new Cell().add(new Paragraph(chair.get("chairName").getAsString()).setTextAlignment(TextAlignment.LEFT)));
+            table.addCell(new Cell().add(new Paragraph(chair.get("sponsorName").getAsString()).setTextAlignment(TextAlignment.LEFT)));
         }
-
-        // Add table to document
-        document.add(table);
-
+    } else {
+        // Add a single row with "NILL" if there are no chairs
+        table.addCell(new Cell(1, 4).add(new Paragraph("NILL").setTextAlignment(TextAlignment.CENTER)));
     }
+
+    // Add table to the document
+    document.add(table);
+}
+
+    private static void addDistinguishedAcademicians(Document document, JsonArray distinguishedAcademicians) {
+    // Add title
+    Paragraph title = new Paragraph("Distinguished Academicians Appointed")
+            .setBold()
+            .setFontSize(10);
+    document.add(title);
+
+    // Create the table
+    Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 2}))
+            .setWidth(UnitValue.createPercentValue(100));
+
+    // Add header row
+    table.addHeaderCell(createHeaderCell(""));
+    table.addHeaderCell(createHeaderCell("Male"));
+    table.addHeaderCell(createHeaderCell("Female"));
+    table.addHeaderCell(createHeaderCell("Others"));
+    table.addHeaderCell(createHeaderCell("Total"));
+
+    // Data structure to aggregate data by position
+    Map<String, int[]> aggregatedData = new HashMap<>();
+
+    // Process the JsonArray
+    for (JsonElement element : distinguishedAcademicians) {
+        JsonObject academician = element.getAsJsonObject();
+
+        String position = academician.get("type").getAsString() + " Professor";
+        String gender = academician.get("gender").getAsString();
+        int count = academician.get("count").getAsInt();
+
+        // Initialize data for the position if not already present
+        aggregatedData.putIfAbsent(position, new int[4]); // [Male, Female, Others, Total]
+
+        // Update counts based on gender
+        switch (gender.toLowerCase()) {
+            case "male" -> aggregatedData.get(position)[0] += count;
+            case "female" -> aggregatedData.get(position)[1] += count;
+            default -> aggregatedData.get(position)[2] += count; // "Other"
+        }
+        // Update the total count
+        aggregatedData.get(position)[3] += count;
+    }
+
+    // Populate the table with aggregated data
+    for (Map.Entry<String, int[]> entry : aggregatedData.entrySet()) {
+        String position = entry.getKey();
+        int[] counts = entry.getValue();
+
+        table.addCell(createBodyCell(position));
+        table.addCell(createBodyCell(String.valueOf(counts[0]))); // Male
+        table.addCell(createBodyCell(String.valueOf(counts[1]))); // Female
+        table.addCell(createBodyCell(String.valueOf(counts[2]))); // Others
+        table.addCell(createBodyCell(String.valueOf(counts[3]))); // Total
+    }
+
+    // Add the table to the document
+    document.add(table);
+}
 
 // Method to create the qualification table
-    private static void addQualificationTable(Document document, String title, JSONObject jsonObject) {
-        
-        // Create table with 11 columns (Qualification + 3 Columns per Teacher Type + Total)
-        // Title
-        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 1, 1, 1, 1, 1, 1, 1, 1, 1,2}))
+    private static void addQualificationTable(Document document, JsonArray facultyDetails) {
+    // Define qualifications and recruitment statuses
+    String[] qualifications = {"D.Sc/D.Litt", "Ph.D", "M.Phil", "PG"};
+    String[] recruitmentStatuses = {"Permanent", "Temporary", "Part Time"};
+    String[] academicRanks = {"Professor", "Associate Professor", "Assistant Professor"};
+
+    // Group data by recruitment status and qualification
+    Map<String, Map<String, Map<String, int[]>>> groupedData = new HashMap<>();
+
+    // Initialize the data structure
+    for (String status : recruitmentStatuses) {
+        groupedData.put(status, new HashMap<>());
+        for (String qualification : qualifications) {
+            groupedData.get(status).put(qualification, new HashMap<>());
+            for (String rank : academicRanks) {
+                groupedData.get(status).get(qualification).put(rank, new int[3]); // [Male, Female, Others]
+            }
+        }
+    }
+
+    // Process the faculty details array
+    for (JsonElement element : facultyDetails) {
+        JsonObject faculty = element.getAsJsonObject();
+
+        String recruitmentStatus = faculty.get("recruitmentStatus").getAsString();
+        String highestQualification = faculty.get("highestQualification").getAsString();
+        String academicRank = faculty.get("academicRank").getAsString();
+        String gender = faculty.get("gender").getAsString();
+        int count = faculty.get("count").getAsInt();
+
+        // Validate recruitment status, qualification, and academic rank
+        if (!groupedData.containsKey(recruitmentStatus) ||
+            !groupedData.get(recruitmentStatus).containsKey(highestQualification) ||
+            !groupedData.get(recruitmentStatus).get(highestQualification).containsKey(academicRank)) {
+            continue;
+        }
+
+        // Update gender-specific counts
+        int genderIndex = switch (gender.toLowerCase()) {
+            case "male" -> 0;
+            case "female" -> 1;
+            default -> 2; // "Others"
+        };
+        groupedData.get(recruitmentStatus).get(highestQualification).get(academicRank)[genderIndex] += count;
+    }
+
+    // Generate a table for each recruitment status
+    for (String recruitmentStatus : recruitmentStatuses) {
+        // Create table for the current recruitment status
+        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2}))
                 .useAllAvailableWidth();
-        table.addHeaderCell(new Cell(1, 11).add(new Paragraph(title).setBold().setFontSize(10))
-                .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.CENTER));
+        table.addHeaderCell(new Cell(1, 11).add(new Paragraph(recruitmentStatus + " Teachers").setBold().setFontSize(10))
+                .setTextAlignment(TextAlignment.CENTER));
+
         // Header Row
-        table.addCell(createHeaderCell("Highest Qualification",2,1));
-        table.addCell(createHeaderCell("Professor",2,3));
-        table.addCell(createHeaderCell("Associate Professor",2,3));
-        table.addCell(createHeaderCell("Assistant Professor",2,3));
-        table.addCell(createHeaderCell("Total",2,1));
+        table.addCell(createHeaderCell("Highest Qualification", 2, 1));
+        table.addCell(createHeaderCell("Professor", 2, 3));
+        table.addCell(createHeaderCell("Associate Professor", 2, 3));
+        table.addCell(createHeaderCell("Assistant Professor", 2, 3));
+        table.addCell(createHeaderCell("Total", 2, 1));
 
         // Sub-header Row
         table.addCell("");
@@ -582,33 +850,27 @@ public class PdfService {
         table.addCell(""); // Total column
 
         // Data Rows
-        String[] qualifications = {"D.sc/D.Litt", "Ph.D.", "M.Phil.", "PG"};
         for (String qualification : qualifications) {
             table.addCell(createBodyCell(qualification));
-            JSONObject profData = jsonObject.getJSONObject(qualification).getJSONObject("Professor");
-            table.addCell(createBodyCell(String.valueOf(profData.getInt("Male"))));
-            table.addCell(createBodyCell(String.valueOf(profData.getInt("Female"))));
-            table.addCell(createBodyCell(String.valueOf(profData.getInt("Others"))));
 
-            JSONObject assocProfData = jsonObject.getJSONObject(qualification).getJSONObject("Associate Professor");
-            table.addCell(createBodyCell(String.valueOf(assocProfData.getInt("Male"))));
-            table.addCell(createBodyCell(String.valueOf(assocProfData.getInt("Female"))));
-            table.addCell(createBodyCell(String.valueOf(assocProfData.getInt("Others"))));
+            int total = 0;
+            for (String academicRank : academicRanks) {
+                int[] counts = groupedData.get(recruitmentStatus).get(qualification).get(academicRank);
 
-            JSONObject assistProfData = jsonObject.getJSONObject(qualification).getJSONObject("Assistant Professor");
-            table.addCell(createBodyCell(String.valueOf(assistProfData.getInt("Male"))));
-            table.addCell(createBodyCell(String.valueOf(assistProfData.getInt("Female"))));
-            table.addCell(createBodyCell(String.valueOf(assistProfData.getInt("Others"))));
+                table.addCell(createBodyCell(String.valueOf(counts[0]))); // Male
+                table.addCell(createBodyCell(String.valueOf(counts[1]))); // Female
+                table.addCell(createBodyCell(String.valueOf(counts[2]))); // Others
 
-            int total = profData.getInt("Male") + profData.getInt("Female") + profData.getInt("Others")
-                    + assocProfData.getInt("Male") + assocProfData.getInt("Female") + assocProfData.getInt("Others")
-                    + assistProfData.getInt("Male") + assistProfData.getInt("Female") + assistProfData.getInt("Others");
-            table.addCell(createBodyCell(String.valueOf(total)));
+                total += counts[0] + counts[1] + counts[2];
+            }
+            table.addCell(createBodyCell(String.valueOf(total))); // Total
         }
 
-        // Add table to document
+        // Add the table to the document
         document.add(table);
+        document.add(new Paragraph("\n")); // Add space between tables
     }
+}
 
     private static Cell createHeaderCell(String content,int rowspan,int colspan) {
         return new Cell(rowspan, colspan)
@@ -620,13 +882,59 @@ public class PdfService {
         return new Cell().add(new Paragraph(content).setBold()).setTextAlignment(TextAlignment.CENTER);
     }
 
+      private static void addStaffTable(Document document, JsonArray staffData) {
+    // Define categories
+    String[] categories = {"Sanctioned", "Recruited", "Yet to Recruit","Contractual"};
 
+    // Initialize data structures to hold aggregated data
+    Map<String, int[]> technicalData = new HashMap<>();
+    Map<String, int[]> nonTechnicalData = new HashMap<>();
 
-    private static void addStaffTable(Document document, String title, JSONObject jsonObject) {
-        // Title for the table
-        document.add(new Paragraph(title).setBold().setTextAlignment(TextAlignment.LEFT));
+    // Initialize default values
+    for (String category : categories) {
+        technicalData.put(category, new int[4]); // [Male, Female, Others, Total]
+        nonTechnicalData.put(category, new int[4]); // [Male, Female, Others, Total]
+    }
 
-        // Create table with 5 columns
+    // Process staff data
+    for (JsonElement element : staffData) {
+        JsonObject staff = element.getAsJsonObject();
+
+        boolean isTechnical = staff.get("isTechnical").getAsBoolean();
+        String recruitmentStatus = staff.get("recruitmentStatus").getAsString();
+        String gender = staff.get("gender").getAsString();
+        int count = staff.get("count").getAsInt();
+
+        // Skip invalid recruitment status
+        if (!Arrays.asList(categories).contains(recruitmentStatus)) {
+            continue;
+        }
+
+        // Determine the correct map to update
+        Map<String, int[]> targetData = isTechnical ? technicalData : nonTechnicalData;
+
+        // Update gender-specific and total counts
+        switch (gender.toLowerCase()) {
+            case "male":
+                targetData.get(recruitmentStatus)[0] += count;
+                break;
+            case "female":
+                targetData.get(recruitmentStatus)[1] += count;
+                break;
+            default: // "Others"
+                targetData.get(recruitmentStatus)[2] += count;
+                break;
+        }
+        // Update total count
+        targetData.get(recruitmentStatus)[3] += count;
+    }
+
+    // Helper function to create and populate a table
+    BiConsumer<Map<String, int[]>, String> createAndAddTable = (dataMap, tableTitle) -> {
+        // Add title for the table
+        document.add(new Paragraph(tableTitle).setBold().setTextAlignment(TextAlignment.LEFT));
+
+        // Create a new table for the current data
         Table table = new Table(UnitValue.createPercentArray(new float[]{2, 2, 2, 2, 2}))
                 .useAllAvailableWidth();
 
@@ -637,20 +945,27 @@ public class PdfService {
         table.addCell(createHeaderCell("Others"));
         table.addCell(createHeaderCell("Total"));
 
-        // Populate table rows dynamically from JSON
-        String[] categories = {"Sanctioned", "Recruited", "Yet to Recruit", "Contractual"};
+        // Populate rows with aggregated data
         for (String category : categories) {
+            int[] data = dataMap.get(category);
             table.addCell(createBodyCell(category));
-            JSONObject data = jsonObject.getJSONObject(category);
-            table.addCell(createBodyCell(String.valueOf(data.getInt("Male"))));
-            table.addCell(createBodyCell(String.valueOf(data.getInt("Female"))));
-            table.addCell(createBodyCell(String.valueOf(data.getInt("Others"))));
-            table.addCell(createBodyCell(String.valueOf(data.getInt("Total"))));
+            table.addCell(createBodyCell(String.valueOf(data[0])));
+            table.addCell(createBodyCell(String.valueOf(data[1])));
+            table.addCell(createBodyCell(String.valueOf(data[2])));
+            table.addCell(createBodyCell(String.valueOf(data[3])));
         }
 
-        // Add table to document
+        // Add the table to the document
         document.add(table);
-    }
+        document.add(new Paragraph("\n")); // Add space after the table
+    };
+
+    // Create and add the table for Technical Staff
+    createAndAddTable.accept(technicalData, "Technical Staff");
+
+    // Create and add the table for Non-Technical Staff
+    createAndAddTable.accept(nonTechnicalData, "Non-Technical Staff");
+}
 
     // Helper to create header cell
     private static Cell createHeaderCell(String content) {
@@ -666,48 +981,91 @@ public class PdfService {
                 .setTextAlignment(TextAlignment.CENTER);
     }
 
+    private static void addTeachingFacultyTable(Document document, JsonArray FacultyDetails) {
+    // Create table with 13 columns
+    Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}))
+            .useAllAvailableWidth();
 
-    private static void addTeachingFacultyTable(Document document, JSONObject facultyData) {
-        // Create table with 13 columns
-        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}))
-                .useAllAvailableWidth();
+    // Header Row 1
+    table.addCell(createBodyCell("", 1, 3));
+    table.addCell(createHeaderCell("Designation", 12));
 
-        
-        table.addCell(createBodyCell("", 1,3));
+    // Header Row 2
+    table.addCell(createHeaderCell("Professor", 4));
+    table.addCell(createHeaderCell("Associate Professor", 4));
+    table.addCell(createHeaderCell("Assistant Professor", 4));
 
-        table.addCell(createHeaderCell("Designation", 12));
-
-        table.addCell(createHeaderCell("Professor", 4));
-        table.addCell(createHeaderCell("Associate Professor", 4));
-        table.addCell(createHeaderCell("Assistant Professor", 4));
-
-
-        // Header Row 3
-        for (int i = 0; i < 3; i++) {
-            table.addCell(createHeaderCell("Male", 1));
-            table.addCell(createHeaderCell("Female", 1));
-            table.addCell(createHeaderCell("Others", 1));
-            table.addCell(createHeaderCell("Total", 1));
-        }
-
-        // Populate table rows dynamically from JSON
-        String[] categories = {"Sanctioned", "Recruited", "Yet to Recruit", "Contractual"};
-        String[] designations = {"Professor", "Associate Professor", "Assistant Professor"};
-
-        for (String category : categories) {
-            table.addCell(createBodyCell(category, 1));
-            for (String designation : designations) {
-                JSONObject data = facultyData.getJSONObject(category).getJSONObject(designation);
-                table.addCell(createBodyCell(String.valueOf(data.getInt("Male")), 1));
-                table.addCell(createBodyCell(String.valueOf(data.getInt("Female")), 1));
-                table.addCell(createBodyCell(String.valueOf(data.getInt("Others")), 1));
-                table.addCell(createBodyCell(String.valueOf(data.getInt("Total")), 1));
-            }
-        }
-
-        // Add table to document
-        document.add(table);
+    // Header Row 3
+    for (int i = 0; i < 3; i++) {
+        table.addCell(createHeaderCell("Male", 1));
+        table.addCell(createHeaderCell("Female", 1));
+        table.addCell(createHeaderCell("Others", 1));
+        table.addCell(createHeaderCell("Total", 1));
     }
+
+
+    // Define categories and designations
+    String[] categories = {"Sanctioned", "Recruited", "Yet to Recruit","Contractual"};
+    String[] designations = {"Professor", "Associate Professor", "Assistant Professor"};
+
+    // Initialize map to store aggregated data
+    Map<String, Map<String, int[]>> aggregatedData = new HashMap<>();
+
+    // Process FacultyDetails JSON array
+    for (JsonElement element : FacultyDetails) {
+        JsonObject faculty = element.getAsJsonObject();
+        String tenure = faculty.get("tenure").getAsString();
+        String designation = faculty.get("academicRank").getAsString();
+        String gender = faculty.get("gender").getAsString();
+        int count = faculty.get("count").getAsInt();
+
+        // Skip rows that don't match known categories or designations
+        if (!Arrays.asList(categories).contains(tenure) || !Arrays.asList(designations).contains(designation)) {
+            continue;
+        }
+
+        // Initialize data structure for the current category and designation
+        aggregatedData.putIfAbsent(tenure, new HashMap<>());
+        aggregatedData.get(tenure).putIfAbsent(designation, new int[4]); // [Male, Female, Others, Total]
+
+        // Update gender-specific and total counts
+        switch (gender.toLowerCase()) {
+            case "male":
+                aggregatedData.get(tenure).get(designation)[0] += count;
+                break;
+            case "female":
+                aggregatedData.get(tenure).get(designation)[1] += count;
+                break;
+            default: // "Others"
+                aggregatedData.get(tenure).get(designation)[2] += count;
+                break;
+        }
+        // Update total count
+        aggregatedData.get(tenure).get(designation)[3] += count;
+    }
+
+    // Populate table rows dynamically from aggregated data
+    for (String category : categories) {
+        table.addCell(createBodyCell(category, 1, 1)); // Category spanning all designations
+        for (String designation : designations) {
+            int[] data = aggregatedData.getOrDefault(category, new HashMap<>())
+                    .getOrDefault(designation, new int[4]); // Default to zeros if no data exists
+
+            // Add cells for Male, Female, Others, and Total counts
+            table.addCell(createBodyCell(String.valueOf(data[0]), 1));
+            table.addCell(createBodyCell(String.valueOf(data[1]), 1));
+            table.addCell(createBodyCell(String.valueOf(data[2]), 1));
+            table.addCell(createBodyCell(String.valueOf(data[3]), 1));
+        }
+    }
+
+    // Add table to the document
+    try {
+        document.add(table);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
     // Helper to create header cell
     private static Cell createHeaderCell(String content, int colspan) {
@@ -728,87 +1086,146 @@ public class PdfService {
                 .setTextAlignment(TextAlignment.CENTER);
     }
 
-    private static void addDynamicSRATable(Document document, String isSRA, JSONArray sraProgramsArray) {
-        // Outer table with two equal-width columns
-        Table outerTable = new Table(new float[] { 1, 1 }); // 1:1 ratio
-        outerTable.setWidth(UnitValue.createPercentValue(100)); // Set width to 100%
+    private static void addDynamicSRATable(Document document, DataFormaterService dataFormaterService, String areSRAProgram) {
+    // Outer table with two equal-width columns
+    Table outerTable = new Table(new float[]{1, 1}); // 1:1 ratio
+    outerTable.setWidth(UnitValue.createPercentValue(100)); // Set width to 100%
 
-        // Add the question cell (Column 1)
-        Cell questionCell = new Cell()
-                .add(new Paragraph(
-                        "Is the University Offering any Programmes Recognised by any Statutory Regulatory Authority (SRA)")
-                        .setFontSize(10)) // Set font size
-                .setPadding(5) // Add padding
-                .setBorder(new SolidBorder(1)); // Ensure visible border
-        outerTable.addCell(questionCell);
+    // Add the question cell (Column 1)
+    Cell questionCell = new Cell()
+            .add(new Paragraph(
+                    "Is the University Offering any Programmes Recognised by any Statutory Regulatory Authority (SRA)?")
+                    .setFontSize(10)) // Set font size
+            .setPadding(5) // Add padding
+            .setBorder(new SolidBorder(1)); // Ensure visible border
+    outerTable.addCell(questionCell);
 
-        // Add the response cell (Column 2)
-        Cell responseCell = new Cell()
-                .add(new Paragraph(": " + isSRA)
-                        .setFontSize(10)) // Set font size
-                .setPadding(5) // Add padding
-                .setTextAlignment(TextAlignment.LEFT) // Align text to the left
-                .setBorder(new SolidBorder(1)); // Ensure visible border
-        outerTable.addCell(responseCell);
+    // Add the response cell (Column 2)
+    Cell responseCell = new Cell()
+            .add(new Paragraph(": " + ("true".equalsIgnoreCase(areSRAProgram) ? "Yes" : "No"))
+                    .setFontSize(10)) // Set font size
+            .setPadding(5) // Add padding
+            .setTextAlignment(TextAlignment.LEFT) // Align text to the left
+            .setBorder(new SolidBorder(1)); // Ensure visible border
+    outerTable.addCell(responseCell);
 
-        // If "Yes", create and add the inner table in column 1
-        if ("Yes".equalsIgnoreCase(isSRA)) {
-            // Create an inner table for SRA programs and documents
-            Table innerTable = new Table(new float[] { 3, 2 }); // Adjust column widths for SRA Program and Document
-            innerTable.setWidth(UnitValue.createPercentValue(100)); // Inner table takes full width of column 1
+    // If "Yes", create and add the inner table in column 1
+    if ("true".equalsIgnoreCase(areSRAProgram)) {
+        // Check and extract SRA Programs
+        JsonArray sraProgramsArray = JsonParser.parseString(dataFormaterService.getSRAPRogramms(1)).getAsJsonArray();
 
-            // Add headers to the inner table
-            innerTable.addCell(new Cell().add(new Paragraph("SRA Program").setBold().setFontSize(10)).setPadding(5));
-            innerTable.addCell(new Cell().add(new Paragraph("Document").setBold().setFontSize(10)).setPadding(5));
+        // Create an inner table for SRA programs and documents
+        Table innerTable = new Table(new float[]{3, 2}); // Adjust column widths for SRA Program and Document
+        innerTable.setWidth(UnitValue.createPercentValue(100)); // Inner table takes full width of column 1
 
-            // Loop through the JSONArray to add rows for each program
-            for (int i = 0; i < sraProgramsArray.length(); i++) {
-                JSONObject program = sraProgramsArray.getJSONObject(i);
+        // Add headers to the inner table
+        innerTable.addCell(new Cell().add(new Paragraph("SRA Program").setBold().setFontSize(10)).setPadding(5));
+        innerTable.addCell(new Cell().add(new Paragraph("Document").setBold().setFontSize(10)).setPadding(5));
 
-                // Add SRA Program
-                innerTable.addCell(
-                        new Cell().add(new Paragraph(program.getString("program")).setFontSize(10)).setPadding(5));
+        // Loop through the JsonArray to add rows for each program
+        for (JsonElement element : sraProgramsArray) {
+            JsonObject program = element.getAsJsonObject();
 
-                // Add Document (as a hyperlink)
-                innerTable.addCell(new Cell().add(new Paragraph(new Link(program.getString("document"),
-                        PdfAction.createURI(program.getString("document"))).setFontSize(10))).setPadding(5));
+            // Safely retrieve program and document details
+            String programName = program.has("name") && !program.get("name").isJsonNull()
+                    ? program.get("name").getAsString()
+                    : "N/A"; // Default to "N/A" if the key is missing or null
+
+            JsonObject sraDocument = program.has("sraDocument") && !program.get("sraDocument").isJsonNull()
+                    ? program.getAsJsonObject("sraDocument")
+                    : null;
+
+            String fileName = sraDocument != null && sraDocument.has("fileName") && !sraDocument.get("fileName").isJsonNull()
+                    ? sraDocument.get("fileName").getAsString()
+                    : "N/A";
+
+            String fileIdentifier = sraDocument != null && sraDocument.has("fileIdentifier") && !sraDocument.get("fileIdentifier").isJsonNull()
+                    ? sraDocument.get("fileIdentifier").getAsString()
+                    : null;
+
+            // Add SRA Program
+            innerTable.addCell(new Cell().add(new Paragraph(programName).setFontSize(10)).setPadding(5));
+
+            // Add Document (as a hyperlink with file name, or plain text if missing)
+            if (fileIdentifier != null) {
+                String documentUrl = recognitionDetailsPrefixURL + fileIdentifier; // Construct the URL
+                innerTable.addCell(new Cell().add(new Paragraph(new Link(fileName, 
+                        PdfAction.createURI(documentUrl)).setFontColor(com.itextpdf.kernel.colors.ColorConstants.BLUE).setFontSize(10))).setPadding(5));
+            } else {
+                innerTable.addCell(new Cell().add(new Paragraph(fileName).setFontSize(10)).setPadding(5));
             }
-
-            // Add the inner table to column 1
-            Cell innerTableCell = new Cell(1, 2); // Span across both columns of the outer table
-            innerTableCell.add(innerTable);
-            innerTableCell.setPadding(5); // Add padding for separation
-            innerTableCell.setBorder(new SolidBorder(1)); // Ensure proper border for outer table
-            outerTable.addCell(innerTableCell);
-        } else {
-            // If no SRA programs, add an empty cell to column 2 to maintain the structure
-            outerTable.addCell(new Cell(1, 2)
-                    .add(new Paragraph("No programs recognized").setFontSize(10))
-                    .setPadding(5)
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setBorder(new SolidBorder(1))); // Ensure border for the cell
         }
 
-        // Add the outer table to the document
-        try {
-            document.add(outerTable.setMarginBottom(10));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Add the inner table to column 1
+        Cell innerTableCell = new Cell(1, 2); // Span across both columns of the outer table
+        innerTableCell.add(innerTable);
+        innerTableCell.setPadding(5); // Add padding for separation
+        innerTableCell.setBorder(new SolidBorder(1)); // Ensure proper border for outer table
+        outerTable.addCell(innerTableCell);
+    } else {
+        // If no SRA programs, add an empty cell to column 2 to maintain the structure
+        outerTable.addCell(new Cell(1, 2)
+                .add(new Paragraph("No programs recognized").setFontSize(10))
+                .setPadding(5)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setBorder(new SolidBorder(1))); // Ensure border for the cell
     }
 
+    // Add the outer table to the document
+    try {
+        document.add(outerTable.setMarginBottom(10));
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
-private static void addAffiliatedInstitution(Document document, JsonObject collegeStatsJsonObject) {
-    Table table = new Table(new float[]{3, 1}); // Adjust column widths as needed
+
+
+
+
+
+private static void addAffiliatedInstitution(Document document, JsonArray affiliatedInstitutionArray) {
+        Table table = new Table(new float[] { 3, 1, 1, 1 }); // Column widths
+        table.setWidth(UnitValue.createPercentValue(100));
+
+        table.addCell(new Cell().add(new Paragraph("Type of Colleges").setBold())
+                .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.CENTER));
+        table.addCell(new Cell().add(new Paragraph("Permanent").setBold())
+                .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.CENTER));
+        table.addCell(new Cell().add(new Paragraph("Temporary").setBold())
+                .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.CENTER));
+        table.addCell(new Cell().add(new Paragraph("Total").setBold())
+                .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.CENTER));
+
+        // Loop through the affiliated institution array to fill the data
+        for (JsonElement element : affiliatedInstitutionArray) {
+            JsonObject row = element.getAsJsonObject();
+
+            table.addCell(new Cell().add(new Paragraph(row.get("Type of Colleges").getAsString()))
+                    .setFontSize(10).setPadding(5));
+            table.addCell(new Cell().add(new Paragraph(String.valueOf(row.get("Permanent").getAsInt())))
+                    .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.RIGHT));
+            table.addCell(new Cell().add(new Paragraph(String.valueOf(row.get("Temporary").getAsInt())))
+                    .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.RIGHT));
+            table.addCell(new Cell().add(new Paragraph(String.valueOf(row.get("Total").getAsInt())))
+                    .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.RIGHT));
+        }
+
+        // Add the table to the document
+        document.add(table.setMarginBottom(10));
+    }
+
+   
+    // Function to add College Stats
+    private static void addCollegeStatsTable(Document document, JsonObject academicDetails) {
+    Table table = new Table(UnitValue.createPercentArray(new float[]{1, 1})); // Two equal-width columns
     table.setWidth(UnitValue.createPercentValue(100));
 
-    // Add header row
-    table.addCell(new Cell().add(new Paragraph("Type of Institution").setBold())
-            .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.CENTER));
-    table.addCell(new Cell().add(new Paragraph("Count").setBold())
-            .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.CENTER));
+    // Add table headers
+    table.addCell(createCellWithBoldAndSpacing("Type of Colleges", 10));
+    table.addCell(createCellWithBoldAndSpacing("Numbers", 10));
 
-    // Define the mapping between the JSON keys and the type labels
+    // Define mapping for JSON keys to user-friendly labels
     Map<String, String> typeMapping = new LinkedHashMap<>();
     typeMapping.put("constituentColleges", "Constituent Colleges");
     typeMapping.put("affiliatedColleges", "Affiliated Colleges");
@@ -825,88 +1242,27 @@ private static void addAffiliatedInstitution(Document document, JsonObject colle
     for (Map.Entry<String, String> entry : typeMapping.entrySet()) {
         String key = entry.getKey();
         String label = entry.getValue();
-        int count = collegeStatsJsonObject.has(key) ? collegeStatsJsonObject.get(key).getAsInt() : 0;
 
-        table.addCell(new Cell().add(new Paragraph(label)).setFontSize(10).setPadding(5));
-        table.addCell(new Cell().add(new Paragraph(String.valueOf(count)))
-                .setFontSize(10).setPadding(5).setTextAlignment(TextAlignment.RIGHT));
+        int count = academicDetails.has(key) ? academicDetails.get(key).getAsInt() : 0;
+
+        table.addCell(createCellWithSpacing(label, 10));
+        table.addCell(createCellWithSpacing(String.valueOf(count), 10));
     }
 
     // Add the table to the document
     document.add(table.setMarginBottom(10));
 }
 
+private static Cell createCellWithBoldAndSpacing(String content, int fontSize) {
+    return new Cell().add(new Paragraph(content).setBold().setFontSize(fontSize))
+            .setPadding(5).setTextAlignment(TextAlignment.LEFT);
+}
 
-    // Spacing Cell
-    private static Cell createCellWithSpacing(String text, float fontSize) {
-        return new Cell()
-                .add(new Paragraph(text).setFontSize(fontSize))
-                .setPadding(5) // Inner spacing within the cell
-                .setMarginBottom(5); // Space between rows
-    }
+private static Cell createCellWithSpacing(String content, int fontSize) {
+    return new Cell().add(new Paragraph(content).setFontSize(fontSize))
+            .setPadding(5).setTextAlignment(TextAlignment.LEFT);
+}
 
-    // Bold Spacing Cell
-    private static Cell createCellWithBoldandSpacing(String text, float fontSize) {
-        return new Cell()
-                .add(new Paragraph(text).setFontSize(fontSize))
-                .setPadding(5) // Inner spacing within the cell
-                .setMarginBottom(5).setBold(); // Space between rows
-    }
-
-    // Function to add AcademincInfo
-    private static void addAcademicTable(Document document, JSONObject academicDetails) {
-        Table table = new Table(UnitValue.createPercentArray(new float[] { 1, 1 }));
-        table.setWidth(UnitValue.createPercentValue(100));
-
-        table.addCell(createCellWithBoldandSpacing("Type of Colleges", 10));
-        table.addCell(createCellWithBoldandSpacing("Numbers", 10));
-
-        for (String key : academicDetails.keySet()) {
-            table.addCell(createCellWithSpacing(key, 10));
-            table.addCell(createCellWithSpacing(String.valueOf(academicDetails.getInt(key)), 10));
-
-        }
-
-        document.add(table.setMarginBottom(10));
-    }
-
-    // Function to add Recognition Details Table
-    // private static void addRecognitionDetailsTable(Document document, JSONArray recognitionDetails) {
-    //     Table table = new Table(UnitValue.createPercentArray(new float[] { 4, 4, 4 }));
-    //     table.setWidth(UnitValue.createPercentValue(100));
-
-    //     table.addHeaderCell(new Cell(1, 6).add(new Paragraph(" Recognition Details").setBold().setFontSize(10))
-    //             .setFontSize(10).setPadding(5));
-    //     table.addHeaderCell(new Cell(1, 6)
-    //             .add(new Paragraph(" Date of Recognition as a University by UGC or Any Other National Agency : ")
-    //                     .setBold().setFontSize(10))
-    //             .setFontSize(10).setPadding(5));
-    //     table.addHeaderCell(
-    //             new Cell().add(new Paragraph("Under Section").setBold().setFontSize(10)));
-    //     table.addHeaderCell(new Cell().add(new Paragraph("Date").setBold().setFontSize(10)));
-    //     table.addHeaderCell(
-    //             new Cell().add(new Paragraph("View Document").setBold().setFontSize(10)));
-
-    //     for (int i = 0; i < recognitionDetails.length(); i++) {
-    //         JSONObject detail = recognitionDetails.getJSONObject(i);
-    //         table.addCell(new Cell().add(new Paragraph(detail.getString("section")).setFontSize(10)));
-    //         table.addCell(new Cell().add(new Paragraph(detail.getString("date")).setFontSize(10)));
-    //         // table.addCell(new Cell().add(new
-    //         // Paragraph(detail.getString("document")).setFontSize(10)));
-    //         String doc_url = detail.getString("document");
-    //         if (doc_url != "Not Available") {
-    //             Link link = new Link(doc_url, PdfAction.createURI(doc_url));
-    //             table.addCell(
-    //                     new Cell().add(new Paragraph(link).setFontColor(com.itextpdf.kernel.colors.ColorConstants.BLUE))
-    //                             .setFontSize(10).setPadding(5));
-    //         } else {
-    //             table.addCell(new Cell().add(new Paragraph(detail.getString("document")).setFontSize(10)));
-    //         }
-
-    //     }
-
-    //     document.add(table.setMarginBottom(10));
-    // }
     private static void addRecognitionDetailsTable(Document document, JsonObject recognitionDetails) {
     Table table = new Table(UnitValue.createPercentArray(new float[] { 4, 4, 4 }));
     table.setWidth(UnitValue.createPercentValue(100));
@@ -950,10 +1306,10 @@ private static void addRecognitionDetailRow(Table table, String section, String 
     if (!"Not Available".equals(documentUrl)) {
       String final_url = recognitionDetailsPrefixURL + documentUrl;
         Link link = new Link("View Document", PdfAction.createURI(final_url));
-        table.addCell(new Cell().add(new Paragraph(link).setFontColor(com.itextpdf.kernel.colors.ColorConstants.BLUE))
-                .setFontSize(10).setPadding(5));
+        table.addCell(new Cell().add(new Paragraph(link).setFontColor(com.itextpdf.kernel.colors.ColorConstants.BLUE).setUnderline())
+                .setFontSize(10).setPadding(5).setUnderline());
     } else {
-        table.addCell(new Cell().add(new Paragraph("Not Available").setFontSize(10)));
+        table.addCell(new Cell().add(new Paragraph("Not Available").setFontSize(10).setUnderline()));
     }
 }
 
@@ -1103,13 +1459,7 @@ private static void addDynamicContactsTable(Document document, JsonArray contact
             continue; // Skip invalid elements
         }
         JsonObject contact = element.getAsJsonObject();
-        // System.out.println("LOOOOOOOOOOPPPPPPPPPPPP");
-        // System.out.println(getJsonValue(contact, "name"));
-        // System.out.println(getJsonValue(contact, "designation"));
-        // System.out.println(getJsonValue(contact, "telephone"));
-        // System.out.println(getJsonValue(contact, "phone"));
-        // System.out.println(getJsonValue(contact, "fax"));
-        // System.out.println(getJsonValue(contact, "email"));
+        
         table.addCell(new Cell().add(new Paragraph(getJsonValue(contact, "designation")).setFontSize(10)));
         table.addCell(new Cell().add(new Paragraph(getJsonValue(contact, "name")).setFontSize(10)));
         table.addCell(new Cell().add(new Paragraph(getJsonValue(contact, "telephone")).setFontSize(10)));

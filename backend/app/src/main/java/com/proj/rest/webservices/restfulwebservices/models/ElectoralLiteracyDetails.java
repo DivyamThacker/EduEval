@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Lob;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +27,8 @@ public class ElectoralLiteracyDetails {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private DocumentDetails document;
     
+    @Lob
+    private String extractedText;
     @ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnore
     private University university;

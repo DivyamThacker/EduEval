@@ -1,5 +1,4 @@
 package com.proj.rest.webservices.restfulwebservices.services;
-
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -11,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 @Service
 @Slf4j
@@ -22,7 +21,6 @@ public class StorageService {
 
     @Value("${application.bucket.name}")
     private String bucketName;
-
     @Autowired
     private AmazonS3 s3Client;
 
@@ -46,8 +44,6 @@ public class StorageService {
         }
         return null;
     }
-
-
     public String deleteFile(String fileName) {
         try {
             s3Client.deleteObject(bucketName, fileName);
@@ -71,4 +67,20 @@ public class StorageService {
         }
         return convertedFile;
     }
+
+    // step 2
+
+   public File downloadFileAsFile(String fileName) {
+    File tempFile = null;
+    try {
+        S3Object s3Object = s3Client.getObject(bucketName, fileName);
+        S3ObjectInputStream inputStream = s3Object.getObjectContent();
+        tempFile = File.createTempFile("s3-", ".pdf");
+        Files.copy(inputStream, tempFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        inputStream.close();
+    } catch (IOException e) {
+        log.error("Error downloading file as File object", e);
+    }
+    return tempFile;
+}
 }
