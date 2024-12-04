@@ -422,7 +422,6 @@ public class PdfService {
         JsonArray NEPDetailsJson = JsonParser.parseString(dataFormaterService.getNepDetails(1)).getAsJsonArray();
         // Electoral Details
         JsonArray electrolDetails = JsonParser.parseString(dataFormaterService.getElectoralDetails(1)).getAsJsonArray();
-        System.out.println("Electrola KI DETAILSSSS _________________--------------" + electrolDetails);
 
         PdfWriter writer = new PdfWriter(DEST);
         PdfDocument pdf = new PdfDocument(writer);
@@ -496,6 +495,7 @@ public class PdfService {
         // 15) HRDC Details
         addHRDCDetails(document,HRDCDetails);
         // 16) Accrediation Details
+        
         // 17) Department Evaluation Details
         addEvaluativeReportTable(document, DepartmentEvaluationJson);
 

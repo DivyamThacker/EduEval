@@ -1,25 +1,26 @@
-
-insert into university_details (id, name, address, city, state, pincode)
-values (10001, 'Example University', '123 University St', 'Sample City', 'Sample State', '123456');
-
 insert into university_details (are_sra_program,id,name,address,city,state,pincode,website_url,establishment_date,prior_status,nature,type)
-values ('YES',1,'DHIRUBHAI AMBANI INSTITUE OF INFORMATION AND COMMUNICATION TECHNOLOGY','GANDHINAGAR','GANDHINAGAR','GUJARAT','382007','www.daiict.ac.in','24-1-2003','No','Private','Unitary');
+values ('YES',1,'DHIRUBHAI AMBANI INSTITUE OF INFORMATION AND COMMUNICATION TECHNOLOGY (DAIICT)','Near Indroda Circle, Gandhinagar','Gandhinagar','Gujarat','382007','www.daiict.ac.in','06-08-2001','No','State Private University','Unitary');
 
 
 insert into contact_details (id,name,  designation, email, phone, fax, telephone, university_id)
-values (101, 'John Doe', 'Manager', 'johndoe@gmail.com', '1234567890', '1234567890', '1234567890', '1');
+values (101, 'K S Dasgupta', 'Director', 'director@daiict.ac.in', '079-68261572', '079-68261710', '9327043614 ', '1');
 
 insert into contact_details (id,name,  designation, email, phone, fax, telephone, university_id)
-values (102, 'Mayank Gour', 'Manager', 'johndoe@gmail.com', '1234567890', '1234567890', '1234567890', '1');
+values (102, 'Anil Roy ', 'IQAC / CIQA coordinator', 'iqac_dir@daiict.ac.in', '9376163094 ', '079-68261567', '079-68261567', '1');
 
 insert into document_details(id,file_name,file_identifier)
-values (1001,'202101072_Assignment.pdf','1733203606502_202101072_Assignment.pdf	');
+values (1001,'108378_9387_1_1668404817.pdf','1733289763797_108378_9387_1_1668404817.pdf');
 
 insert into document_details(id,file_name,file_identifier)
-values (1002,'2nd_wali.pdf','1733203606502_202101072_Assignment.pdf	');
+values (1002,'doc.pdf','1733203606502_202101072_Assignment.pdf');
 
 insert into document_details(id,file_name,file_identifier)
-values (1003,'2nd_wali.pdf','1733203606502_202101072_Assignment.pdf	');
+values (1003,'nac_cycle.pdf','1733290967666_nac_cycle.pdf');
+
+-- 1733290967666_nac_cycle.pdf
+
+-- insert into document_details(id,file_name,file_identifier)
+-- values (1003,'2nd_wali.pdf','1733203606502_202101072_Assignment.pdf	');
 
 
 -- insert into recognition_details(ID,RECOGNITION_DOCUMENT12B_ID  	RECOGNITION_DOCUMENT2F_ID  	UNIVERSITY_ID  	ISUPE  	RECOGNITION_DATE_UNDER_SECTION12B  	RECOGNITION_DATE_UNDER_SECTION2F  
@@ -30,7 +31,7 @@ values (10001,1001,1002,1,'True','24-01-2003','20-02-2001');
 -- ID  	UNIVERSITY_ID  	ADDRESS  	BUILT_UP_AREA  	CAMPUS_AREA  	ESTABLISHMENT_DATE  	LOCATION  	RECOGNITION_DATE  	TYPE  	PROGRAMMES_OFFERED
 
 insert into campus (id,university_id,address,built_up_area,campus_area,establishment_date,location,recognition_date,type,programmes_offered)
-values (100001,1,'Gandhinagar','100','21','20-02-2921','Rural','23-02-2021','Education','UG,PG');
+values (100001,1,'Near Indroda Circle,Gandhinagar','202350 ','50','20-02-2921','Urban','23-02-2021','Main campus','Under Graduate,Post Graduate,PhD');
 
 insert into campus (id,university_id,address,built_up_area,campus_area,establishment_date,location,recognition_date,type,programmes_offered)
 values (100002,1,'Gandhinagar','100','21','20-02-2921','Rural','23-02-2021','Sports','Basketball,Badminton');
@@ -38,18 +39,18 @@ values (100002,1,'Gandhinagar','100','21','20-02-2921','Rural','23-02-2021','Spo
 -- AFFILIATED_COLLEGES  	AUTONOMOUS_COLLEGES  	COLLEGES_UNDER2F  	COLLEGES_UNDER2F12B  	COLLEGES_WITH_EXCELLENCE  	COLLEGES_WITH_PG_DEPARTMENTS  	COLLEGES_WITH_RESEARCH_DEPARTMENTS  	CONSTITUENT_COLLEGES  	ID  	NAAC_ACCREDITED  	RESEARCH_INSTITUTES  	UNIVERSITY_ID 
 
 insert into college_stats (affiliated_colleges,autonomous_colleges,colleges_under2f,colleges_under2f12b,colleges_with_excellence,colleges_with_pg_departments,colleges_with_research_departments,constituent_colleges,id,naac_accredited,research_institutes,university_id)
-values (0,1,1,2,1,3,7,2,3,4,10,1);
+values (0,0,0,0,0,0,0,0,0,0,0,1);
 
 -- // ID  	SRA_DOCUMENT_ID  	UNIVERSITY_ID  	NAME 
 
 insert into sra_program (id,sra_document_id,university_id,name)
-values (1,1001,1,'PCI');
+values (1,1002,1,'PCI');
 
-insert into sra_program (id,sra_document_id,university_id,name)
-values (2,1002,1,'BCI');
+-- insert into sra_program (id,sra_document_id,university_id,name)
+-- values (2,1002,1,'BCI');
 
-insert into sra_program (id,sra_document_id,university_id,name)
-values (3,1003,1,'COA');
+-- insert into sra_program (id,sra_document_id,university_id,name)
+-- values (3,1002,1,'COA');
 
 -- COUNT  	ID  	UNIVERSITY_ID  	ACADEMIC_RANK  	GENDER  	HIGHEST_QUALIFICATION  	RECRUITMENT_STATUS  	TENURE
 insert into faculty (count,id,university_id,academic_rank,gender,highest_qualification,recruitment_status,tenure)
@@ -153,15 +154,15 @@ values ('2024-12-15',23,32,33,23,1,1);
 
 -- CGPA  	CYCLE_NUMBER  	ID  	PEER_TEAM_REPORT_ID  	UNIVERSITY_ID  	GRADE  	TYPE
 -- ACCREDITATION_DETAILS
-insert into accreditation_details (id,cgpa,cycle_number,peer_team_report_id,university_id,grade,type)
-values (1,3.4,1,1002,1,'B','Accreditation');
+-- insert into accreditation_details (id,cgpa,cycle_number,peer_team_report_id,university_id,grade,type)
+-- values (1,3.4,1,1002,1,'B','Accreditation');
 
 -- ID  	REPORT_ID  	UNIVERSITY_ID  	DEPARTMENT_NAME
-insert into department_evaluation (id,report_id,university_id,department_name)
-values (1,1001,1,'Information and Communication Technology');
+-- insert into department_evaluation (id,report_id,university_id,department_name)
+-- values (1,1001,1,'Information and Communication Technology');
 
-insert into department_evaluation (id,report_id,university_id,department_name)
-values (2,1002,1,'Computer Science Engineering');
+-- insert into department_evaluation (id,report_id,university_id,department_name)
+-- values (2,1002,1,'Computer Science Engineering');
 
 -- DOCUMENT_ID  	ID  	SECTION  	UNIVERSITY_ID  
 -- insert into nep_details (document_id,id,section,university_id)

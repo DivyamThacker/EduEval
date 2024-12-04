@@ -16,7 +16,6 @@ import com.proj.rest.webservices.restfulwebservices.repositories.DocumentDetails
 import com.proj.rest.webservices.restfulwebservices.repositories.NepDetailsRepository;
 import com.proj.rest.webservices.restfulwebservices.repositories.UniversityRepository;
 import com.proj.rest.webservices.restfulwebservices.services.StorageService;
-import com.proj.rest.webservices.restfulwebservices.services.PdfTextExtractionService;
 import com.proj.rest.webservices.restfulwebservices.services.FileTextExtractionService;
 import java.io.File;
 @RestController
@@ -27,18 +26,15 @@ public class NepDetailsResource {
     private NepDetailsRepository nepDetailsRepository;
     private StorageService storageService;
     private DocumentDetailsRepository documentDetailsRepository;
-    private PdfTextExtractionService pdfTextExtractionService;
     private FileTextExtractionService fileTextExtractionService;
 
     public NepDetailsResource(UniversityRepository universityRepository, 
                               NepDetailsRepository nepDetailsRepository,StorageService storageService,
-                              DocumentDetailsRepository documentDetailsRepository,PdfTextExtractionService
-                              pdfTextExtractionService,FileTextExtractionService fileTextExtractionService) {
+                              DocumentDetailsRepository documentDetailsRepository,FileTextExtractionService fileTextExtractionService) {
         this.universityRepository = universityRepository;
         this.storageService = storageService;
         this.documentDetailsRepository = documentDetailsRepository;
         this.nepDetailsRepository = nepDetailsRepository;
-        this.pdfTextExtractionService = pdfTextExtractionService;
         this.fileTextExtractionService = fileTextExtractionService;
     }
 
