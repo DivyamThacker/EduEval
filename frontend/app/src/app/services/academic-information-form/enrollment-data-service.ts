@@ -11,7 +11,6 @@ export class EnrollmentDataService {
 apiUrl = environment.apiUrl;
 
 private universityId: number | null = null;
-private enrollmentId: number | null = null;
 
 private enrollmentModelSource = new BehaviorSubject<any>({
    hasIntegrated: false , enrollments: [] , totalIntegratedPrograms: '' 
@@ -26,15 +25,6 @@ getUniversityId(): number | null {
   return this.basicFormDataService.getUniversityId();
 }
 
-// Enrollment Info ID and model management
-setEnrollmentId(id: number | null) {
-  this.enrollmentId = id;
-}
-
-getEnrollmentId(): number | null {
-  return this.enrollmentId;
-}
-
 setEnrollmentData(data: any) {
   this.enrollmentModelSource.next(data);
 }
@@ -46,32 +36,24 @@ getEnrollmentData(): Observable<any> {
 // Enrollment Info API submission
 submitEnrollmentData() {
   this.universityId = this.getUniversityId();
+  this.http.delete(`${this.apiUrl}/university/${this.universityId}/enrollment`)
+  .subscribe({
+    next: response => console.log(`Enrollment Details for this university id : ${this.universityId} deleted successfully`, response),
+    error: error => console.error('Error deleting Enrollment Details', error)
+  });
   const formData = new FormData();
   const data = this.enrollmentModelSource.value;
 
   console.log('University Id:', this.universityId);
-  console.log('Enrollment Id:', this.enrollmentId);
   console.log('Data:', data);
 
   formData.append('enrollments', JSON.stringify(data.enrollments));
   formData.append('hasIntegrated', JSON.stringify(data.hasIntegrated));
   formData.append('totalIntegratedPrograms', JSON.stringify(data.totalIntegratedPrograms));
 
-  if (this.enrollmentId != null) {
-    return this.http.put(`${this.apiUrl}/university/${this.universityId}/enrollment/${this.enrollmentId}`, formData)
-      .pipe(
-        catchError(error => throwError(() => error))
-      );
-  } else {
-    return this.http.post(`${this.apiUrl}/university/${this.universityId}/enrollment`, formData)
-      .pipe(
-        tap((response: any) => {
-          this.enrollmentId = response.id;
-          this.setEnrollmentId(response.id);
-        }),
-        catchError(error => throwError(() => error))
-      );
-  }
-
+  return this.http.post(`${this.apiUrl}/university/${this.universityId}/enrollment`, formData)
+    .pipe(
+      catchError(error => throwError(() => error))
+    );
 }
 }

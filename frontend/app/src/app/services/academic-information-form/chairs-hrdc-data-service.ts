@@ -11,7 +11,6 @@ export class ChairsHrdcDataService {
 apiUrl = environment.apiUrl;
 
 private universityId: number | null = null;
-private chairsInfoId: number | null = null;
 private hrdcInfoId: number | null = null;
 
 private chairsInfoModelSource = new BehaviorSubject<any>({});
@@ -26,15 +25,6 @@ constructor(private http: HttpClient, private basicFormDataService : BasicFormDa
 // Method to fetch the universityId dynamically
 getUniversityId(): number | null {
   return this.basicFormDataService.getUniversityId();
-}
-
-// Chairs Info ID and model management
-setChairsInfoId(id: number | null) {
-  this.chairsInfoId = id;
-}
-
-getChairsInfoId(): number | null {
-  return this.chairsInfoId;
 }
 
 setChairsInfoData(data: any) {
@@ -66,23 +56,16 @@ getHrdcInfoData(): Observable<any> {
 submitChairs() {
   const data = this.chairsInfoModelSource.value;
   this.universityId = this.getUniversityId();
+  this.http.delete(`${this.apiUrl}/university/${this.universityId}/chair`)
+  .subscribe({
+    next: response => console.log(`Chair Details for this university id : ${this.universityId} deleted successfully`, response),
+    error: error => console.error('Error deleting Chair Details', error)
+  });
   console.log('University Id:', this.universityId);
-  console.log('Chairs Info Id:', this.chairsInfoId);
-  if (this.chairsInfoId != null) {
-    return this.http.put(`${this.apiUrl}/university/${this.universityId}/chair/${this.chairsInfoId}`, data.chairs)
-      .pipe(
-        catchError(error => throwError(() => error))
-      );
-    } else {
-    return this.http.post(`${this.apiUrl}/university/${this.universityId}/chair`, data.chairs)
-      .pipe(
-        tap((response: any) => {
-          this.chairsInfoId = response.id;
-          this.setChairsInfoId(response.id);
-        }),
-        catchError(error => throwError(() => error))
-      );
-  }
+  return this.http.post(`${this.apiUrl}/university/${this.universityId}/chair`, data.chairs)
+    .pipe(
+      catchError(error => throwError(() => error))
+    );
 }
 
 // HRDC Info API submission

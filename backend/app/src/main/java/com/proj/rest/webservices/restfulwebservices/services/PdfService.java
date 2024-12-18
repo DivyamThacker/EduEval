@@ -413,7 +413,7 @@ public class PdfService {
         JsonObject HRDCDetails = JsonParser.parseString(dataFormaterService.getHRDCDetails(1)).getAsJsonObject();
 // Accrediation Details
 // -------------------------------------------------------------------------------------------------------------------
-        JsonArray AccreditationDetails = JsonParser.parseString(dataFormaterService.getAccreditationDetails(1)).getAsJsonArray();
+        // JsonArray AccreditationDetails = JsonParser.parseString(dataFormaterService.getAccreditationDetails(1)).getAsJsonArray();
 // Create PDF document
 // Departement Evaluation
         JsonArray DepartmentEvaluationJson = JsonParser.parseString(dataFormaterService.getDepartmetEvaluation(1)).getAsJsonArray();
@@ -519,17 +519,7 @@ public void createElectoralTable(Document document,JsonArray jsonArray) throws E
     document.add(title);
 
         // Define the categories in order
-        String[] categories = {
-            "1. Whether Electoral Literacy Club (ELC) has been" +
-                "set up in the College?",
-            "2. Whether students’ co-ordinator and co-ordinating" +
-                "faculty members are appointed by the College and" +
-                "whether the ELCs are functional? Whether the ELCs" +
-                "are representative in character?",
-            "3. What innovative programmes and initiatives undertaken by the ELCs? These may include voluntary contribution by the students in electoral processes-participation in voter registration of students and communities where they come from, assisting district election administration in conduct of poll, voter awareness campaigns, promotion of ethical voting, enhancing participation of the under privileged sections of society especially transgender, commercial sex workers, disabled persons, senior citizens, etc.",
-            "4. Any socially relevant projects/initiatives taken by College in electoral related issues especially research projects, surveys, awareness drives, creating content, publications highlighting their contribution to advancing democratic values and participation in electoral processes, etc.",
-            "5. Extent of students above 18 years who are yet to be enrolled as voters in the electoral roll and efforts by ELCs as well as efforts by the College to institutionalize mechanisms to register eligible students as voters.",
-        };
+        String[] categories = staticDataService.getElectoralLiteracyQuestions();
 
         // Create PDF writer and document
 
@@ -566,14 +556,7 @@ public void createNEPTable(Document document,JsonArray jsonArray) throws Excepti
     document.add(title);
 
         // Define the categories in order
-        String[] categories = {
-            "Multidisciplinary / interdisciplinary",
-            "Academic bank of credits (ABC)",
-            "Skill development",
-            "Appropriate integration of Indian Knowledge system (teaching in Indian Language, culture, using online course)",
-            "Focus on Outcome based education (OBE)",
-            "Distance education/online education"
-        };
+        String[] categories = staticDataService.getNepSections();
 
         // Create PDF writer and document
 

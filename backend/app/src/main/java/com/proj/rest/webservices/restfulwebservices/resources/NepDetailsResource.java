@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,4 +86,22 @@ public class NepDetailsResource {
     return ResponseEntity.status(HttpStatus.CREATED).body(savedNeps);
 }
 
+@DeleteMapping("")
+	public ResponseEntity<Object> deleteAllNepDetails(@PathVariable Integer universityId) {
+		University university = universityRepository.findById(universityId).orElse(null);
+		if (university == null) {
+			return ResponseEntity.notFound().build();
+		}
+		List<NepDetails> nepDetails = university.getNepDetails();
+		for (NepDetails c : nepDetails) {
+			System.out.println(c);
+            storageService.deleteFile(c.getDocument().getFileIdentifier());
+		}
+		if (!nepDetails.isEmpty()) {
+			nepDetailsRepository.deleteAll(nepDetails);
+			university.getNepDetails().clear();       // Remove from university
+			universityRepository.save(university);        // Persist update to university
+		}
+		return ResponseEntity.noContent().build();
+	}
 }

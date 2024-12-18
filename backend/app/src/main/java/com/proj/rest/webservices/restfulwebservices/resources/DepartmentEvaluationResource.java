@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,6 +78,25 @@ public class DepartmentEvaluationResource {
     }
 
     return ResponseEntity.status(HttpStatus.CREATED).body(savedDepartmentEvaluations);
-}
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<Object> deleteAllDepartmentEvaluations(@PathVariable Integer universityId) {
+        University university = universityRepository.findById(universityId).orElse(null);
+        if (university == null) {
+            return ResponseEntity.notFound().build();
+        }
+        List<DepartmentEvaluation> departmentEvaluations = university.getDepartmentEvaluations();
+        for (DepartmentEvaluation c : departmentEvaluations) {
+            System.out.println(c);
+            storageService.deleteFile(c.getReport().getFileIdentifier());
+        }
+        if (!departmentEvaluations.isEmpty()) {
+            departmentEvaluationRepository.deleteAll(departmentEvaluations);
+            university.getDepartmentEvaluations().clear();       // Remove from university
+            universityRepository.save(university);        // Persist update to university
+        }
+        return ResponseEntity.noContent().build();
+    }
 
 }

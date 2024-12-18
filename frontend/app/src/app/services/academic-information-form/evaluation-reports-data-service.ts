@@ -11,7 +11,6 @@ export class EvaluationReportsDataService {
 apiUrl = environment.apiUrl;
 
 private universityId: number | null = null;
-private departmentId: number | null = null;
 private accreditationId: number | null = null;
 
 private departmentModelSource = new BehaviorSubject<any>({
@@ -49,15 +48,6 @@ setAccreditationData(data: any) {
 
 getAccreditationData(): Observable<any> {
   return this.accreditationModel$;
-}
-
-// Department ID and model management
-setDepartmentId(id: number | null) {
-  this.departmentId = id;
-}
-
-getDepartmentId(): number | null {
-  return this.departmentId;
 }
 
 setDepartmentData(data: any) {
@@ -105,6 +95,11 @@ submitAccredationDetails(): Observable<any> {
 
 submitEvaluationReports(): Observable<any> {
   this.universityId = this.getUniversityId();
+  this.http.delete(`${this.apiUrl}/university/${this.universityId}/department-evaluation`)
+  .subscribe({
+    next: response => console.log(`Department for this university id : ${this.universityId} deleted successfully`, response),
+    error: error => console.error('Error deleting Department', error)
+  });
   const formData = new FormData();
   const data = this.departmentModelSource.value;
 
@@ -117,27 +112,14 @@ submitEvaluationReports(): Observable<any> {
     formData.append('files', file);
   });
 
-  if (this.departmentId != null) {
-    // Update (PUT) existing Department
-    return this.http.put(`${this.apiUrl}/university/${this.universityId}/department-evaluation/${this.departmentId}`, formData)
-      .pipe(
-        tap(response => console.log('Department updated:', response)),
-        catchError(error => {
-          console.error('Error updating Department:', error);
-          return throwError(error);
-        })
-      );
-  } else {
-    // Create (POST) new Department
-    return this.http.post(`${this.apiUrl}/university/${this.universityId}/department-evaluation`, formData)
-      .pipe(
-        tap(response => console.log('Department created:', response)),
-        catchError(error => {
-          console.error('Error creating Department:', error);
-          return throwError(error);
-        })
-      );
-  }
+  return this.http.post(`${this.apiUrl}/university/${this.universityId}/department-evaluation`, formData)
+    .pipe(
+      tap(response => console.log('Department created:', response)),
+      catchError(error => {
+        console.error('Error creating Department:', error);
+        return throwError(error);
+      })
+    );
 }
 
 }

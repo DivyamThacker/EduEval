@@ -3,6 +3,7 @@ package com.proj.rest.webservices.restfulwebservices.resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,5 +34,18 @@ public class HrdcDetailsResource {
         university.setHrdcDetails(savedHrdcDetails);
         universityRepository.save(university);
         return ResponseEntity.ok(savedHrdcDetails);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<HrdcDetails> updateHrdcDetails(@PathVariable Integer universityId, @PathVariable Integer id, @RequestBody HrdcDetails hrdcDetails) {
+        if (!hrdcDetailsRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        University university = universityRepository.findById(universityId).get();
+        hrdcDetails.setUniversity(university);
+        hrdcDetails.setId(id);
+        HrdcDetails updatedHrdcDetails = hrdcDetailsRepository.save(hrdcDetails);
+        return ResponseEntity.ok(updatedHrdcDetails);
     }
 }

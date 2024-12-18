@@ -1,17 +1,16 @@
 package com.proj.rest.webservices.restfulwebservices.services;
 
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class StaticDataService {
-    private static final List<String> nepSections = List.of(" Multidisciplinary / interdisciplinary",
+    private static final String[] nepSections = {" Multidisciplinary / interdisciplinary",
      "Academic bank of credits (ABC)", "Skill development", "Appropriate integration of Indian Knowledge system (teaching in Indian Language,\r\n" + //
                   "culture, using online course)", "Focus on Outcome based education (OBE)", 
-                  "Distance education/online education");
+                  "Distance education/online education"};
 
-    private static final List<String> electoralLiteracyQuestions = List.of("Whether Electoral Literacy Club (ELC) has been set up in the University?\r",
+    private static final String[]  electoralLiteracyQuestions = {"Whether Electoral Literacy Club (ELC) has been set up in the University?\r",
     "Whether students’ co-ordinator and co-ordinating faculty members are appointed by the\r\n" + //
                 "University and whether the ELCs are functional? Whether the ELCs are representative in\r\n" + //
                 "character? ", "What innovative programmes and initiatives undertaken by the ELCs? These may\r\n" + //
@@ -26,13 +25,13 @@ public class StaticDataService {
                 "electoral processes, etc.",
                 "Extent of students above 18 years who are yet to be enrolled as voters in the electoral roll\r\n" + //
                                         "and efforts by ELCs as well as efforts by the University to institutionalize mechanisms to\r\n" + //
-                                        "register eligible students as voters.");
+                                        "register eligible students as voters."};
 
-    public List<String> getNepSections() {
+    public String[]  getNepSections(){
         return nepSections;
     }
 
-    public List<String> getElectoralLiteracyQuestions() {
+    public String[]  getElectoralLiteracyQuestions() {
         return electoralLiteracyQuestions;
     }
 }

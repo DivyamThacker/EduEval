@@ -12,7 +12,6 @@ apiUrl = environment.apiUrl;
 
 private universityId: number | null = null;
 private collegeInfoId: number | null = null;
-private sraProgramId: number | null = null;
 
 private collegeInfoModelSource = new BehaviorSubject<any>({});
 collegeInfoModel$ = this.collegeInfoModelSource.asObservable();
@@ -45,15 +44,6 @@ setCollegeInfoData(data: any) {
 
 getCollegeInfoData(): Observable<any> {
   return this.collegeInfoModel$;
-}
-
-// SRA Program ID and model management
-setSraProgramId(id: number | null) {
-  this.sraProgramId = id;
-}
-
-getSraProgramId(): number | null {
-  return this.sraProgramId;
 }
 
 setSraProgramData(data: any) {
@@ -90,6 +80,12 @@ submitCollegeInfo() {
 // Submit SRA Program API
   submitSraProgram(): Observable<any> {
     this.universityId = this.getUniversityId();
+    this.http.delete(`${this.apiUrl}/university/${this.universityId}/sra-program`)
+    .subscribe({
+      next: response => console.log(`Sra Programs for this university id : ${this.universityId} deleted successfully`, response),
+      error: error => console.error('Error deleting Sra Programs', error)
+    });
+
     const formData = new FormData();
     const data = this.sraProgramModelSource.value;
     console.log("This is Data : ", data);
@@ -105,12 +101,7 @@ submitCollegeInfo() {
       formData.append('files', file);
   });
   
-    if (this.sraProgramId !=null) { 
-      // Update (PUT) existing SRA Program
-      return this.http.put(`${this.apiUrl}/university/${this.universityId}/sra-program/${this.sraProgramId}`, formData);
-    } else { 
-      // Create (POST) new SRA Program
-      return this.http.post(`${this.apiUrl}/university/${this.universityId}/sra-program`, formData);
-    }
+    // Create (POST) new SRA Program
+    return this.http.post(`${this.apiUrl}/university/${this.universityId}/sra-program`, formData);
   }
 }

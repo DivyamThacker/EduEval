@@ -3,6 +3,7 @@ package com.proj.rest.webservices.restfulwebservices.resources;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,5 +37,23 @@ public class ChairDetailsResource {
 		}
 		List<ChairDetails> savedChairs = universityRepository.findById(universityId).get().getChairDetails();
 		return ResponseEntity.ok(savedChairs);
+	}
+
+	@DeleteMapping("")
+	public ResponseEntity<Object> deleteAllChairs(@PathVariable Integer universityId) {
+		University university = universityRepository.findById(universityId).orElse(null);
+		if (university == null) {
+			return ResponseEntity.notFound().build();
+		}
+		List<ChairDetails> chairs = university.getChairDetails();
+		for (ChairDetails c : chairs) {
+			System.out.println(c);
+		}
+		if (!chairs.isEmpty()) {
+			chairDetailsRepository.deleteAll(chairs);
+			university.getChairDetails().clear();       
+			universityRepository.save(university);       
+		}
+		return ResponseEntity.noContent().build();
 	}
 }

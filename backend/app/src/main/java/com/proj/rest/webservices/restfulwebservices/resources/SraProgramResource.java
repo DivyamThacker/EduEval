@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.proj.rest.webservices.restfulwebservices.models.DocumentDetails;
 import com.proj.rest.webservices.restfulwebservices.models.SraProgram;
+import com.proj.rest.webservices.restfulwebservices.models.DocumentDetails;
 import com.proj.rest.webservices.restfulwebservices.models.University;
 import com.proj.rest.webservices.restfulwebservices.repositories.DocumentDetailsRepository;
 import com.proj.rest.webservices.restfulwebservices.repositories.SraProgramRepository;
@@ -150,6 +150,25 @@ public class SraProgramResource {
         sraProgramRepository.deleteById(sraProgramId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    
+    @DeleteMapping("")
+	public ResponseEntity<Object> deleteAllSraPrograms(@PathVariable Integer universityId) {
+		University university = universityRepository.findById(universityId).orElse(null);
+		if (university == null) {
+			return ResponseEntity.notFound().build();
+		}
+		List<SraProgram> sraPrograms = university.getSraPrograms();
+		for (SraProgram c : sraPrograms) {
+			System.out.println(c);
+            storageService.deleteFile(c.getSraDocument().getFileIdentifier());
+		}
+		if (!sraPrograms.isEmpty()) {
+			sraProgramRepository.deleteAll(sraPrograms);
+			university.getSraPrograms().clear();       // Remove from university
+			universityRepository.save(university);        // Persist update to university
+		}
+		return ResponseEntity.noContent().build();
+	}
 
         
 }

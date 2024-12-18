@@ -11,7 +11,6 @@ export class NepDetailsDataService {
 apiUrl = environment.apiUrl;
 
 private universityId: number | null = null;
-private nepDetailsId: number | null = null;
 
 private nepDetailsModelSource = new BehaviorSubject<any>({
   files: [] // Initialize as an array
@@ -25,15 +24,6 @@ getUniversityId(): number | null {
   return this.basicFormDataService.getUniversityId();
 }
 
-// NEP Details ID and model management
-setNepDetailsId(id: number | null) {
-  this.nepDetailsId = id;
-}
-
-getNepDetailsId(): number | null {
-  return this.nepDetailsId;
-}
-
 setNepDetailsData(data: any) {
   this.nepDetailsModelSource.next(data);
 }
@@ -44,33 +34,24 @@ getNepDetailsData(): Observable<any> {
 
 submitNepDetails(): Observable<any> {
   this.universityId = this.getUniversityId();
+  this.http.delete(`${this.apiUrl}/university/${this.universityId}/nep-details`)
+  .subscribe({
+    next: response => console.log(`Nep Details for this university id : ${this.universityId} deleted successfully`, response),
+    error: error => console.error('Error deleting Nep Details', error)
+  });
   const formData = new FormData();
   const data = this.nepDetailsModelSource.value;
 
   data.files.forEach((file: File) => {
     formData.append('files', file);
   });
-
-  if (this.nepDetailsId != null) {
-    // Update (PUT) existing NEP Details
-    return this.http.put(`${this.apiUrl}/university/${this.universityId}/nep-details/${this.nepDetailsId}`, formData)
-      .pipe(
-        tap(response => console.log('NEP Details updated:', response)),
-        catchError(error => {
-          console.error('Error updating NEP Details:', error);
-          return throwError(error);
-        })
-      );
-  } else {
-    // Create (POST) new NEP Details
-    return this.http.post(`${this.apiUrl}/university/${this.universityId}/nep-details`, formData)
-      .pipe(
-        tap(response => console.log('NEP Details created:', response)),
-        catchError(error => {
-          console.error('Error creating NEP Details:', error);
-          return throwError(error);
-        })
-      );
-  }
+  return this.http.post(`${this.apiUrl}/university/${this.universityId}/nep-details`, formData)
+    .pipe(
+      tap(response => console.log('NEP Details created:', response)),
+      catchError(error => {
+        console.error('Error creating NEP Details:', error);
+        return throwError(error);
+      })
+    );
 }
 }

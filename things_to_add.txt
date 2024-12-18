@@ -1,7 +1,8 @@
-check and fix why enrollment is not working
+put real static data in data.sql in place of dummy data
+
+see why only pdf upload is working, instead of text file
 
 put data.sql in things.txt so that you can show for other universities
-
 
 fix the error happening due to String to date conversion (right now I am changing dates into strings in model which is wrong )
 

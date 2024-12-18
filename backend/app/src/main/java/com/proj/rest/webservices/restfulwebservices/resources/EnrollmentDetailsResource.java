@@ -3,6 +3,7 @@ package com.proj.rest.webservices.restfulwebservices.resources;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,5 +61,22 @@ public class EnrollmentDetailsResource {
 		return ResponseEntity.ok(savedEnrollmentDetails);
 	}
 
+    @DeleteMapping("")
+	public ResponseEntity<Object> deleteAllEnrollments(@PathVariable Integer universityId) {
+		University university = universityRepository.findById(universityId).orElse(null);
+		if (university == null) {
+			return ResponseEntity.notFound().build();
+		}
+		List<EnrollmentDetails> enrollments = university.getEnrollmentDetails();
+		for (EnrollmentDetails c : enrollments) {
+			System.out.println(c);
+		}
+		if (!enrollments.isEmpty()) {
+			enrollmentDetailsRepository.deleteAll(enrollments);
+			university.getEnrollmentDetails().clear();       // Remove from university
+			universityRepository.save(university);        // Persist update to university
+		}
+		return ResponseEntity.noContent().build();
+	}
 
 }
