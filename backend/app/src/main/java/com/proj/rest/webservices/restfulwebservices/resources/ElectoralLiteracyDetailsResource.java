@@ -1,6 +1,5 @@
 package com.proj.rest.webservices.restfulwebservices.resources;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,6 @@ import com.proj.rest.webservices.restfulwebservices.repositories.DocumentDetails
 import com.proj.rest.webservices.restfulwebservices.repositories.ElectoralLiteracyDetailsRepository;
 import com.proj.rest.webservices.restfulwebservices.repositories.UniversityRepository;
 import com.proj.rest.webservices.restfulwebservices.services.StorageService;
-import com.proj.rest.webservices.restfulwebservices.services.FileTextExtractionService;
 
 @RestController
 @RequestMapping("/api/naac/university/{universityId}/electoral-literacy-details")
@@ -32,17 +30,14 @@ public class ElectoralLiteracyDetailsResource {
     private ElectoralLiteracyDetailsRepository electoralLiteracyDetailsRepository;
     private StorageService storageService;
     private DocumentDetailsRepository documentDetailsRepository;
-    private FileTextExtractionService fileTextExtractionService;
 
     public ElectoralLiteracyDetailsResource(UniversityRepository universityRepository, 
                                             ElectoralLiteracyDetailsRepository electoralLiteracyDetailsRepository,StorageService storageService,
-                                            DocumentDetailsRepository documentDetailsRepository,
-                                            FileTextExtractionService fileTextExtractionService) {
+                                            DocumentDetailsRepository documentDetailsRepository) {
                       this.universityRepository = universityRepository;
                       this.storageService = storageService;
                       this.documentDetailsRepository = documentDetailsRepository;
                         this.electoralLiteracyDetailsRepository = electoralLiteracyDetailsRepository;
-                        this.fileTextExtractionService = fileTextExtractionService;
                      }    
                      
         @PostMapping(value="")
@@ -66,14 +61,6 @@ public class ElectoralLiteracyDetailsResource {
         documentDetailsRepository.save(doc); // Save the DocumentDetails entity
         electoralLiteracyDetails.setDocument(doc);
 
-         // Download file from S3
-        File downloadedFile = storageService.downloadFileAsFile(fileIdentifier);
-
-        // Extract text based on file type
-        String extractedText = fileTextExtractionService.extractTextFromFile(downloadedFile);
-
-        electoralLiteracyDetails.setExtractedText(extractedText);
-        System.out.println("Extracted text: " + extractedText);
         savedElectoralLiteracyDetails.add(electoralLiteracyDetailsRepository.save(electoralLiteracyDetails));
     }
 

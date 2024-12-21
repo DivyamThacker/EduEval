@@ -17,8 +17,6 @@ import com.proj.rest.webservices.restfulwebservices.repositories.DocumentDetails
 import com.proj.rest.webservices.restfulwebservices.repositories.NepDetailsRepository;
 import com.proj.rest.webservices.restfulwebservices.repositories.UniversityRepository;
 import com.proj.rest.webservices.restfulwebservices.services.StorageService;
-import com.proj.rest.webservices.restfulwebservices.services.FileTextExtractionService;
-import java.io.File;
 @RestController
 @RequestMapping("/api/naac/university/{universityId}/nep-details")
 public class NepDetailsResource {
@@ -27,16 +25,14 @@ public class NepDetailsResource {
     private NepDetailsRepository nepDetailsRepository;
     private StorageService storageService;
     private DocumentDetailsRepository documentDetailsRepository;
-    private FileTextExtractionService fileTextExtractionService;
 
     public NepDetailsResource(UniversityRepository universityRepository, 
                               NepDetailsRepository nepDetailsRepository,StorageService storageService,
-                              DocumentDetailsRepository documentDetailsRepository,FileTextExtractionService fileTextExtractionService) {
+                              DocumentDetailsRepository documentDetailsRepository) {
         this.universityRepository = universityRepository;
         this.storageService = storageService;
         this.documentDetailsRepository = documentDetailsRepository;
         this.nepDetailsRepository = nepDetailsRepository;
-        this.fileTextExtractionService = fileTextExtractionService;
     }
 
      @PostMapping(value="")
@@ -64,23 +60,7 @@ public class NepDetailsResource {
         documentDetailsRepository.save(doc);
         nepDetails.setDocument(doc);
 
-        // Download file from S3
-        File downloadedFile = storageService.downloadFileAsFile(fileIdentifier);
-
-        // Extract text based on file type
-        String extractedText = fileTextExtractionService.extractTextFromFile(downloadedFile);
-
-        // Save extracted text
-        nepDetails.setExtractedText(extractedText);
-        System.out.println("Extracted text: " + extractedText);
-
-        // Save NepDetails
         savedNeps.add(nepDetailsRepository.save(nepDetails));
-
-        // Clean up the downloaded file
-        if (downloadedFile != null) {
-            downloadedFile.delete();
-        }
     }
 
     return ResponseEntity.status(HttpStatus.CREATED).body(savedNeps);

@@ -1,5 +1,7 @@
 package com.proj.rest.webservices.restfulwebservices.services;
 
+import java.io.File;
+
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,9 +13,14 @@ import com.proj.rest.webservices.restfulwebservices.repositories.*;
 public class DataFormaterService {
 
     private UniversityRepository universityRepository;
+    private StorageService storageService;
+    private FileTextExtractionService fileTextExtractionService;
 
-    public DataFormaterService(UniversityRepository universityRepository) {
-                this.universityRepository = universityRepository;
+    public DataFormaterService(UniversityRepository universityRepository, 
+    StorageService storageService, FileTextExtractionService fileTextExtractionService) {
+        this.universityRepository = universityRepository;
+        this.storageService = storageService;
+        this.fileTextExtractionService = fileTextExtractionService;
     }
 
     public String getBasicInfo(Integer universityId) {
@@ -195,7 +202,14 @@ public class DataFormaterService {
 
         ObjectMapper mapper = new ObjectMapper();
         try{
-            return mapper.writeValueAsString(university.getNepDetails());
+            var nepDetails = university.getNepDetails();
+            nepDetails.forEach(nep -> {
+                String fileIdentifier = nep.getDocument().getFileIdentifier();
+                File downloadedFile = storageService.downloadFileAsFile(fileIdentifier);
+            nep.setExtractedText(fileTextExtractionService.extractTextFromTxt(downloadedFile));
+            System.out.println("Extracted text: " + nep.getExtractedText());
+            });
+            return mapper.writeValueAsString(nepDetails);
         } catch(JsonProcessingException e){
             throw new RuntimeException("Error processing JSON", e);
         }
@@ -208,7 +222,14 @@ public class DataFormaterService {
 
         ObjectMapper mapper = new ObjectMapper();
         try{
-            return mapper.writeValueAsString(university.getElectoralLiteracyDetails());
+            var electoralDetails = university.getElectoralLiteracyDetails();
+            electoralDetails.forEach(detail -> {
+            String fileIdentifier = detail.getDocument().getFileIdentifier();
+            File downloadedFile = storageService.downloadFileAsFile(fileIdentifier);
+            detail.setExtractedText(fileTextExtractionService.extractTextFromTxt(downloadedFile));
+            System.out.println("Extracted text: " + detail.getExtractedText());
+        });
+        return mapper.writeValueAsString(electoralDetails);
         } catch(JsonProcessingException e){
             throw new RuntimeException("Error processing JSON", e);
         }

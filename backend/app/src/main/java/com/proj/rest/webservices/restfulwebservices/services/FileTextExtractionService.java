@@ -30,8 +30,11 @@ public class FileTextExtractionService {
         }
     }
 
-    private String extractTextFromTxt(File txtFile) {
+    public String extractTextFromTxt(File txtFile) {
         try {
+            System.out.println("Extracting text from txt file");
+            System.out.println(txtFile.toPath());
+            System.out.println(Files.readAllBytes(txtFile.toPath()));
             return new String(Files.readAllBytes(txtFile.toPath()));
         } catch (IOException e) {
             throw new RuntimeException("Error reading text file", e);

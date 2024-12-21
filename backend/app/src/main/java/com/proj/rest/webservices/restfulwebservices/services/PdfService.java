@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.kernel.pdf.action.PdfAction;
+import java.util.List; 
 
 @Service
 public class PdfService {
@@ -31,21 +32,13 @@ public class PdfService {
 
     private static final String SRC = "src/main/resources/static/input.html";
     private static final String DEST = "target/classes/UniversityProfile.pdf";
-    // String arialFontPath =
-    // "EduEval/backend/app/src/main/resources/static/Arial.ttf";
-    // PdfFont arialFont = PdfFontFactory.createFont(arialFontPath,
-    // PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
     private final StaticDataService staticDataService;
-    // private final PdfTextExtractionService pdfTextExtractionService;
     private final DataFormaterService dataFormaterService;
-    // private final StorageService storageService;
 
     public PdfService( StaticDataService staticDataService, DataFormaterService dataFormaterService
-    ,PdfTextExtractionService pdfTextExtractionService,StorageService storageService) {
+    ,StorageService storageService) {
         this.staticDataService = staticDataService;
         this.dataFormaterService = dataFormaterService;
-        // this.pdfTextExtractionService = pdfTextExtractionService;
-        // this.storageService = storageService;
     }
 
     public void convertHtmlToPdf() throws IOException {
@@ -60,291 +53,7 @@ public class PdfService {
     public void generatePdf() throws IOException {
         try {
             // JSON String
-            String jsonData = """
-{
-    "universityInfo": {
-    "name": "DHIRUBHAI AMBANI INSTITUTE OF INFORMATION AND COMMUNICATION TECHNOLOGY (DA-IICT)",
-    "address": "Near Indroda Circle, Gandhinagar",
-    "city": "Gandhinagar",
-    "state": "Gujarat",
-    "pin": "382007",
-    "website": "https://www.daiict.ac.in"
-  },
-  "contacts": [
-    {
-      "designation": "Director",
-      "name": "K S Dasgupta",
-      "telephone": "079-68261572",
-      "mobile": "9327043614",
-      "fax": "079-68261710",
-      "email": "director@daiict.ac.in"
-    },
-    {
-      "designation": "IQAC / CIQA Coordinator",
-      "name": "Anil Roy",
-      "telephone": "079-68261567",
-      "mobile": "9376163094",
-      "fax": "079-68261710",
-      "email": "iqac_dir@daiict.ac.in"
-    }
-  ],
-  "recognitionDetails": [
-    {
-      "section": "2f of UGC",
-      "date": "30-11-2004",
-      "document": "View Document"
-    },
-    {
-      "section": "12B of UGC",
-      "date": "Not Applicable",
-      "document": "Not Available"
-    }
-  ],
-  "campusDetails": [
-    {
-      "type": "Main Campus",
-      "address": "Near Indroda Circle, Gandhinagar",
-      "location": "Urban",
-      "area": "50",
-      "builtUpArea": "202350",
-      "programs": "Undergraduate, Postgraduate, PhD",
-      "establishmentDate": "06-08-2001",
-      "dateOfRecognitionByUGC": ""
-    }
-  ],
-  "natureOfUniversity": "State Private University",
-  "typeOfUniversity": "Unitary",
-  "establishmentDate": "06-08-2001",
-  "priorDate": "NA",
-  "universityPotential": "No",
-  "academicDetails": {
-    "Constituent Colleges": 0,
-    "Affiliated Colleges": 0,
-    "Colleges Under 2(f)": 0,
-    "Colleges Under 2(f) and 12B": 0,
-    "NAAC Accredited Colleges": 0,
-    "Colleges with Potential for Excellence (UGC)": 0,
-    "Autonomous Colleges": 0,
-    "Colleges with Postgraduate Departments": 0,
-    "Colleges with Research Departments": 0,
-    "University Recognized Research Institutes/Centers": 0
-  },
-  "isSRAProgram": "Yes",
-  "sraPrograms": [
-    { "program": "PCI", "document": "url1.pdf" },
-    { "program": "BCI", "document": "url2.pdf" },
-    { "program": "COA", "document": "url3.pdf" }
-  ],
-  "affiliatedInstitution": [
-    { "Type of Colleges": "Education/Teachers Training", "Permanent": 4, "Temporary": 0, "Total": 4 },
-    { "Type of Colleges": "Arts", "Permanent": 1, "Temporary": 0, "Total": 1 },
-    { "Type of Colleges": "Rehabilitation Sciences", "Permanent": 2, "Temporary": 0, "Total": 2 },
-    { "Type of Colleges": "Engineering/Technology/Architecture/Design", "Permanent": 1, "Temporary": 0, "Total": 1 },
-    { "Type of Colleges": "General", "Permanent": 64, "Temporary": 0, "Total": 64 },
-    {
-      "Type of Colleges": "Medicine & Surgery/Ayurveda/Unani/Homeopathy/Health & Allied Sciences/Paramedical/Sciences",
-      "Permanent": 18,
-      "Temporary": 0,
-      "Total": 18
-    }
-  ],
-  "TeachingFaculty": {
-    "Sanctioned": {
-      "Professor": { "Male": 10, "Female": 5, "Others": 0, "Total": 15 },
-      "Associate Professor": { "Male": 8, "Female": 7, "Others": 1, "Total": 16 },
-      "Assistant Professor": { "Male": 12, "Female": 10, "Others": 0, "Total": 22 }
-    },
-    "Recruited": {
-      "Professor": { "Male": 8, "Female": 4, "Others": 0, "Total": 12 },
-      "Associate Professor": { "Male": 7, "Female": 5, "Others": 0, "Total": 12 },
-      "Assistant Professor": { "Male": 10, "Female": 8, "Others": 1, "Total": 19 }
-    },
-    "Yet to Recruit": {
-      "Professor": { "Male": 2, "Female": 1, "Others": 0, "Total": 3 },
-      "Associate Professor": { "Male": 1, "Female": 2, "Others": 1, "Total": 4 },
-      "Assistant Professor": { "Male": 2, "Female": 2, "Others": 0, "Total": 4 }
-    },
-    "Contractual": {
-      "Professor": { "Male": 1, "Female": 1, "Others": 0, "Total": 2 },
-      "Associate Professor": { "Male": 2, "Female": 0, "Others": 0, "Total": 2 },
-      "Assistant Professor": { "Male": 5, "Female": 3, "Others": 0, "Total": 8 }
-    }
-  },
-  "NonTeachingStaff": {
-    "Sanctioned": { "Male": 10, "Female": 8, "Others": 2, "Total": 20 },
-    "Recruited": { "Male": 8, "Female": 6, "Others": 1, "Total": 15 },
-    "Yet to Recruit": { "Male": 2, "Female": 2, "Others": 1, "Total": 5 },
-    "Contractual": { "Male": 5, "Female": 3, "Others": 0, "Total": 8 }
-  },
-  "TechnicalStaff": {
-    "Sanctioned": { "Male": 15, "Female": 10, "Others": 0, "Total": 25 },
-    "Recruited": { "Male": 12, "Female": 8, "Others": 0, "Total": 20 },
-    "Yet to Recruit": { "Male": 3, "Female": 2, "Others": 0, "Total": 5 },
-    "Contractual": { "Male": 6, "Female": 4, "Others": 0, "Total": 10 }
-  },
-  "QualificationDetails": {
-    "permanentTeacher": {
-      "D.sc/D.Litt": {
-        "Professor": { "Male": 3, "Female": 2, "Others": 0 },
-        "Associate Professor": { "Male": 4, "Female": 1, "Others": 0 },
-        "Assistant Professor": { "Male": 5, "Female": 3, "Others": 0 }
-      },
-      "Ph.D.": {
-        "Professor": { "Male": 6, "Female": 4, "Others": 1 },
-        "Associate Professor": { "Male": 8, "Female": 6, "Others": 0 },
-        "Assistant Professor": { "Male": 12, "Female": 8, "Others": 1 }
-      },
-      "M.Phil.": {
-        "Professor": { "Male": 1, "Female": 0, "Others": 0 },
-        "Associate Professor": { "Male": 2, "Female": 2, "Others": 0 },
-        "Assistant Professor": { "Male": 3, "Female": 2, "Others": 0 }
-      },
-      "PG": {
-        "Professor": { "Male": 2, "Female": 1, "Others": 0 },
-        "Associate Professor": { "Male": 3, "Female": 2, "Others": 0 },
-        "Assistant Professor": { "Male": 5, "Female": 3, "Others": 1 }
-      }
-    },
-    "temporaryTeacher": {
-      "D.sc/D.Litt": {
-        "Professor": { "Male": 1, "Female": 0, "Others": 0 },
-        "Associate Professor": { "Male": 0, "Female": 1, "Others": 0 },
-        "Assistant Professor": { "Male": 1, "Female": 1, "Others": 0 }
-      },
-      "Ph.D.": {
-        "Professor": { "Male": 3, "Female": 2, "Others": 0 },
-        "Associate Professor": { "Male": 1, "Female": 2, "Others": 0 },
-        "Assistant Professor": { "Male": 4, "Female": 3, "Others": 0 }
-      },
-      "M.Phil.": {
-        "Professor": { "Male": 0, "Female": 0, "Others": 0 },
-        "Associate Professor": { "Male": 0, "Female": 1, "Others": 0 },
-        "Assistant Professor": { "Male": 1, "Female": 1, "Others": 0 }
-      },
-      "PG": {
-        "Professor": { "Male": 1, "Female": 1, "Others": 0 },
-        "Associate Professor": { "Male": 2, "Female": 2, "Others": 0 },
-        "Assistant Professor": { "Male": 3, "Female": 2, "Others": 0 }
-      }
-    },
-    "partTimeTeacher": {
-      "D.sc/D.Litt": { "Professor": { "Male": 1, "Female": 1, "Others": 0 }, "Associate Professor": { "Male": 1, "Female": 0, "Others": 0 }, "Assistant Professor": { "Male": 0, "Female": 1, "Others": 0 } },
-      "Ph.D.": { "Professor": { "Male": 2, "Female": 2, "Others": 0 }, "Associate Professor": { "Male": 3, "Female": 1, "Others": 0 }, "Assistant Professor": { "Male": 4, "Female": 3, "Others": 0 } },
-      "M.Phil.": { "Professor": { "Male": 1, "Female": 1, "Others": 0 }, "Associate Professor": { "Male": 1, "Female": 1, "Others": 0 }, "Assistant Professor": { "Male": 1, "Female": 2, "Others": 0 } },
-      "PG": { "Professor": { "Male": 3, "Female": 2, "Others": 0 }, "Associate Professor": { "Male": 4, "Female": 2, "Others": 0 }, "Assistant Professor": { "Male": 5, "Female": 3, "Others": 0 } }
-    }
-  },
-  "DistinguishedAcademicians": {
-            "Emeritus Professor": { "Male": 2, "Female": 1, "Others": 0, "Total": 3 },
-            "Adjunct Professor": { "Male": 3, "Female": 2, "Others": 1, "Total": 6 },
-            "Visiting Professor": { "Male": 4, "Female": 3, "Others": 0, "Total": 7 }
-          },
-  "chairs": [
-                        {
-                            "serialNo": 1,
-                            "department": "Department of Computer Science",
-                            "chair": "AI Research Chair",
-                            "sponsor": "Google AI"
-                        },
-                        {
-                            "serialNo": 2,
-                            "department": "Department of Physics",
-                            "chair": "Quantum Mechanics Chair",
-                            "sponsor": "NASA"
-                        }
-            ],
-
-            "programmes": [
-                {
-                  "name": "PG",
-                  "categories": [
-                    {
-                      "gender": "Male",
-                      "fromState": 50,
-                      "fromOtherStates": 30,
-                      "nri": 5,
-                      "foreign": 10,
-                      "total": 95
-                    },
-                    {
-                      "gender": "Female",
-                      "fromState": 60,
-                      "fromOtherStates": 40,
-                      "nri": 7,
-                      "foreign": 8,
-                      "total": 115
-                    },
-                    {
-                      "gender": "Others",
-                      "fromState": 5,
-                      "fromOtherStates": 3,
-                      "nri": 1,
-                      "foreign": 2,
-                      "total": 11
-                    }
-                  ]
-                },
-                {
-                  "name": "UG",
-                  "categories": [
-                    {
-                      "gender": "Male",
-                      "fromState": 80,
-                      "fromOtherStates": 50,
-                      "nri": 10,
-                      "foreign": 15,
-                      "total": 155
-                    },
-                    {
-                      "gender": "Female",
-                      "fromState": 90,
-                      "fromOtherStates": 60,
-                      "nri": 12,
-                      "foreign": 20,
-                      "total": 182
-                    },
-                    {
-                      "gender": "Others",
-                      "fromState": 10,
-                      "fromOtherStates": 5,
-                      "nri": 2,
-                      "foreign": 3,
-                      "total": 20
-                    }
-                  ]
-                },
-                {
-                  "name": "PG Diploma recognized by statutory authority",
-                  "categories": [
-                    {
-                      "gender": "Male",
-                      "fromState": 25,
-                      "fromOtherStates": 15,
-                      "nri": 3,
-                      "foreign": 4,
-                      "total": 47
-                    },
-                    {
-                      "gender": "Female",
-                      "fromState": 30,
-                      "fromOtherStates": 20,
-                      "nri": 5,
-                      "foreign": 6,
-                      "total": 61
-                    },
-                    {
-                      "gender": "Others",
-                      "fromState": 3,
-                      "fromOtherStates": 2,
-                      "nri": 0,
-                      "foreign": 1,
-                      "total": 6
-                    }
-                  ]
-                }
-              ]
-      
-}""";
+            String jsonData = staticDataService.getJsonData();
             // Parse JSON data
             JSONObject jsonObject = new JSONObject(jsonData);
             JsonObject tempJsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
@@ -361,7 +70,21 @@ public class PdfService {
         // path to font library
 // ---------------------------------------------------------------------------- //
         // University Models Data
-        JsonObject universityJsonObject = JsonParser.parseString(dataFormaterService.getBasicInfo(1)).getAsJsonObject();
+      String basicInfo = dataFormaterService.getBasicInfo(1);
+      System.out.println("Basic Info Data: " + basicInfo);
+if (basicInfo == null || basicInfo.isEmpty()) {
+    throw new IllegalArgumentException("Basic Info data is null or empty for ID 1");
+}
+
+JsonObject universityJsonObject;
+try {
+    universityJsonObject = JsonParser.parseString(basicInfo).getAsJsonObject();
+} catch (IllegalStateException e) {
+    throw new IllegalStateException("Invalid JSON format for Basic Info: " + basicInfo, e);
+}
+System.out.println("11111 --> " + universityJsonObject);
+
+        // JsonObject universityJsonObject = JsonParser.parseString(dataFormaterService.getBasicInfo(1)).getAsJsonObject();
         String name = getJsonValue(universityJsonObject, "name");
         String address = getJsonValue(universityJsonObject, "address");
         String city = getJsonValue(universityJsonObject, "city");
@@ -376,52 +99,168 @@ public class PdfService {
 // ------------------------------------------------------------------------------- //
 
       // Contact Details
-      JsonArray contactsJsonArray = JsonParser.parseString(dataFormaterService.getContactDetials(1)).getAsJsonArray();
-
+      Boolean isContactsNull = true;
+      JsonArray contactsJsonArray = new JsonArray();
+      String contactDetails = dataFormaterService.getContactDetials(1);
+      if (contactDetails != null) {
+          contactsJsonArray = JsonParser.parseString(contactDetails).getAsJsonArray();
+          isContactsNull = false;
+      }
+      System.out.println("22222 -> " + contactsJsonArray);
         // JSONArray campusDetails = jsonObject.getJSONArray("campusDetails");
-        String priorDate = jsonObject.getString("priorDate");
+        String priorDate = getJsonValue(universityJsonObject, "priorStatus");
         // String isSRA = jsonObject.getString("isSRAProgram");
         JsonArray affiliatedInstitutionArray = tempJsonObject.getAsJsonArray("affiliatedInstitution");
         // JSONArray sraProgramsArray = jsonObject.getJSONArray("sraPrograms");
-
+      System.out.println("33333 -> " + affiliatedInstitutionArray);
 // -------------------------------------------------------------------------------- //
         
-        // Recognition Detail
+// Recognition Detail
+         Boolean isRecognitionDetailsNull = true;
+        JsonObject recognitionDetailsJsonObject = new JsonObject();
 
-        JsonObject RecognitionDetailsJsonObject = JsonParser.parseString(dataFormaterService.getRecognitionDetails(1)).getAsJsonObject();
+        try {
+            String recognitionDetails = dataFormaterService.getRecognitionDetails(1);
+            System.out.println("Recog wale baba --> " + recognitionDetails);
+
+            if (recognitionDetails != null && !recognitionDetails.trim().isEmpty()) {
+                // Attempt to parse the string as a JSON object
+                recognitionDetailsJsonObject = JsonParser.parseString(recognitionDetails).getAsJsonObject();
+                isRecognitionDetailsNull = false;
+            } else {
+                System.out.println("Recognition details are null or empty.");
+            }
+        } catch (JsonSyntaxException | IllegalStateException e) {
+            System.err.println("Error parsing recognition details as JSON: " + e.getMessage());
+        }
+
+        System.out.println("4444 -> " + recognitionDetailsJsonObject);
+
         
 // --------------------------------------------- ---------------------------------//
 // Campus Details
-
-        JsonArray CampusDetailsJsonObject = JsonParser.parseString(dataFormaterService.getCampusDetails(1)).getAsJsonArray();
-
+        Boolean isCampusDetailsNull = true;
+        JsonArray campusDetailsJsonArray = new JsonArray();
+        String campusDetails = dataFormaterService.getCampusDetails(1);
+        if (campusDetails != null) {
+          campusDetailsJsonArray = JsonParser.parseString(campusDetails).getAsJsonArray();
+          isCampusDetailsNull = false;
+        }
+        System.out.println("5555 -> " + campusDetailsJsonArray);
 // -------------------------------------------------------------------------------- //
-// College Stats
+Boolean isCollegeStatsNull = true;
+JsonObject collegeStatsJsonObject = new JsonObject();
 
-        JsonObject CollegeStatsJsonObject = JsonParser.parseString(dataFormaterService.getCollegeStatsDetails(1)).getAsJsonObject();
-// SRA Program
+try {
+    String collegeStatsDetails = dataFormaterService.getCollegeStatsDetails(1);
+    
+    if (collegeStatsDetails != null && !collegeStatsDetails.trim().isEmpty()) {
+        // Attempt to parse the string as a JSON object
+        collegeStatsJsonObject = JsonParser.parseString(collegeStatsDetails).getAsJsonObject();
+        isCollegeStatsNull = false;
+    } else {
+        System.out.println("College stats details are null or empty.");
+    }
+} catch (JsonSyntaxException | IllegalStateException e) {
+    System.err.println("Error parsing college stats details as JSON: " + e.getMessage());
+}
+
+System.out.println("6666 -> " + collegeStatsJsonObject);
 // -----------------------------------------------------------------------------------------------------------------
 // Faculty Details       
-        JsonArray FacultyDetails = JsonParser.parseString(dataFormaterService.getFacultyDetails(1)).getAsJsonArray();
+        Boolean isFacultyDetailsNull = true;
+        JsonArray FacultyDetails = new JsonArray();
+        String facultyDetails = dataFormaterService.getFacultyDetails(1);
+        if (facultyDetails != null) {
+            FacultyDetails = JsonParser.parseString(facultyDetails).getAsJsonArray();
+            isFacultyDetailsNull = false;
+        }
+        System.out.println("7777 -> "+ FacultyDetails);
 // Non Teaching Staff
-        JsonArray NonTeachingStaff = JsonParser.parseString(dataFormaterService.getNonTeachingDetails(1)).getAsJsonArray();
+        Boolean isNonTeachingStaffNull = true;
+        JsonArray NonTeachingStaff = new JsonArray();
+        String nonTeachingStaffDetails = dataFormaterService.getNonTeachingDetails(1);
+        if (nonTeachingStaffDetails != null) {
+            NonTeachingStaff = JsonParser.parseString(nonTeachingStaffDetails).getAsJsonArray();
+            isNonTeachingStaffNull = false;
+        }
+        System.out.println("8888 -> " + NonTeachingStaff);
 // Distinguish Academician
-        JsonArray DistinguishedAcademicianDetail = JsonParser.parseString(dataFormaterService.getDistinguishAcadmecian(1)).getAsJsonArray();
+        Boolean isDistinguishedAcademicianNull = true;
+        JsonArray DistinguishedAcademicianDetail = new JsonArray();
+        String distinguishedAcademicianDetails = dataFormaterService.getDistinguishAcadmecian(1);
+        if (distinguishedAcademicianDetails != null) {
+            DistinguishedAcademicianDetail = JsonParser.parseString(distinguishedAcademicianDetails).getAsJsonArray();
+            isDistinguishedAcademicianNull = false;
+        }
+        System.out.println("9999 --> " + DistinguishedAcademicianDetail);
 // Chairs Details
-        JsonArray ChairsDetails = JsonParser.parseString(dataFormaterService.getChairsDetails(1)).getAsJsonArray();
+        Boolean isChairsDetailsNull = true;
+        JsonArray ChairsDetails = new JsonArray();
+        String chairsDetails = dataFormaterService.getChairsDetails(1);
+        if (chairsDetails != null) {
+            ChairsDetails = JsonParser.parseString(chairsDetails).getAsJsonArray();
+            isChairsDetailsNull = false;
+        }
+        System.out.println("1010 --> " + ChairsDetails);
 // HRDC Details
-        JsonObject HRDCDetails = JsonParser.parseString(dataFormaterService.getHRDCDetails(1)).getAsJsonObject();
+        Boolean isHRDCDetailsNull = true;
+JsonObject HRDCDetails = new JsonObject();
+
+try {
+    String hrdcDetails = dataFormaterService.getHRDCDetails(1);
+
+    if (hrdcDetails != null && !hrdcDetails.trim().isEmpty()) {
+        // Attempt to parse the string as a JSON object
+        HRDCDetails = JsonParser.parseString(hrdcDetails).getAsJsonObject();
+        isHRDCDetailsNull = false;
+    } else {
+        System.out.println("HRDC details are null or empty.");
+    }
+} catch (JsonSyntaxException | IllegalStateException e) {
+    System.err.println("Error parsing HRDC details as JSON: " + e.getMessage());
+}
+
+System.out.println("1111 --> " + HRDCDetails);
+
 // Accrediation Details
+        // Boolean isAccreditationDetailsNull = true;
+        // JsonArray AccreditationDetails = new JsonArray();
+        // String accreditationDetails = dataFormaterService.getAccreditationDetails(1);
+        // if (accreditationDetails != null) {
+        //     AccreditationDetails = JsonParser.parseString(accreditationDetails).getAsJsonArray();
+        //     isAccreditationDetailsNull = false;
+        // }
 // -------------------------------------------------------------------------------------------------------------------
         // JsonArray AccreditationDetails = JsonParser.parseString(dataFormaterService.getAccreditationDetails(1)).getAsJsonArray();
 // Create PDF document
 // Departement Evaluation
-        JsonArray DepartmentEvaluationJson = JsonParser.parseString(dataFormaterService.getDepartmetEvaluation(1)).getAsJsonArray();
-// ------------------------------------------------------------
-// NEP Detials
-        JsonArray NEPDetailsJson = JsonParser.parseString(dataFormaterService.getNepDetails(1)).getAsJsonArray();
-        // Electoral Details
-        JsonArray electrolDetails = JsonParser.parseString(dataFormaterService.getElectoralDetails(1)).getAsJsonArray();
+Boolean isDepartmentEvaluationNull = true;
+JsonArray DepartmentEvaluationJson = new JsonArray();
+String departmentEvaluationDetails = dataFormaterService.getDepartmetEvaluation(1);
+if (departmentEvaluationDetails != null) {
+    DepartmentEvaluationJson = JsonParser.parseString(departmentEvaluationDetails).getAsJsonArray();
+    isDepartmentEvaluationNull = false;
+}
+System.out.println("1212 -- > " + DepartmentEvaluationJson);
+// NEP Details
+Boolean isNEPDetailsNull = true;
+JsonArray NEPDetailsJson = new JsonArray();
+String nepDetails = dataFormaterService.getNepDetails(1);
+if (nepDetails != null) {
+    NEPDetailsJson = JsonParser.parseString(nepDetails).getAsJsonArray();
+    isNEPDetailsNull = false;
+}
+System.out.println("1313 --> " + NEPDetailsJson);
+// Electoral Details
+Boolean isElectoralDetailsNull = true;
+JsonArray electrolDetails = new JsonArray();
+String electoralDetails = dataFormaterService.getElectoralDetails(1);
+if (electoralDetails != null) {
+    electrolDetails = JsonParser.parseString(electoralDetails).getAsJsonArray();
+    isElectoralDetailsNull = false;}
+
+    System.out.println("1414 --> "+ electrolDetails);
 
         PdfWriter writer = new PdfWriter(DEST);
         PdfDocument pdf = new PdfDocument(writer);
@@ -441,6 +280,7 @@ public class PdfService {
         addUniversityInfoTable(document, name, address, city, state, pin, website);
 
         //2)  Add Dynamic Tables
+        if (!isContactsNull)
         addDynamicContactsTable(document, contactsJsonArray);
         // 3) Nature of Uni
         addSimpleRowTable(document, "Nature of University", natureOfUniversity);
@@ -450,216 +290,222 @@ public class PdfService {
         addEstablishmentTable(document, "Establishment Date of the University", establishmentDate,
                 priorDate.equals("NA") ? "" : priorDate);
 
-        document.add(new AreaBreak());
-
         // 6) Recognition Details
-        addRecognitionDetailsTable(document, RecognitionDetailsJsonObject);
+        if(!isRecognitionDetailsNull)
+        addRecognitionDetailsTable(document, recognitionDetailsJsonObject);
         // 7) Campus Details
-        addCampusDetailsTable(document,CampusDetailsJsonObject);
+        if(!isCampusDetailsNull)
+        addCampusDetailsTable(document,campusDetailsJsonArray);
 
         // ---- Academic Info ----- //
         document.add(new Paragraph("2.2 ACADEMIC INFORMATION").setBold().setFontSize(15).setMarginBottom(5));
 
         // add affilated institution if any
-        document.add(new Paragraph("Affiliated Institutions to the University").setBold().setFontSize(10)
-                .setMarginBottom(5));
+        // document.add(new Paragraph("Affiliated Institutions to the University").setBold().setFontSize(10)
+        //         .setMarginBottom(5));
 
-        if (!natureOfUniversity.equalsIgnoreCase("private") &&
-                !natureOfUniversity.equalsIgnoreCase("deemed to be")) {
-            addAffiliatedInstitution(document, affiliatedInstitutionArray);
-        } else {
-            document.add(new Paragraph("(Not applicable for private and deemed to be Universities)")
-                    .setFontSize(10).setItalic());
-        }
+        // if (!natureOfUniversity.equalsIgnoreCase("private") &&
+        //         !natureOfUniversity.equalsIgnoreCase("deemed to be")) {
+        //     addAffiliatedInstitution(document, affiliatedInstitutionArray);
+        // } else {
+        //     document.add(new Paragraph("(Not applicable for private and deemed to be Universities)")
+        //             .setFontSize(10).setItalic());
+        // }
         document.add(new Paragraph("Furnish the Details of Colleges of University\r").setBold().setFontSize(10));
-        // 8) College Stats
-        addCollegeStatsTable(document, CollegeStatsJsonObject);
+        // // 8) College Stats
+        if(!isCollegeStatsNull)
+        addCollegeStatsTable(document, collegeStatsJsonObject);
         // 9) addSRATable;
         addDynamicSRATable(document, dataFormaterService, areSRAProgram);
         // Faculty Data
         document.add(new Paragraph("Details Of Teaching & Non-Teaching Staff Of University").setBold().setFontSize(10));
         // 10) Teaching Faculty Table
+        if(!isFacultyDetailsNull)
         addTeachingFacultyTable(document, FacultyDetails);
         // 11) Staff Details Table
+        if(!isNonTeachingStaffNull)
         addStaffTable(document, NonTeachingStaff);
         // 12) Qualification Detail
         document.add(new Paragraph("Qualifications of the Teaching Staff ").setBold().setFontSize(10));
+        if(!isFacultyDetailsNull)
         addQualificationTable(document, FacultyDetails);
         // 13) Distinguish Academicians
+        if(!isDistinguishedAcademicianNull)
         addDistinguishedAcademicians(document,DistinguishedAcademicianDetail);
         // 14) Chairs
+        if(!isChairsDetailsNull)
         addChairs(document,ChairsDetails);
         /*
          * Student Enrolled in Current Academic Year Info
          */
-        // 15) HRDC Details
+        // // 15) HRDC Details
+        if(!isHRDCDetailsNull)
         addHRDCDetails(document,HRDCDetails);
         // 16) Accrediation Details
         
         // 17) Department Evaluation Details
+        if(!isDepartmentEvaluationNull)
         addEvaluativeReportTable(document, DepartmentEvaluationJson);
 
 
         // 18) NEP details
+        if(!isNEPDetailsNull)
         createNEPTable(document,NEPDetailsJson);
 
         // 19) Electoral Details
+        if(!isElectoralDetailsNull)
         createElectoralTable(document,electrolDetails);
 
         document.close();
         System.out.println("Extended PDF Created!");
     }
 
-public void createElectoralTable(Document document,JsonArray jsonArray) throws Exception {
+public void createElectoralTable(Document document, JsonArray jsonArray) throws Exception {
 
-  Paragraph title = new Paragraph("Institutional Initiatives for Electoral Literacy")
+    Paragraph title = new Paragraph("Institutional Initiatives for Electoral Literacy")
             .setBold()
             .setTextAlignment(TextAlignment.LEFT)
             .setFontSize(10);
     document.add(title);
 
-        // Define the categories in order
-        String[] categories = staticDataService.getElectoralLiteracyQuestions();
+    // Define the categories in order
+    List<String> categoryList = staticDataService.getElectoralLiteracyQuestions(); // Use java.util.List
+    String[] categories = categoryList.toArray(new String[0]); // Convert List<String> to String[]
 
-        // Create PDF writer and document
+    // Add a table with 2 columns
+    Table table = new Table(UnitValue.createPercentArray(new float[]{30, 70}));
+    table.setWidth(UnitValue.createPercentValue(100));
 
-        // Add a table with 2 columns
-        Table table = new Table(UnitValue.createPercentArray(new float[]{30, 70}));
-        table.setWidth(UnitValue.createPercentValue(100));
+    // Iterate over the JSON array and populate the table
+    for (int i = 0; i < jsonArray.size(); i++) {
+        JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+        int section = jsonObject.get("section").getAsInt();
+        String extractedText = jsonObject.get("extractedText").getAsString();
 
-        // Iterate over the JSON array and populate the table
-        for (int i = 0; i < jsonArray.size(); i++) {
-            JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-            int section = jsonObject.get("section").getAsInt();
-            String extractedText = jsonObject.get("extractedText").getAsString();
+        // Clean up the extracted text (e.g., remove "\r\n")
+        String formattedText = extractedText.replace("\\r\\n", " ").replace("\\n", " ").trim();
 
-            // Clean up the extracted text (e.g., remove "\r\n")
-            String formattedText = extractedText.replace("\\r\\n", " ").replace("\\n", " ").trim();
-
-            // Add category and formatted text to the table
-            table.addCell(new Cell().add(new Paragraph(categories[section])));
-            table.addCell(new Cell().add(new Paragraph(formattedText)));
-        }
-
-        // Add table to document and close
-        document.add(table);
-
-    }
-
-
-public void createNEPTable(Document document,JsonArray jsonArray) throws Exception {
-
-  Paragraph title = new Paragraph("Institutional preparedness for NEP")
-            .setBold()
-            .setTextAlignment(TextAlignment.LEFT)
-            .setFontSize(10);
-    document.add(title);
-
-        // Define the categories in order
-        String[] categories = staticDataService.getNepSections();
-
-        // Create PDF writer and document
-
-        // Add a table with 2 columns
-        Table table = new Table(UnitValue.createPercentArray(new float[]{30, 70}));
-        table.setWidth(UnitValue.createPercentValue(100));
-
-        // Iterate over the JSON array and populate the table
-        for (int i = 0; i < jsonArray.size(); i++) {
-            JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-            int section = jsonObject.get("section").getAsInt();
-            String extractedText = jsonObject.get("extractedText").getAsString();
-
-            // Clean up the extracted text (e.g., remove "\r\n")
-            String formattedText = extractedText.replace("\\r\\n", " ").replace("\\n", " ").trim();
-
-            // Add category and formatted text to the table
-            table.addCell(new Cell().add(new Paragraph(categories[section])));
-            table.addCell(new Cell().add(new Paragraph(formattedText)));
-        }
-
-        // Add table to document and close
-        document.add(table);
-
-    }
-
-    private static void addEvaluativeReportTable(Document document, JsonArray departmentEvaluationJson) {
-    // Add title
-    Paragraph title = new Paragraph("EVALUATIVE REPORT OF THE DEPARTMENTS")
-            .setBold()
-            .setTextAlignment(TextAlignment.CENTER)
-            .setFontSize(10);
-    document.add(title);
-
-    // Define table with 2 columns
-    float[] columnWidths = {5, 5};
-    Table table = new Table(columnWidths).useAllAvailableWidth();
-
-    // Add table headers
-    table.addHeaderCell(new Cell().add(new Paragraph("Name of the Department").setBold()));
-    table.addHeaderCell(new Cell().add(new Paragraph("Evaluative Report").setBold()));
-
-    // Add data rows
-    if (departmentEvaluationJson.size() > 0) {
-        for (JsonElement element : departmentEvaluationJson) {
-            JsonObject department = element.getAsJsonObject();
-            String departmentName = department.get("departmentName").getAsString();
-
-            // Extract evaluative report details
-            JsonObject report = department.getAsJsonObject("report");
-            String fileIdentifierUrl = recognitionDetailsPrefixURL + report.get("fileIdentifier").getAsString();
-            // String fileName = report.get("fileName").getAsString();
-
-            // Create a clickable link for the file
-            Link fileLink = new Link("View Document", PdfAction.createURI(fileIdentifierUrl));
-            Paragraph fileLinkParagraph = new Paragraph().add(fileLink).setFontColor(com.itextpdf.kernel.colors.ColorConstants.BLUE);
-
-            table.addCell(new Cell().add(new Paragraph(departmentName)));
-            table.addCell(new Cell().add(fileLinkParagraph).setUnderline());
-        }
-    } else {
-        // If no data, add a row with "NILL"
-        table.addCell(new Cell(1, 2).add(new Paragraph("NILL").setTextAlignment(TextAlignment.CENTER)));
+        // Add category and formatted text to the table
+        table.addCell(new Cell().add(new Paragraph(categories[section])));
+        table.addCell(new Cell().add(new Paragraph(formattedText)));
     }
 
     // Add table to document
     document.add(table);
 }
 
-
-    private static void addHRDCDetails(Document document, JsonObject hrdcDetails) {
-    // Add title
-    Paragraph title = new Paragraph("Details of programmes under the UGC Human Resource Development Centre, If applicable")
+public void createNEPTable(Document document, JsonArray jsonArray) throws Exception {
+    Paragraph title = new Paragraph("Institutional preparedness for NEP")
             .setBold()
+            .setTextAlignment(TextAlignment.LEFT)
             .setFontSize(10);
     document.add(title);
 
-    // Define the table structure
-    float[] columnWidths = {6, 4};
-    Table table = new Table(columnWidths).useAllAvailableWidth();
+    // Define the categories in order
+    List<String> categoryList = staticDataService.getNepSections();
+    String[] categories = categoryList.toArray(new String[0]); // Convert List<String> to String[]
 
-    // Add rows to the table
-    table.addCell(new Cell().add(new Paragraph("Year of Establishment")));
-    // Convert the establishment date from epoch to year
-    long establishmentDate = hrdcDetails.get("hrdcEstablishmentDate").getAsLong();
-    String establishmentYear = String.valueOf(java.time.Instant.ofEpochMilli(establishmentDate)
-            .atZone(java.time.ZoneId.systemDefault()).getYear());
-    table.addCell(new Cell().add(new Paragraph(establishmentYear)));
+    // Add a table with 2 columns
+    Table table = new Table(UnitValue.createPercentArray(new float[]{30, 70}));
+    table.setWidth(UnitValue.createPercentValue(100));
 
-    table.addCell(new Cell().add(new Paragraph("Number of UGC Orientation Programmes")));
-    table.addCell(new Cell().add(new Paragraph(String.valueOf(hrdcDetails.get("hrdcOrientationProgramCount").getAsInt()))));
+    // Iterate over the JSON array and populate the table
+    for (int i = 0; i < jsonArray.size(); i++) {
+        JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+        int section = jsonObject.get("section").getAsInt();
+        String extractedText = jsonObject.get("extractedText").getAsString();
 
-    table.addCell(new Cell().add(new Paragraph("Number of UGC Refresher Course")));
-    table.addCell(new Cell().add(new Paragraph(String.valueOf(hrdcDetails.get("hrdcRefresherCourseCount").getAsInt()))));
+        // Clean up the extracted text (e.g., remove "\r\n")
+        String formattedText = extractedText.replace("\\r\\n", " ").replace("\\n", " ").trim();
 
-    table.addCell(new Cell().add(new Paragraph("Number of University's own Programmes")));
-    table.addCell(new Cell().add(new Paragraph(String.valueOf(hrdcDetails.get("hrdcOwnProgramCount").getAsInt()))));
+        // Add category and formatted text to the table
+        table.addCell(new Cell().add(new Paragraph(categories[section])));
+        table.addCell(new Cell().add(new Paragraph(formattedText)));
+    }
 
-    table.addCell(new Cell().add(new Paragraph("Total Number of Programmes Conducted\n(during the last five years)")));
-    table.addCell(new Cell().add(new Paragraph(String.valueOf(hrdcDetails.get("hrdctotalProgramCount").getAsInt()))));
-
-    // Add the table to the document
+    // Add table to document
     document.add(table);
+}
+
+  private static void addEvaluativeReportTable(Document document, JsonArray departmentEvaluationJson) {
+  // Add title
+  Paragraph title = new Paragraph("EVALUATIVE REPORT OF THE DEPARTMENTS")
+          .setBold()
+          .setTextAlignment(TextAlignment.CENTER)
+          .setFontSize(10);
+  document.add(title);
+
+  // Define table with 2 columns
+  float[] columnWidths = {5, 5};
+  Table table = new Table(columnWidths);
+  table.setWidth(UnitValue.createPercentValue(100));
+
+  // Add table headers
+  table.addHeaderCell(new Cell().add(new Paragraph("Name of the Department").setBold()));
+  table.addHeaderCell(new Cell().add(new Paragraph("Evaluative Report").setBold()));
+
+  // Add data rows
+  if (departmentEvaluationJson.size() > 0) {
+      for (JsonElement element : departmentEvaluationJson) {
+          JsonObject department = element.getAsJsonObject();
+          String departmentName = department.get("departmentName").getAsString();
+
+          // Extract evaluative report details
+          JsonObject report = department.getAsJsonObject("report");
+          String fileIdentifierUrl = recognitionDetailsPrefixURL + report.get("fileIdentifier").getAsString();
+          // String fileName = report.get("fileName").getAsString();
+
+          // Create a clickable link for the file
+          Link fileLink = new Link("View Document", PdfAction.createURI(fileIdentifierUrl));
+          Paragraph fileLinkParagraph = new Paragraph().add(fileLink).setFontColor(com.itextpdf.kernel.colors.ColorConstants.BLUE);
+
+          table.addCell(new Cell().add(new Paragraph(departmentName)));
+          table.addCell(new Cell().add(fileLinkParagraph).setUnderline());
+      }
+  } else {
+      // If no data, add a row with "NILL"
+      table.addCell(new Cell(1, 2).add(new Paragraph("NILL").setTextAlignment(TextAlignment.CENTER)));
+  }
+
+  // Add table to document
+  document.add(table);
+}
+
+
+  private static void addHRDCDetails(Document document, JsonObject hrdcDetails) {
+  // Add title
+  Paragraph title = new Paragraph("Details of programmes under the UGC Human Resource Development Centre, If applicable")
+          .setBold()
+          .setFontSize(10);
+  document.add(title);
+
+  // Define the table structure
+  float[] columnWidths = {6, 4};
+  Table table = new Table(columnWidths);
+  table.setWidth(UnitValue.createPercentValue(100));
+
+  // Add rows to the table
+  table.addCell(new Cell().add(new Paragraph("Year of Establishment")));
+  // Convert the establishment date from epoch to year
+  long establishmentDate = hrdcDetails.get("hrdcEstablishmentDate").getAsLong();
+  String establishmentYear = String.valueOf(java.time.Instant.ofEpochMilli(establishmentDate)
+          .atZone(java.time.ZoneId.systemDefault()).getYear());
+  table.addCell(new Cell().add(new Paragraph(establishmentYear)));
+
+  table.addCell(new Cell().add(new Paragraph("Number of UGC Orientation Programmes")));
+  table.addCell(new Cell().add(new Paragraph(String.valueOf(hrdcDetails.get("hrdcOrientationProgramCount").getAsInt()))));
+
+  table.addCell(new Cell().add(new Paragraph("Number of UGC Refresher Course")));
+  table.addCell(new Cell().add(new Paragraph(String.valueOf(hrdcDetails.get("hrdcRefresherCourseCount").getAsInt()))));
+
+  table.addCell(new Cell().add(new Paragraph("Number of University's own Programmes")));
+  table.addCell(new Cell().add(new Paragraph(String.valueOf(hrdcDetails.get("hrdcOwnProgramCount").getAsInt()))));
+
+  table.addCell(new Cell().add(new Paragraph("Total Number of Programmes Conducted\n(during the last five years)")));
+  table.addCell(new Cell().add(new Paragraph(String.valueOf(hrdcDetails.get("hrdctotalProgramCount").getAsInt()))));
+
+  // Add the table to the document
+  document.add(table);
 }
 
     private static String getJsonValue(JsonObject jsonObject, String key) {
@@ -677,7 +523,8 @@ public void createNEPTable(Document document,JsonArray jsonArray) throws Excepti
 
     // Define table with 4 columns
     float[] columnWidths = {1, 4, 4, 5};
-    Table table = new Table(columnWidths).useAllAvailableWidth();
+    Table table = new Table(columnWidths);
+    table.setWidth(UnitValue.createPercentValue(100));
 
     // Add table headers
     table.addHeaderCell(new Cell().add(new Paragraph("Sl.No").setBold().setTextAlignment(TextAlignment.CENTER)));
@@ -811,8 +658,8 @@ public void createNEPTable(Document document,JsonArray jsonArray) throws Excepti
     // Generate a table for each recruitment status
     for (String recruitmentStatus : recruitmentStatuses) {
         // Create table for the current recruitment status
-        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2}))
-                .useAllAvailableWidth();
+        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2}));
+        table.setWidth(UnitValue.createPercentValue(100));
         table.addHeaderCell(new Cell(1, 11).add(new Paragraph(recruitmentStatus + " Teachers").setBold().setFontSize(10))
                 .setTextAlignment(TextAlignment.CENTER));
 
@@ -918,9 +765,8 @@ public void createNEPTable(Document document,JsonArray jsonArray) throws Excepti
         document.add(new Paragraph(tableTitle).setBold().setTextAlignment(TextAlignment.LEFT));
 
         // Create a new table for the current data
-        Table table = new Table(UnitValue.createPercentArray(new float[]{2, 2, 2, 2, 2}))
-                .useAllAvailableWidth();
-
+        Table table = new Table(UnitValue.createPercentArray(new float[]{2, 2, 2, 2, 2}));
+        table.setWidth(UnitValue.createPercentValue(100));
         // Add header row
         table.addCell(createHeaderCell(""));
         table.addCell(createHeaderCell("Male"));
@@ -966,9 +812,8 @@ public void createNEPTable(Document document,JsonArray jsonArray) throws Excepti
 
     private static void addTeachingFacultyTable(Document document, JsonArray FacultyDetails) {
     // Create table with 13 columns
-    Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}))
-            .useAllAvailableWidth();
-
+    Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}));
+    table.setWidth(UnitValue.createPercentValue(100));
     // Header Row 1
     table.addCell(createBodyCell("", 1, 3));
     table.addCell(createHeaderCell("Designation", 12));
@@ -1161,11 +1006,6 @@ public void createNEPTable(Document document,JsonArray jsonArray) throws Excepti
         e.printStackTrace();
     }
 }
-
-
-
-
-
 
 private static void addAffiliatedInstitution(Document document, JsonArray affiliatedInstitutionArray) {
         Table table = new Table(new float[] { 3, 1, 1, 1 }); // Column widths
