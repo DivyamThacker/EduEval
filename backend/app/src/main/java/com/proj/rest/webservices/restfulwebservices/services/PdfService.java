@@ -194,6 +194,17 @@ System.out.println("6666 -> " + collegeStatsJsonObject);
             isDistinguishedAcademicianNull = false;
         }
         System.out.println("9999 --> " + DistinguishedAcademicianDetail);
+
+// Enrollment Details
+         Boolean isEnrollmentDetailsNull = true;
+         JsonArray EnrollmentDetails = new JsonArray();
+         String enrollmentDetails = dataFormaterService.getEnrollmentDetails(1);
+         if (enrollmentDetails != null) {
+             EnrollmentDetails = JsonParser.parseString(enrollmentDetails).getAsJsonArray();
+             isEnrollmentDetailsNull = false;
+         }
+         System.out.println("09012100 --> " + EnrollmentDetails);
+
 // Chairs Details
         Boolean isChairsDetailsNull = true;
         JsonArray ChairsDetails = new JsonArray();
@@ -332,6 +343,12 @@ if (electoralDetails != null) {
         // 13) Distinguish Academicians
         if(!isDistinguishedAcademicianNull)
         addDistinguishedAcademicians(document,DistinguishedAcademicianDetail);
+
+        // 13.2) addEnrollmentDetails
+
+        if (!isEnrollmentDetailsNull)
+        addEnrollmentDetails(document, EnrollmentDetails);
+
         // 14) Chairs
         if(!isChairsDetailsNull)
         addChairs(document,ChairsDetails);
@@ -514,41 +531,105 @@ public void createNEPTable(Document document, JsonArray jsonArray) throws Except
             : ""; // Return empty string if key is missing or value is null
 }
 
-    private static void addChairs(Document document, JsonArray chairs) {
-    // Add title
-    Paragraph title = new Paragraph("Chairs Instituted by the University")
-            .setBold()
-            .setFontSize(10);
-    document.add(title);
+    private static void addEnrollmentDetails(Document document, JsonArray enrollmentDetails) {
+        // Create table with 6 columns
+        Table table = new Table(UnitValue.createPercentArray(new float[]{4, 3, 3, 3, 3, 3}));
+        table.setWidth(UnitValue.createPercentValue(100));
 
-    // Define table with 4 columns
-    float[] columnWidths = {1, 4, 4, 5};
-    Table table = new Table(columnWidths);
-    table.setWidth(UnitValue.createPercentValue(100));
+        // Header Row 1
+        table.addCell(createBodyCell("", 1, 2));
+        table.addCell(createHeaderCell("From the State Where University is Located", 1));
+        table.addCell(createHeaderCell("From Other States of India", 1));
+        table.addCell(createHeaderCell("NRI Students", 1));
+        table.addCell(createHeaderCell("Foreign Students", 1));
+        table.addCell(createHeaderCell("Total", 1));
 
-    // Add table headers
-    table.addHeaderCell(new Cell().add(new Paragraph("Sl.No").setBold().setTextAlignment(TextAlignment.CENTER)));
-    table.addHeaderCell(new Cell().add(new Paragraph("Name of the Department").setBold().setTextAlignment(TextAlignment.CENTER)));
-    table.addHeaderCell(new Cell().add(new Paragraph("Name of the Chair").setBold().setTextAlignment(TextAlignment.CENTER)));
-    table.addHeaderCell(new Cell().add(new Paragraph("Name of the Sponsor Organisation/Agency").setBold().setTextAlignment(TextAlignment.CENTER)));
+        // Populate table rows dynamically from enrollmentDetails JSON array
+        Map<String, Map<String, Map<String, Integer>>> aggregatedData = new HashMap<>();
 
-    // Add data rows
-    if (chairs.size() > 0) {
-        for (int i = 0; i < chairs.size(); i++) {
-            JsonObject chair = chairs.get(i).getAsJsonObject();
-            table.addCell(new Cell().add(new Paragraph(String.valueOf(i + 1)).setTextAlignment(TextAlignment.CENTER))); // Serial Number
-            table.addCell(new Cell().add(new Paragraph(chair.get("departmentName").getAsString()).setTextAlignment(TextAlignment.LEFT)));
-            table.addCell(new Cell().add(new Paragraph(chair.get("chairName").getAsString()).setTextAlignment(TextAlignment.LEFT)));
-            table.addCell(new Cell().add(new Paragraph(chair.get("sponsorName").getAsString()).setTextAlignment(TextAlignment.LEFT)));
+        for (JsonElement element : enrollmentDetails) {
+            JsonObject enrollment = element.getAsJsonObject();
+            String program = enrollment.get("program").getAsString();
+            String gender = enrollment.get("gender").getAsString();
+            String location = enrollment.get("location").getAsString();
+            int count = enrollment.get("count").getAsInt();
+
+            aggregatedData.putIfAbsent(program, new HashMap<>());
+            aggregatedData.get(program).putIfAbsent(gender, new HashMap<>());
+            aggregatedData.get(program).get(gender).merge(location, count, Integer::sum);
         }
-    } else {
-        // Add a single row with "NILL" if there are no chairs
-        table.addCell(new Cell(1, 4).add(new Paragraph("NILL").setTextAlignment(TextAlignment.CENTER)));
+
+        // Generate rows based on aggregated data
+        for (var programEntry : aggregatedData.entrySet()) {
+            String program = programEntry.getKey();
+            table.addCell(createBodyCell(program, 1, 1));
+
+            for (var genderEntry : programEntry.getValue().entrySet()) {
+                String gender = genderEntry.getKey();
+                Map<String, Integer> counts = genderEntry.getValue();
+
+                table.addCell(createBodyCell(gender, 1, 1));
+                int sameState = counts.getOrDefault("sameState", 0);
+                int otherStates = counts.getOrDefault("otherStates", 0);
+                int nri = counts.getOrDefault("nri", 0);
+                int foreign = counts.getOrDefault("foreign", 0);
+                int total = sameState + otherStates + nri + foreign;
+
+                table.addCell(createBodyCell(String.valueOf(sameState), 1));
+                table.addCell(createBodyCell(String.valueOf(otherStates), 1));
+                table.addCell(createBodyCell(String.valueOf(nri), 1));
+                table.addCell(createBodyCell(String.valueOf(foreign), 1));
+                table.addCell(createBodyCell(String.valueOf(total), 1));
+            }
+        }
+
+        // Add table to the document
+        try {
+            document.add(table);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    // Add table to the document
-    document.add(table);
-}
+    private static void addChairs(Document document, JsonArray chairs) {
+        // Add title
+        Paragraph title = new Paragraph("Chairs Instituted by the University")
+                .setBold()
+                .setFontSize(10);
+        document.add(title);
+
+        // Define table with 4 columns
+        float[] columnWidths = {1, 4, 4, 5};
+        Table table = new Table(columnWidths);
+        table.setWidth(UnitValue.createPercentValue(100));
+
+        // Add table headers
+        table.addHeaderCell(new Cell().add(new Paragraph("Sl.No").setBold().setTextAlignment(TextAlignment.CENTER)));
+        table.addHeaderCell(new Cell().add(new Paragraph("Name of the Department").setBold().setTextAlignment(TextAlignment.CENTER)));
+        table.addHeaderCell(new Cell().add(new Paragraph("Name of the Chair").setBold().setTextAlignment(TextAlignment.CENTER)));
+        table.addHeaderCell(new Cell().add(new Paragraph("Name of the Sponsor Organisation/Agency").setBold().setTextAlignment(TextAlignment.CENTER)));
+
+        // Add data rows
+        if (chairs != null && chairs.size() > 0) {
+            for (int i = 0; i < chairs.size(); i++) {
+                JsonObject chair = chairs.get(i).getAsJsonObject();
+                table.addCell(new Cell().add(new Paragraph(String.valueOf(i + 1)).setTextAlignment(TextAlignment.CENTER))); // Serial Number
+                table.addCell(new Cell().add(new Paragraph(getJsonStringValue(chair, "departmentName")).setTextAlignment(TextAlignment.LEFT)));
+                table.addCell(new Cell().add(new Paragraph(getJsonStringValue(chair, "chairName")).setTextAlignment(TextAlignment.LEFT)));
+                table.addCell(new Cell().add(new Paragraph(getJsonStringValue(chair, "sponsorName")).setTextAlignment(TextAlignment.LEFT)));
+            }
+        } else {
+            // Add a single row with "NILL" if there are no chairs
+            table.addCell(new Cell(1, 4).add(new Paragraph("NILL").setTextAlignment(TextAlignment.CENTER)));
+        }
+
+        // Add table to the document
+        document.add(table);
+    }
+
+    private static String getJsonStringValue(JsonObject jsonObject, String key) {
+        return jsonObject.has(key) && !jsonObject.get(key).isJsonNull() ? jsonObject.get(key).getAsString() : "";
+    }
 
     private static void addDistinguishedAcademicians(Document document, JsonArray distinguishedAcademicians) {
     // Add title
@@ -713,88 +794,89 @@ public void createNEPTable(Document document, JsonArray jsonArray) throws Except
     }
 
       private static void addStaffTable(Document document, JsonArray staffData) {
-    // Define categories
-    String[] categories = {"Sanctioned", "Recruited", "Yet to Recruit","Contractual"};
+          // Define categories
+          String[] categories = {"Sanctioned", "Recruited", "Yet to Recruit", "Contractual"};
 
-    // Initialize data structures to hold aggregated data
-    Map<String, int[]> technicalData = new HashMap<>();
-    Map<String, int[]> nonTechnicalData = new HashMap<>();
+          // Initialize data structures to hold aggregated data
+          Map<String, int[]> technicalData = new HashMap<>();
+          Map<String, int[]> nonTechnicalData = new HashMap<>();
 
-    // Initialize default values
-    for (String category : categories) {
-        technicalData.put(category, new int[4]); // [Male, Female, Others, Total]
-        nonTechnicalData.put(category, new int[4]); // [Male, Female, Others, Total]
-    }
+          // Initialize default values
+          for (String category : categories) {
+              technicalData.put(category, new int[4]); // [Male, Female, Others, Total]
+              nonTechnicalData.put(category, new int[4]); // [Male, Female, Others, Total]
+          }
 
-    // Process staff data
-    for (JsonElement element : staffData) {
-        JsonObject staff = element.getAsJsonObject();
+          // Process staff data
+          for (JsonElement element : staffData) {
+              if (!element.isJsonObject()) continue;
+              JsonObject staff = element.getAsJsonObject();
 
-        boolean isTechnical = staff.get("isTechnical").getAsBoolean();
-        String recruitmentStatus = staff.get("recruitmentStatus").getAsString();
-        String gender = staff.get("gender").getAsString();
-        int count = staff.get("count").getAsInt();
+              boolean isTechnical = staff.has("isTechnical") && !staff.get("isTechnical").isJsonNull() && staff.get("isTechnical").getAsBoolean();
+              String recruitmentStatus = staff.has("recruitmentStatus") && !staff.get("recruitmentStatus").isJsonNull() ? staff.get("recruitmentStatus").getAsString() : "";
+              String gender = staff.has("gender") && !staff.get("gender").isJsonNull() ? staff.get("gender").getAsString() : "";
+              int count = staff.has("count") && !staff.get("count").isJsonNull() ? staff.get("count").getAsInt() : 0;
 
-        // Skip invalid recruitment status
-        if (!Arrays.asList(categories).contains(recruitmentStatus)) {
-            continue;
-        }
+              // Skip invalid recruitment status
+              if (!Arrays.asList(categories).contains(recruitmentStatus)) {
+                  continue;
+              }
 
-        // Determine the correct map to update
-        Map<String, int[]> targetData = isTechnical ? technicalData : nonTechnicalData;
+              // Determine the correct map to update
+              Map<String, int[]> targetData = isTechnical ? technicalData : nonTechnicalData;
 
-        // Update gender-specific and total counts
-        switch (gender.toLowerCase()) {
-            case "male":
-                targetData.get(recruitmentStatus)[0] += count;
-                break;
-            case "female":
-                targetData.get(recruitmentStatus)[1] += count;
-                break;
-            default: // "Others"
-                targetData.get(recruitmentStatus)[2] += count;
-                break;
-        }
-        // Update total count
-        targetData.get(recruitmentStatus)[3] += count;
-    }
+              // Update gender-specific and total counts
+              switch (gender.toLowerCase()) {
+                  case "male":
+                      targetData.get(recruitmentStatus)[0] += count;
+                      break;
+                  case "female":
+                      targetData.get(recruitmentStatus)[1] += count;
+                      break;
+                  default: // "Others"
+                      targetData.get(recruitmentStatus)[2] += count;
+                      break;
+              }
+              // Update total count
+              targetData.get(recruitmentStatus)[3] += count;
+          }
 
-    // Helper function to create and populate a table
-    BiConsumer<Map<String, int[]>, String> createAndAddTable = (dataMap, tableTitle) -> {
-        // Add title for the table
-        document.add(new Paragraph(tableTitle).setBold().setTextAlignment(TextAlignment.LEFT));
+          // Helper function to create and populate a table
+          BiConsumer<Map<String, int[]>, String> createAndAddTable = (dataMap, tableTitle) -> {
+              // Add title for the table
+              document.add(new Paragraph(tableTitle).setBold().setTextAlignment(TextAlignment.LEFT));
 
-        // Create a new table for the current data
-        Table table = new Table(UnitValue.createPercentArray(new float[]{2, 2, 2, 2, 2}));
-        table.setWidth(UnitValue.createPercentValue(100));
-        // Add header row
-        table.addCell(createHeaderCell(""));
-        table.addCell(createHeaderCell("Male"));
-        table.addCell(createHeaderCell("Female"));
-        table.addCell(createHeaderCell("Others"));
-        table.addCell(createHeaderCell("Total"));
+              // Create a new table for the current data
+              Table table = new Table(UnitValue.createPercentArray(new float[]{2, 2, 2, 2, 2}));
+              table.setWidth(UnitValue.createPercentValue(100));
+              // Add header row
+              table.addCell(createHeaderCell(""));
+              table.addCell(createHeaderCell("Male"));
+              table.addCell(createHeaderCell("Female"));
+              table.addCell(createHeaderCell("Others"));
+              table.addCell(createHeaderCell("Total"));
 
-        // Populate rows with aggregated data
-        for (String category : categories) {
-            int[] data = dataMap.get(category);
-            table.addCell(createBodyCell(category));
-            table.addCell(createBodyCell(String.valueOf(data[0])));
-            table.addCell(createBodyCell(String.valueOf(data[1])));
-            table.addCell(createBodyCell(String.valueOf(data[2])));
-            table.addCell(createBodyCell(String.valueOf(data[3])));
-        }
+              // Populate rows with aggregated data
+              for (String category : categories) {
+                  int[] data = dataMap.get(category);
+                  table.addCell(createBodyCell(category));
+                  table.addCell(createBodyCell(String.valueOf(data[0])));
+                  table.addCell(createBodyCell(String.valueOf(data[1])));
+                  table.addCell(createBodyCell(String.valueOf(data[2])));
+                  table.addCell(createBodyCell(String.valueOf(data[3])));
+              }
 
-        // Add the table to the document
-        document.add(table);
-        document.add(new Paragraph("\n")); // Add space after the table
-    };
+              // Add the table to the document
+              document.add(table);
+              document.add(new Paragraph("\n")); // Add space after the table
+          };
 
-    // Create and add the table for Technical Staff
-    createAndAddTable.accept(technicalData, "Technical Staff");
+          // Create and add the table for Technical Staff
+          createAndAddTable.accept(technicalData, "Technical Staff");
 
-    // Create and add the table for Non-Technical Staff
-    createAndAddTable.accept(nonTechnicalData, "Non-Technical Staff");
-}
+          // Create and add the table for Non-Technical Staff
+          createAndAddTable.accept(nonTechnicalData, "Non-Technical Staff");
+      }
 
     // Helper to create header cell
     private static Cell createHeaderCell(String content) {
@@ -811,89 +893,88 @@ public void createNEPTable(Document document, JsonArray jsonArray) throws Except
     }
 
     private static void addTeachingFacultyTable(Document document, JsonArray FacultyDetails) {
-    // Create table with 13 columns
-    Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}));
-    table.setWidth(UnitValue.createPercentValue(100));
-    // Header Row 1
-    table.addCell(createBodyCell("", 1, 3));
-    table.addCell(createHeaderCell("Designation", 12));
+        // Create table with 13 columns
+        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}));
+        table.setWidth(UnitValue.createPercentValue(100));
+        // Header Row 1
+        table.addCell(createBodyCell("", 1, 3));
+        table.addCell(createHeaderCell("Designation", 12));
 
-    // Header Row 2
-    table.addCell(createHeaderCell("Professor", 4));
-    table.addCell(createHeaderCell("Associate Professor", 4));
-    table.addCell(createHeaderCell("Assistant Professor", 4));
+        // Header Row 2
+        table.addCell(createHeaderCell("Professor", 4));
+        table.addCell(createHeaderCell("Associate Professor", 4));
+        table.addCell(createHeaderCell("Assistant Professor", 4));
 
-    // Header Row 3
-    for (int i = 0; i < 3; i++) {
-        table.addCell(createHeaderCell("Male", 1));
-        table.addCell(createHeaderCell("Female", 1));
-        table.addCell(createHeaderCell("Others", 1));
-        table.addCell(createHeaderCell("Total", 1));
-    }
-
-
-    // Define categories and designations
-    String[] categories = {"Sanctioned", "Recruited", "Yet to Recruit","Contractual"};
-    String[] designations = {"Professor", "Associate Professor", "Assistant Professor"};
-
-    // Initialize map to store aggregated data
-    Map<String, Map<String, int[]>> aggregatedData = new HashMap<>();
-
-    // Process FacultyDetails JSON array
-    for (JsonElement element : FacultyDetails) {
-        JsonObject faculty = element.getAsJsonObject();
-        String tenure = faculty.get("tenure").getAsString();
-        String designation = faculty.get("academicRank").getAsString();
-        String gender = faculty.get("gender").getAsString();
-        int count = faculty.get("count").getAsInt();
-
-        // Skip rows that don't match known categories or designations
-        if (!Arrays.asList(categories).contains(tenure) || !Arrays.asList(designations).contains(designation)) {
-            continue;
+        // Header Row 3
+        for (int i = 0; i < 3; i++) {
+            table.addCell(createHeaderCell("Male", 1));
+            table.addCell(createHeaderCell("Female", 1));
+            table.addCell(createHeaderCell("Others", 1));
+            table.addCell(createHeaderCell("Total", 1));
         }
 
-        // Initialize data structure for the current category and designation
-        aggregatedData.putIfAbsent(tenure, new HashMap<>());
-        aggregatedData.get(tenure).putIfAbsent(designation, new int[4]); // [Male, Female, Others, Total]
+        // Define categories and designations
+        String[] categories = {"Sanctioned", "Recruited", "Yet to Recruit", "Contractual"};
+        String[] designations = {"Professor", "Associate Professor", "Assistant Professor"};
 
-        // Update gender-specific and total counts
-        switch (gender.toLowerCase()) {
-            case "male":
-                aggregatedData.get(tenure).get(designation)[0] += count;
-                break;
-            case "female":
-                aggregatedData.get(tenure).get(designation)[1] += count;
-                break;
-            default: // "Others"
-                aggregatedData.get(tenure).get(designation)[2] += count;
-                break;
+        // Initialize map to store aggregated data
+        Map<String, Map<String, int[]>> aggregatedData = new HashMap<>();
+
+        // Process FacultyDetails JSON array
+        for (JsonElement element : FacultyDetails) {
+            JsonObject faculty = element.getAsJsonObject();
+            String tenure = faculty.has("tenure") && !faculty.get("tenure").isJsonNull() ? faculty.get("tenure").getAsString() : "";
+            String designation = faculty.has("academicRank") && !faculty.get("academicRank").isJsonNull() ? faculty.get("academicRank").getAsString() : "";
+            String gender = faculty.has("gender") && !faculty.get("gender").isJsonNull() ? faculty.get("gender").getAsString() : "";
+            int count = faculty.has("count") && !faculty.get("count").isJsonNull() ? faculty.get("count").getAsInt() : 0;
+
+            // Skip rows that don't match known categories or designations
+            if (!Arrays.asList(categories).contains(tenure) || !Arrays.asList(designations).contains(designation)) {
+                continue;
+            }
+
+            // Initialize data structure for the current category and designation
+            aggregatedData.putIfAbsent(tenure, new HashMap<>());
+            aggregatedData.get(tenure).putIfAbsent(designation, new int[4]); // [Male, Female, Others, Total]
+
+            // Update gender-specific and total counts
+            switch (gender.toLowerCase()) {
+                case "male":
+                    aggregatedData.get(tenure).get(designation)[0] += count;
+                    break;
+                case "female":
+                    aggregatedData.get(tenure).get(designation)[1] += count;
+                    break;
+                default: // "Others"
+                    aggregatedData.get(tenure).get(designation)[2] += count;
+                    break;
+            }
+            // Update total count
+            aggregatedData.get(tenure).get(designation)[3] += count;
         }
-        // Update total count
-        aggregatedData.get(tenure).get(designation)[3] += count;
-    }
 
-    // Populate table rows dynamically from aggregated data
-    for (String category : categories) {
-        table.addCell(createBodyCell(category, 1, 1)); // Category spanning all designations
-        for (String designation : designations) {
-            int[] data = aggregatedData.getOrDefault(category, new HashMap<>())
-                    .getOrDefault(designation, new int[4]); // Default to zeros if no data exists
+        // Populate table rows dynamically from aggregated data
+        for (String category : categories) {
+            table.addCell(createBodyCell(category, 1, 1)); // Category spanning all designations
+            for (String designation : designations) {
+                int[] data = aggregatedData.getOrDefault(category, new HashMap<>())
+                        .getOrDefault(designation, new int[4]); // Default to zeros if no data exists
 
-            // Add cells for Male, Female, Others, and Total counts
-            table.addCell(createBodyCell(String.valueOf(data[0]), 1));
-            table.addCell(createBodyCell(String.valueOf(data[1]), 1));
-            table.addCell(createBodyCell(String.valueOf(data[2]), 1));
-            table.addCell(createBodyCell(String.valueOf(data[3]), 1));
+                // Add cells for Male, Female, Others, and Total counts
+                table.addCell(createBodyCell(String.valueOf(data[0]), 1));
+                table.addCell(createBodyCell(String.valueOf(data[1]), 1));
+                table.addCell(createBodyCell(String.valueOf(data[2]), 1));
+                table.addCell(createBodyCell(String.valueOf(data[3]), 1));
+            }
+        }
+
+        // Add table to the document
+        try {
+            document.add(table);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
-    // Add table to the document
-    try {
-        document.add(table);
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
 
     // Helper to create header cell
     private static Cell createHeaderCell(String content, int colspan) {
@@ -908,7 +989,9 @@ public void createNEPTable(Document document, JsonArray jsonArray) throws Except
                 .add(new Paragraph(content))
                 .setTextAlignment(TextAlignment.CENTER);
     }
-    private static Cell createBodyCell(String content, int colspan,int rowspan) {
+
+    // Helper to create body cell with rowspan
+    private static Cell createBodyCell(String content, int colspan, int rowspan) {
         return new Cell(rowspan, colspan)
                 .add(new Paragraph(content))
                 .setTextAlignment(TextAlignment.CENTER);
@@ -1041,40 +1124,40 @@ private static void addAffiliatedInstitution(Document document, JsonArray affili
    
     // Function to add College Stats
     private static void addCollegeStatsTable(Document document, JsonObject academicDetails) {
-    Table table = new Table(UnitValue.createPercentArray(new float[]{1, 1})); // Two equal-width columns
-    table.setWidth(UnitValue.createPercentValue(100));
+        Table table = new Table(UnitValue.createPercentArray(new float[]{1, 1})); // Two equal-width columns
+        table.setWidth(UnitValue.createPercentValue(100));
 
-    // Add table headers
-    table.addCell(createCellWithBoldAndSpacing("Type of Colleges", 10));
-    table.addCell(createCellWithBoldAndSpacing("Numbers", 10));
+        // Add table headers
+        table.addCell(createCellWithBoldAndSpacing("Type of Colleges", 10));
+        table.addCell(createCellWithBoldAndSpacing("Numbers", 10));
 
-    // Define mapping for JSON keys to user-friendly labels
-    Map<String, String> typeMapping = new LinkedHashMap<>();
-    typeMapping.put("constituentColleges", "Constituent Colleges");
-    typeMapping.put("affiliatedColleges", "Affiliated Colleges");
-    typeMapping.put("collegesUnder2f", "Colleges under 2(f)");
-    typeMapping.put("collegesUnder2f12b", "Colleges under 2(f) and 12(b)");
-    typeMapping.put("naacAccredited", "NAAC Accredited Colleges");
-    typeMapping.put("collegesWithExcellence", "Colleges with Excellence");
-    typeMapping.put("autonomousColleges", "Autonomous Colleges");
-    typeMapping.put("collegesWithPgDepartments", "Colleges with PG Departments");
-    typeMapping.put("collegesWithResearchDepartments", "Colleges with Research Departments");
-    typeMapping.put("researchInstitutes", "Research Institutes");
+        // Define mapping for JSON keys to user-friendly labels
+        Map<String, String> typeMapping = new LinkedHashMap<>();
+        typeMapping.put("constituentColleges", "Constituent Colleges");
+        typeMapping.put("affiliatedColleges", "Affiliated Colleges");
+        typeMapping.put("collegesUnder2f", "Colleges under 2(f)");
+        typeMapping.put("collegesUnder2f12b", "Colleges under 2(f) and 12(b)");
+        typeMapping.put("naacAccredited", "NAAC Accredited Colleges");
+        typeMapping.put("collegesWithExcellence", "Colleges with Excellence");
+        typeMapping.put("autonomousColleges", "Autonomous Colleges");
+        typeMapping.put("collegesWithPgDepartments", "Colleges with PG Departments");
+        typeMapping.put("collegesWithResearchDepartments", "Colleges with Research Departments");
+        typeMapping.put("researchInstitutes", "Research Institutes");
 
-    // Loop through the mapping and populate the table
-    for (Map.Entry<String, String> entry : typeMapping.entrySet()) {
-        String key = entry.getKey();
-        String label = entry.getValue();
+        // Loop through the mapping and populate the table
+        for (Map.Entry<String, String> entry : typeMapping.entrySet()) {
+            String key = entry.getKey();
+            String label = entry.getValue();
 
-        int count = academicDetails.has(key) ? academicDetails.get(key).getAsInt() : 0;
+            int count = academicDetails.has(key) && !academicDetails.get(key).isJsonNull() ? academicDetails.get(key).getAsInt() : 0;
 
-        table.addCell(createCellWithSpacing(label, 10));
-        table.addCell(createCellWithSpacing(String.valueOf(count), 10));
+            table.addCell(createCellWithSpacing(label, 10));
+            table.addCell(createCellWithSpacing(String.valueOf(count), 10));
+        }
+
+        // Add the table to the document
+        document.add(table.setMarginBottom(10));
     }
-
-    // Add the table to the document
-    document.add(table.setMarginBottom(10));
-}
 
 private static Cell createCellWithBoldAndSpacing(String content, int fontSize) {
     return new Cell().add(new Paragraph(content).setBold().setFontSize(fontSize))
@@ -1159,13 +1242,13 @@ private static void addRecognitionDetailRow(Table table, String section, String 
         JsonObject detail = campusDetailsJsonArray.get(i).getAsJsonObject();
 
         // Extract data with default fallbacks for safety
-        String type = detail.has("type") ? detail.get("type").getAsString() : "Not Available";
-        String address = detail.has("address") ? detail.get("address").getAsString() : "Not Available";
-        String location = detail.has("location") ? detail.get("location").getAsString() : "Not Available";
-        String campusArea = detail.has("campusArea") ? detail.get("campusArea").getAsString() : "Not Available";
-        String builtUpArea = detail.has("builtUpArea") ? detail.get("builtUpArea").getAsString() : "Not Available";
-        String establishmentDate = detail.has("establishmentDate") ? detail.get("establishmentDate").getAsString() : "Not Available";
-        String recognitionDate = detail.has("recognitionDate") ? detail.get("recognitionDate").getAsString() : "Not Available";
+        String type = detail.has("type") && !detail.get("type").isJsonNull() ? detail.get("type").getAsString() : "Not Available";
+        String address = detail.has("address") && !detail.get("address").isJsonNull() ? detail.get("address").getAsString() : "Not Available";
+        String location = detail.has("location") && !detail.get("location").isJsonNull() ? detail.get("location").getAsString() : "Not Available";
+        String campusArea = detail.has("campusArea") && !detail.get("campusArea").isJsonNull() ? detail.get("campusArea").getAsString() : "Not Available";
+        String builtUpArea = detail.has("builtUpArea") && !detail.get("builtUpArea").isJsonNull() ? detail.get("builtUpArea").getAsString() : "0";
+        String establishmentDate = detail.has("establishmentDate") && !detail.get("establishmentDate").isJsonNull() ? detail.get("establishmentDate").getAsString() : "Not Available";
+        String recognitionDate = detail.has("recognitionDate") && !detail.get("recognitionDate").isJsonNull() ? detail.get("recognitionDate").getAsString() : "Not Available";
 
         // Process programmesOffered as a comma-separated string
         String programmesOffered = "Not Available";

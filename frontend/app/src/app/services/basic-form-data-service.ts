@@ -28,7 +28,7 @@ export class BasicFormDataService {
   basicInfoModel$ = this.basicInfoModelSource.asObservable();
 
   constructor(private http: HttpClient) {}
-  
+
   setUnsavedChanges(value: boolean) {
     this.areUnsavedChanges = value;
   }
@@ -45,7 +45,7 @@ export class BasicFormDataService {
   getUniversityId(): number | null {
     return this.universityId;
   }
-  
+
   // Contact ID and model management
   setContactId(id: number | null) {
     this.contactId = id;
@@ -59,7 +59,7 @@ export class BasicFormDataService {
   getContactData(): Observable<any> {
     return this.contactModel$;
   }
-  
+
   // Campus ID and model management
   setCampusId(id: number | null) {
     this.campusId = id;
@@ -87,7 +87,7 @@ export class BasicFormDataService {
   getRecognitionDetailsData(): Observable<any> {
     return this.recognitionDetailsModel$;
   }
-  
+
   setBasicInfoData(data: any) {
     this.basicInfoModelSource.next({ ...this.basicInfoModelSource.value, ...data });
   }

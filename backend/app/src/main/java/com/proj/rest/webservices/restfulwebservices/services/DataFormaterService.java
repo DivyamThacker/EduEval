@@ -143,6 +143,19 @@ public class DataFormaterService {
         }
     }
 
+    public String getEnrollmentDetails(Integer universityId)
+    {
+        University university = universityRepository.findById(universityId)
+                .orElseThrow(() -> new RuntimeException("Chairs Details Not Found"));
+
+        ObjectMapper mapper = new ObjectMapper();
+        try{
+            return mapper.writeValueAsString(university.getEnrollmentDetails());
+        } catch(JsonProcessingException e){
+            throw new RuntimeException("Error processing JSON", e);
+        }
+    }
+
     public String getChairsDetails(Integer universityId)
     {
         University university = universityRepository.findById(universityId)

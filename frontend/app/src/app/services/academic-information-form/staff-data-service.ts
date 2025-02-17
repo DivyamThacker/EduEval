@@ -32,12 +32,13 @@ getStaffInfoData(): Observable<any> {
 
 submitStaffInfoData() {
   const data = this.staffInfoModelSource.value;
+  this.universityId = this.getUniversityId();
   this.http.delete(`${this.apiUrl}/university/${this.universityId}/staff`)
   .subscribe({
     next: response => console.log(`Staff Details for this university id : ${this.universityId} deleted successfully`, response),
     error: error => console.error('Error deleting Staff Details', error)
   });
-  this.universityId = this.getUniversityId();
+
   console.log('University Id:', this.universityId);
   console.log('Staff Info Data:', data.staff);
 
